@@ -3,32 +3,39 @@
 class BasecampAPI {
 	
 	/* 
+	 * Use debugging?
+	 *
+	 * @private boolean
+	 */
+	private $debug = true;
+	
+	/* 
 	 * Basecamp primary account ID
 	 *
 	 * @private string
 	 */
-	private $account_id = "1916473";
+	private $account_id;
 	
 	/*
 	 * Basecamp username
 	 *
 	 * @private string
 	 */
-	private $username = "jenkinsac@health.missouri.edu";
+	private $username;
 	
 	/*
 	 * Basecamp password
 	 *
 	 * @private string
 	 */
-	private $password = "d3st1Ny.I7";
+	private $password;
 	
 	/*
 	 * Application name using this library
 	 *
 	 * @private string
 	 */
-	private $app_name = "";
+	private $app_name;
 	
 	/*
 	 * Content type, Basecamp requires JSON
@@ -44,9 +51,44 @@ class BasecampAPI {
 	 */
 	private $basecamp_url = "https://basecamp.com/";
 	
-	public function __construct()
-	{
+	/*
+	 * Stored RESTful request
+	 *
+	 * @private array
+	 */
+	private $request = array();
+	
+	/*
+	 * Stored RESTful Response
+	 *
+	 * @private array
+	 */
+	private $response = array();
+	
+	/*
+	 * The full built URL
+	 *
+	 * @private string
+	 */
+	private $url = "";
 		
+	/*
+	 * Codeigniter object, to enable use $basecamp->useCI(true);
+	 *
+	 * @private object
+	 */
+	private $CI = false;
+	
+	public function __construct($app_name="", $account_id=null, $username="", $password="")
+	{
+		// Is this library being used with Codeigniter?
+		$this->integrateCI(function_exists('config_item'));
+		
+		// Set defaults
+		$this->setAppName($app_name);
+		$this->setAccountID($account_id);
+		$this->setUsername($username);
+		$this->setPassword($password);
 	}
 	
 	// --------------------------------------------------------------------
@@ -62,6 +104,10 @@ class BasecampAPI {
 	  */  
 	public function getAccessesForProject($project_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -74,6 +120,10 @@ class BasecampAPI {
 	  */  
 	public function getAccessesForCalendar($calendar_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -92,6 +142,10 @@ class BasecampAPI {
 	  */  
 	public function grantAccessToProject($project_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -110,6 +164,10 @@ class BasecampAPI {
 	  */  
 	public function grantAccessToCalendar($calendar_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -122,6 +180,10 @@ class BasecampAPI {
 	  */  
 	public function revokeAccessToProject($project_id=null, $person_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -134,6 +196,10 @@ class BasecampAPI {
 	  */  
 	public function revokeAccessToCalendar($calendar_id=null, $person_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -150,6 +216,10 @@ class BasecampAPI {
 	  */  
 	public function getAttachments($project_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -164,6 +234,10 @@ class BasecampAPI {
 	  */  
 	public function createAttachment()
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -182,6 +256,10 @@ class BasecampAPI {
 	  */  
 	public function createUpload($project_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -194,6 +272,10 @@ class BasecampAPI {
 	  */  
 	public function getUpload($project_id=null, $upload_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -210,6 +292,10 @@ class BasecampAPI {
 	  */  
 	public function getProjectCalendarEvents($project_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -222,6 +308,10 @@ class BasecampAPI {
 	  */  
 	public function getCalendarEvents($calendar_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -234,6 +324,10 @@ class BasecampAPI {
 	  */  
 	public function getPastProjectCalendarEvents($project_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -246,6 +340,10 @@ class BasecampAPI {
 	  */  
 	public function getPastCalendarEvents($calendar_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -258,6 +356,10 @@ class BasecampAPI {
 	  */ 
 	public function getSingleProjectCalendarEvent($project_id=null, $event_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -270,6 +372,10 @@ class BasecampAPI {
 	  */ 
 	public function getSingleCalendarEvent($calendar_id=null, $event_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -289,6 +395,10 @@ class BasecampAPI {
 	  */  
 	public function createCalendarEvent($project_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -308,6 +418,10 @@ class BasecampAPI {
 	  */  
 	public function updateProjectCalendarEvent($project_id=null, $event_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -327,6 +441,10 @@ class BasecampAPI {
 	  */  
 	public function updateCalendarEvent($calendar_id=null, $event_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -339,6 +457,10 @@ class BasecampAPI {
 	  */  
 	public function deleteProjectCalendarEvent($project_id=null, $event_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -351,6 +473,10 @@ class BasecampAPI {
 	  */  
 	public function deleteCalendarEvent($calendar_id=null, $event_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -366,6 +492,10 @@ class BasecampAPI {
 	  */  
 	public function getCalendars()
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -378,6 +508,10 @@ class BasecampAPI {
 	  */  
 	public function getSingleCalendar($calendar_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -393,6 +527,11 @@ class BasecampAPI {
 	  */  
 	public function createCalendar($data=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
+		
 		// if $data is_array or is_string
 	}
 	
@@ -405,6 +544,10 @@ class BasecampAPI {
 	  */  
 	public function updateCalendar($calendar_id=null, $data="")
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -417,6 +560,10 @@ class BasecampAPI {
 	  */  
 	public function deleteCalendar($calendar_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -434,6 +581,11 @@ class BasecampAPI {
 	  */  
 	public function createComment($project_id=null, $topic="", $topic_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
+		
 		// Files can be attached
 	}
 	
@@ -446,6 +598,10 @@ class BasecampAPI {
 	  */  
 	public function deleteComment()
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -462,6 +618,10 @@ class BasecampAPI {
 	  */  
 	public function getDocuments($project_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -474,6 +634,10 @@ class BasecampAPI {
 	  */  
 	public function getSingleDocument($project_id=null, $document_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -490,6 +654,10 @@ class BasecampAPI {
 	  */  
 	public function createDocument($project_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -506,6 +674,10 @@ class BasecampAPI {
 	  */  
 	public function updateDocument($project_id=null, $document_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -518,6 +690,10 @@ class BasecampAPI {
 	  */  
 	public function deleteDocument($project_id=null, $document_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -538,6 +714,10 @@ class BasecampAPI {
 	  */  
 	public function getAllEvents($datetime="", $page=1)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -552,6 +732,10 @@ class BasecampAPI {
 	  */  
 	public function getProjectEvents($project_id=null, $datetime="", $page=1)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -566,6 +750,10 @@ class BasecampAPI {
 	  */  
 	public function getPersonsEvents($person_id=null, $datetime="", $page=1)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -582,6 +770,10 @@ class BasecampAPI {
 	  */  
 	public function getSingleMessage($project_id=null, $message_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -600,6 +792,10 @@ class BasecampAPI {
 	  */  
 	public function createMessage($project_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -618,6 +814,10 @@ class BasecampAPI {
 	  */  
 	public function updateMessage($project_id=null, $message_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -630,6 +830,10 @@ class BasecampAPI {
 	  */  
 	public function deleteMessage($project_id=null, $message_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -646,6 +850,10 @@ class BasecampAPI {
 	  */  
 	public function getPeople()
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -658,6 +866,10 @@ class BasecampAPI {
 	  */  
 	public function getPerson($person_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -669,6 +881,10 @@ class BasecampAPI {
 	  */  
 	public function getMe()
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -681,6 +897,10 @@ class BasecampAPI {
 	  */  
 	public function deletePerson($person_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -696,6 +916,10 @@ class BasecampAPI {
 	  */  
 	public function getProjects()
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -707,6 +931,10 @@ class BasecampAPI {
 	  */  
 	public function getArchivedProjects()
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -719,6 +947,10 @@ class BasecampAPI {
 	  */  
 	public function getSingleProject($project_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -735,6 +967,10 @@ class BasecampAPI {
 	  */  
 	public function createProject($data=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -751,6 +987,10 @@ class BasecampAPI {
 	  */  
 	public function updateProject($project_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -763,6 +1003,10 @@ class BasecampAPI {
 	  */  
 	public function activateProject($project_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -775,6 +1019,10 @@ class BasecampAPI {
 	  */  
 	public function archiveProject($project_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -787,6 +1035,10 @@ class BasecampAPI {
 	  */  
 	public function deleteProject($project_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -803,6 +1055,10 @@ class BasecampAPI {
 	  */  
 	public function getProjectToDoLists()
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -815,6 +1071,10 @@ class BasecampAPI {
 	  */  
 	public function getProjectsCompletedToDoLists($project_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -839,6 +1099,10 @@ class BasecampAPI {
 	  */  
 	public function getPersonsAssignedToDoLists($person_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -863,6 +1127,10 @@ class BasecampAPI {
 	  */  
 	public function getSingleToDoList($project_id=null, $todolist_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -879,6 +1147,10 @@ class BasecampAPI {
 	  */  
 	public function createProjectToDoList($project_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -908,6 +1180,10 @@ class BasecampAPI {
 	  */  
 	public function updateProjectToDoList($project_id=null, $todolist_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -932,6 +1208,10 @@ class BasecampAPI {
 	  */  
 	public function deleteToDoList($project_id=null, $todolist_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -948,6 +1228,10 @@ class BasecampAPI {
 	  */  
 	public function getToDo($project_id=null, $todo_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -967,6 +1251,10 @@ class BasecampAPI {
 	  */  
 	public function createToDo($project_id=null, $todolist_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -987,6 +1275,10 @@ class BasecampAPI {
 	  */  
 	public function updateToDo($project_id=null, $todo_id=null, $data=array())
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -999,6 +1291,10 @@ class BasecampAPI {
 	  */  
 	public function deleteToDo($project_id=null, $todo_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
@@ -1015,11 +1311,15 @@ class BasecampAPI {
 	  */  
 	public function getTopics($project_id=null)
 	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
 		
 	}
 	
 	// --------------------------------------------------------------------
-	//		CONFIGURATION SETTERS
+	//		CONFIGURATION SETTERS/GETTERS
 	// --------------------------------------------------------------------
 	
 	public function setAccountID($id=null)
@@ -1027,9 +1327,29 @@ class BasecampAPI {
 		$this->account_id = $id;
 	}
 	
+	public function getAccountID()
+	{
+		return $this->account_id;
+	}
+	
+	public function setAppName($app_name="")
+	{
+		$this->app_name = $app_name;
+	}
+	
+	public function getAppName()
+	{
+		return $this->app_name;
+	}
+	
 	public function setUsername($username="")
 	{
 	    $this->username = $username;
+	}
+	
+	protected function getUsername()
+	{
+		return $this->username;
 	}
 	
 	public function setPassword($password="")
@@ -1037,14 +1357,389 @@ class BasecampAPI {
 	    $this->password = $password;
 	}
 	
+	protected function getPassword()
+	{
+		return $this->password;
+	}
+	
 	// --------------------------------------------------------------------
 	//		BRAINS OF THE OPERATION
 	// --------------------------------------------------------------------
 	
-	private function processRequest()
+	/**
+	  * Validate function arguments and makes sure we've got basic necessities set
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	private function function_check()
 	{
-	    
+		if(empty($this->basecamp_url))
+		{
+			$this->logit('Basecamp URL is not set.', 'error');
+			return false;
+		}
+		
+		if(empty($this->app_name))
+		{
+			$this->logit('Application name is not set.', 'error');
+			return false;
+		}
+		
+		if(empty($this->account_id))
+		{
+			$this->logit('Account ID is not set.', 'error');
+			return false;
+		}
+		
+		if(empty($this->username))
+		{
+			$this->logit('Username is not set.', 'error');
+			return false;
+		}
+		
+		if(empty($this->password))
+		{
+			$this->logit('Password is not set.', 'error');
+			return false;
+		}
+		
+		return true;
 	}
+	
+	/**
+	  * Logs message if debug is enables
+	  *
+	  * @param string $message, string $level
+	  * @return void
+	  */  
+	private function logit($message="", $level="debug")
+	{
+		if(empty($message))
+		{
+			return;
+		}
+		
+		if($debug == false && $level == 'debug')
+		{
+			return;
+		}
+		
+		if(class_exists('Console'))
+		{
+			Console::log($message);
+		}
+		
+		if(isset($this->CI))
+		{
+			log_message($level, $message);
+		}
+		else
+		{
+			error_log('[BasecampAPI:'.__METHOD__.'] '.ucfirst($level).': '.$message, 0);
+		}
+	}
+	
+	/**
+	  * Attach Codeigniter.
+	  *
+	  * @param boolean $enable
+	  * @return void
+	  */  
+	public function integrateCI($enable=false)
+	{
+		if($enable == true)
+		{
+			$this->CI =& get_instance();
+			$this->logit('The BasecampAPI library is being used with the Codeigniter framework.');
+		}
+		else
+		{
+			$this->logit('The BasecampAPI library is NOT being used with the Codeigniter framework.');
+		}
+	}
+	
+	/**
+	  * Process the RESTful Request
+	  *
+	  * @param string $url, string $type
+	  * @return 
+	  */  
+	private function processRequest($url="", $type="", $data=array())
+	{
+	    // Set Request Body
+	    $this->setRequestBody($data);
+	    
+	    // Set URL
+	    $this->url = $this->basecamp_url . $url;
+	    
+	    // Execute Request
+	    if($this->execute($type) === FALSE)
+	    {
+		    return false;
+	    }
+	    
+	    // Build return
+	    $response = array(
+	    	'status'	=> $this->getResponseStatus(),
+	    	'headers'	=> $this->getResponseHeaders(),
+	    	'location'	=> $this->getResponseLocation(),
+	    	'body'		=> $this->getReponseBody()
+	    );
+	    
+	    // Flush data to reuse
+	    $this->flush();
+	    
+	    return $response;
+	}
+	
+	// --------------------------------------------------------------------
+	//		REST REQUESTS
+	// --------------------------------------------------------------------
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function setRequestBody($data=array())
+	{
+		$this->request['body'] = json_encode($data);
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function getResponseHeaders()
+	{
+		return substr($this->response['body'], 0, $this->response['info']['header_size']);
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected getReponseBody()
+	{
+		return json_decode(substr($this->response['body'], $this->response['info']['header_size']));
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function getResponseStatus()
+	{
+		if(preg_match('!^Status: (.*)$!m', $this->getReponseHeaders(), $match))
+		{
+			return trim($match[1]);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function getResponseLocation()
+	{
+		if(preg_match('!^Location: (.*)$!m', $this->getReponseHeaders(), $match))
+		{
+			return trim($match[1]);
+		}
+		else
+		{
+			return null;
+		}
+	}
+		
+	/**
+	  * Executes curl command
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function execute($verb="")
+	{
+		$ch = curl_init();
+		$this->setAuth($ch);
+		
+		if(empty($this->url))
+		{
+			$this->logit('URL has not been set.', 'error');
+			return false;
+		}
+		
+		switch($verb)
+		{
+			case 'GET':
+				$this->executeGet($ch);
+				break;
+			case 'POST':
+				$this->executePost($ch);
+				break;
+			case 'POSTFILE':
+				$this->executePostFile($ch);
+				break;
+			case 'PUT':
+				$this->executePut($ch);
+				break;
+			case 'DELETE':
+				$this->executeDelete($ch);
+				break;
+			default:
+				$this->logit('Current verb (' . $verb . ') is an invalid REST verb.', 'error');
+				curl_close($ch);
+				return false;
+		}
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function executeGet($ch)
+	{
+		$this->doExecute($ch);
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function executePost($ch)
+	{
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->request['body']);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: '.$this->content_type, 'Content-Type: '.$this->content_type));
+		
+		$this->doExecute($ch);
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function executePostFile($ch)
+	{
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->request['body']);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: '.$this->content_type, 'Content-Type: application/octet-stream'));
+		curl_setopt($ch, CURLOPT_POST, 1);
+		
+		$this->doExecute($ch);
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function executePut($ch)
+	{
+		$this->request['length'] = strlen($this->request['body']);
+		
+		$fh = fopen('php://memory', 'rw');
+		fwrite($fh, $this->request['body']);
+		rewind($fh);
+		
+		curl_setopt($ch, CURLOPT_INFILE, $fh);
+		curl_setopt($ch, CURLOPT_INFILESIZE, 0);
+		curl_setopt($ch, CURLOPT_PUT, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: '.$this->content_type, 'Content-Type: '.$this->content_type));
+		
+		$this->doExecute($ch);
+		
+		fclose($fh);
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function executeDelete($ch)
+	{
+	    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+	    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: '.$this->content_type, 'Content-Type: '.$this->content_type));
+	    
+	    $this->doExecute($ch);
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function doExecute(&$curlHandle)
+	{
+		$this->setCurlOpts($curlHandle);
+		$this->response['body'] = curl_exec($curlHandle);
+		$this->response['info'] = curl_getinfo($curlHandle);
+		curl_close($curlHandle);
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function setCurlOpts(&$curlHandle)
+	{
+		curl_setopt($curlHandle, CURLOPT_TIMEOUT, 10);
+		curl_setopt($curlHandle, CURLOPT_URL, $this->url);
+		curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curlHandle, CURLOPT_HEADER, true);
+		curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, !preg_match("!^https!i",$this->url));
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function setAuth(&$curlHandle)
+	{
+		curl_setopt($curlHandle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+		curl_setopt($curlHandle, CURLOPT_USERPWD, $this->username . ':' . $this->password);
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function flush()
+	{
+		$this->url		= null;
+		$this->request	= null;
+		$this->response	= null;
+	}
+	
 }
 
 /* End of file Basecamp.php */
