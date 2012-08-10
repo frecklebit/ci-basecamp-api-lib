@@ -627,6 +627,170 @@ class BasecampAPI {
 		
 	}
 	
+	// --------------------------------------------------------------------
+	//		PEOPLE
+	//			New people are invited directly to projects via accesses
+	// --------------------------------------------------------------------
+	
+	/**
+	  * Retrieves all the people on the account
+	  * GET /people.json		-> Retrives people
+	  *
+	  * @return array list of people
+	  */  
+	public function getPeople()
+	{
+		
+	}
+	
+	/**
+	  * Retrieves a single person
+	  * GET /people/$PERSON_ID.json		-> Returns specified person
+	  *
+	  * @param int $person_id
+	  * @return object person data
+	  */  
+	public function getPerson($person_id=null)
+	{
+		
+	}
+	
+	/**
+	  * Retrieves the person logged in (you)
+	  * GET /people/me.json
+	  *
+	  * @return object your data
+	  */  
+	public function getMe()
+	{
+		
+	}
+	
+	/**
+	  * Deletes a specified person
+	  * DELETE /people/$PERSON_ID.json
+	  *
+	  * @param int $person_id
+	  * @return boolean success/fail
+	  */  
+	public function deletePerson($person_id=null)
+	{
+		
+	}
+	
+	// --------------------------------------------------------------------
+	//		PROJECTS
+	// --------------------------------------------------------------------
+	
+	/**
+	  * Retrieves all active projects
+	  * GET /projects.json
+	  *
+	  * @return array list of active project data
+	  */  
+	public function getProjects()
+	{
+		
+	}
+	
+	/**
+	  * Retrieves all archived projects
+	  * GET /projects/archived.json
+	  *
+	  * @return array list of archived project data
+	  */  
+	public function getArchivedProjects()
+	{
+		
+	}
+	
+	/**
+	  * Retrieves single project
+	  * GET /projects/$PROJECT_ID.json	-> Returns specified project
+	  *
+	  * @param int $project_id
+	  * @return object project data
+	  */  
+	public function getSingleProject($project_id=null)
+	{
+		
+	}
+	
+	/**
+	  * Creates a new project
+	  * POST /projects.json
+	  *
+	  * $DATA:
+	  *		[name]			- string, The name of the project
+	  *		[description]	- string, A description of the project
+	  *
+	  * @param array $data
+	  * @return object project data or false
+	  */  
+	public function createProject($data=null)
+	{
+		
+	}
+	
+	/**
+	  * Updates a single project
+	  * PUT /projects/$PROJECT_ID.json	-> Updates the project
+	  *
+	  * $DATA:
+	  *		[name]			- string, The name of the project
+	  *		[description]	- string, A description of the project
+	  *
+	  * @param int $project_id, array $data
+	  * @return object project data
+	  */  
+	public function updateProject($project_id=null, $data=array())
+	{
+		
+	}
+	
+	/**
+	  * Activates an archived project
+	  * PUT /projects/$PROJECT_ID.json
+	  *
+	  * @param int $project_id
+	  * @return object project data
+	  */  
+	public function activateProject($project_id=null)
+	{
+		
+	}
+	
+	/**
+	  * Archives an active project
+	  *	PUT /projects/$PROJECT_ID.json
+	  *
+	  * @param int $project_id
+	  * @return object project data
+	  */  
+	public function archiveProject($project_id=null)
+	{
+		
+	}
+	
+	/**
+	  * Deletes a specified project
+	  * DELETE /project/$PROJECT_ID.json
+	  *
+	  * @param int $project_id
+	  * @return boolean success/fail
+	  */  
+	public function deleteProject($project_id=null)
+	{
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	// --------------------------------------------------------------------
 	//		CONFIGURATION SETTERS
