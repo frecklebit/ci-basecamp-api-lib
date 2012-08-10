@@ -281,8 +281,8 @@ class BasecampAPI {
 	  *		[summary]		- string Summary of calendar event
 	  *		[description]	- string Description of calendar event
 	  *		[all_day]		- boolean Is this an all day event?
-	  *		[starts_at]		- string Start time of event (Format: 0000-00-00[T00:00:00-00:00])  [] - time not required
-	  *		[ends_at]		- string End time of event (Format: 0000-00-00[T00:00:00-00:00])  [] - time not required
+	  *		[starts_at]		- string Start time of event (ISO 8601 format - time not required)
+	  *		[ends_at]		- string End time of event (ISO 8601 format - time not required)
 	  *
 	  * @param int $project_id, array $data
 	  * @return object calendar data or false
@@ -300,8 +300,8 @@ class BasecampAPI {
 	  *		[summary]		- string Summary of calendar event
 	  *		[description]	- string Description of calendar event
 	  *		[all_day]		- boolean Is this an all day event?
-	  *		[starts_at]		- string Start time of event (Format: 0000-00-00[T00:00:00-00:00])  [] - time not required
-	  *		[ends_at]		- string End time of event (Format: 0000-00-00[T00:00:00-00:00])  [] - time not required
+	  *		[starts_at]		- string Start time of event (ISO 8601 format - time not required)
+	  *		[ends_at]		- string End time of event (ISO 8601 format - time not required)
 	  *
 	  * @param int $project_id, int $event_id, array $data 
 	  * @return object calendar data or false
@@ -319,8 +319,8 @@ class BasecampAPI {
 	  *		[summary]		- string Summary of calendar event
 	  *		[description]	- string Description of calendar event
 	  *		[all_day]		- boolean Is this an all day event?
-	  *		[starts_at]		- string Start time of event (Format: 0000-00-00[T00:00:00-00:00])  [] - time not required
-	  *		[ends_at]		- string End time of event (Format: 0000-00-00[T00:00:00-00:00])  [] - time not required
+	  *		[starts_at]		- string Start time of event (ISO 8601 format - time not required)
+	  *		[ends_at]		- string End time of event (ISO 8601 format - time not required)
 	  *
 	  * @param int $calendar_id, int $event_id, array $data 
 	  * @return object calendar data or false
@@ -531,6 +531,8 @@ class BasecampAPI {
 	  *
 	  * Returns 50 events per page. If the result has 50 entries, check next page.
 	  *
+	  * Datetime: ISO 8601 format
+	  *
 	  * @param string $datetime, int $page
 	  * @return array list of global event data
 	  */  
@@ -543,6 +545,8 @@ class BasecampAPI {
 	  * Retieves 50 project events at a time, with pagination
 	  * GET /projects/$PROJECT_ID/events.json?since=0000-00-00T00:00:00-00:00&page=0	-> Returns all project events since datetime
 	  *
+	  * Datetime: ISO 8601 format
+	  *
 	  * @param int $project_id, string $datetime, int $page
 	  * @return array list of project event data
 	  */  
@@ -554,6 +558,8 @@ class BasecampAPI {
 	/**
 	  * Retrieves 50 person events at a time, with pagination
 	  * GET /people/$PERSON_ID/events.json?since=0000-00-00T00:00:00-00:00$page=0		-> Returns all events by that person
+	  * 
+	  * Datetime: ISO 8601 format
 	  *
 	  * @param int $person_id, string $datetime, int $page
 	  * @return array list of person's event data
@@ -784,13 +790,233 @@ class BasecampAPI {
 		
 	}
 	
+	// --------------------------------------------------------------------
+	//		TODO LISTS
+	// --------------------------------------------------------------------
 	
+	/**
+	  * Retrieves the todo lists of a specified project
+	  * GET /projects/$PROJECT_ID/todolists.json	-> Returns all todolists with remaining todos sorted by position
+	  *
+	  * @param int $project_id
+	  * @return array list of todolist data
+	  */  
+	public function getProjectToDoLists()
+	{
+		
+	}
 	
+	/**
+	  * Retrieves completed todolists
+	  * GET /projects/$PROJECT_ID/todolists/completed.json	-> Returns all completed todolists
+	  *
+	  * @param int $project_id
+	  * @return array completed todolist data
+	  */  
+	public function getProjectsCompletedToDoLists($project_id=null)
+	{
+		
+	}
 	
+	/**
+	  * Shorthand method to retrieve completed todolists
+	  * See method getProjectsCompletedToDoLists()
+	  *
+	  * @param int $project_id
+	  * @return array completed todolist data
+	  */  
+	public function getCompletedTDL($project_id=null)
+	{
+		return $this->getProjectsCompletedToDoLists($project_id);
+	}
 	
+	/**
+	  * Retrieves assigned todolists of the specified person
+	  * GET /people/$PERSON_ID/assigned_todos.json
+	  *
+	  * @param int $person_id
+	  * @return array assigned todolist data
+	  */  
+	public function getPersonsAssignedToDoLists($person_id=null)
+	{
+		
+	}
 	
+	/**
+	  * Shorthand method to retrieve person's assigned todo lists
+	  * See method getPersonsAssignedToDoList()
+	  *
+	  * @param int $person_id
+	  * @return array assigned todolist data
+	  */  
+	public function getAssignedTDL($person_id=null)
+	{
+		return $this->getPersonsAssignedToDoLists($person_id);
+	}
 	
+	/**
+	  * Retrieves a single ToDo List in specified project
+	  * GET /projects/$PROJECT_ID/todolists/$TODOLIST_ID.json
+	  *
+	  * @param int $project_id, int $todolist_id
+	  * @return object todolist data
+	  */  
+	public function getSingleToDoList($project_id=null, $todolist_id=null)
+	{
+		
+	}
 	
+	/**
+	  * Creates a new ToDo List in a specified project
+	  * POST /projects/$PROJECT_ID/todolists.json
+	  *
+	  * $DATA:
+	  *		[name]			- string, The name of the todolist
+	  *		[description]	- string, A description of the todolist
+	  *
+	  * @param int $project_id, array $data
+	  * @return object todolist data
+	  */  
+	public function createProjectToDoList($project_id=null, $data=array())
+	{
+		
+	}
+	
+	/**
+	  * Shorthand method to create a project todo list
+	  * See method createProjectToDoList
+	  *
+	  * @param int $project_id, array $data
+	  * @return object todolist data
+	  */  
+	public function createToDoList($project_id=null, $data=array())
+	{
+		return $this->createProjectToDolist($project_id, $data);
+	}
+	
+	/**
+	  * Update a ToDoList in a specified project
+	  * PUT /projects/$PROJECT_ID/todolists/$TODOLIST_ID.json
+	  *
+	  * $DATA:
+	  *		[name]			- string, The name of the todolist
+	  *		[description]	- string, A description of the todolist
+	  *		[position]		- int, Reorder the position of the todolist
+	  *
+	  * @param int $project_id, int $todolist_id, array $data
+	  * @return object todolist data
+	  */  
+	public function updateProjectToDoList($project_id=null, $todolist_id=null, $data=array())
+	{
+		
+	}
+	
+	/**
+	  * Shorthand method to update a project todo list
+	  * See method updateProjectToDoList()
+	  *
+	  * @param int $project_id, int $todolist_id, array $data
+	  * @return object todolist data
+	  */  
+	public function updateToDoList($project_id=null, $todolist_id=null, $data=array())
+	{
+		return $this->updateProjectToDoList($project_id, $todolist_id, $data);
+	}
+	
+	/**
+	  * Deletes a specified project ToDo List
+	  * DELETE /projects/$PROJECT_ID/todolists/$TODOLIST_ID.json
+	  *
+	  * @param int $project_id, int $todolist_id
+	  * @return boolean success/fail
+	  */  
+	public function deleteToDoList($project_id=null, $todolist_id=null)
+	{
+		
+	}
+	
+	// --------------------------------------------------------------------
+	//		TODOS
+	// --------------------------------------------------------------------
+	
+	/**
+	  * Retrieves a single todo from a project 
+	  * GET /projects/$PROJECT_ID/todos/$TODO_ID.json
+	  *
+	  * @param int $project_id, int $todo_id
+	  * @return object todo data
+	  */  
+	public function getToDo($project_id=null, $todo_id=null)
+	{
+		
+	}
+	
+	/**
+	  * Creates a todo item for a project
+	  * POST /projects/$PROJECT_ID/todolists/$TODOLIST_ID/todos.json
+	  *
+	  * $DATA:
+	  *		[content]	- string, The content of the todo
+	  *		[due_at]	- string, The due date of the todo (ISO 8601 format)
+	  *		[assignee]	- array, The assignee if necessary
+	  *			[id]		- int, The id of the assignee Person or Group
+	  *			[type]		- string, The type of the assignee Person or Group
+	  *
+	  * @param int $project_id, int $todolist_id, array $data
+	  * @return object todo data
+	  */  
+	public function createToDo($project_id=null, $todolist_id=null, $data=array())
+	{
+		
+	}
+	
+	/**
+	  * Update a single todo in a project
+	  * PUT /projects/$PROJECT_ID/todos/$TODO_ID.json
+	  *
+	  * $DATA:
+	  *		[content]	- string, The content of the todo
+	  *		[due_at]	- string, The due date of the todo (ISO 8601 format)
+	  *		[assignee]	- array, The assignee if necessary
+	  *			[id]		- int, The id of the assignee Person or Group
+	  *			[type]		- string, The type of the assignee Person or Group
+	  *		[position]	- int, Reorder the position of the todo
+	  *
+	  * @param int $project_id, int $todo_id, array $data
+	  * @return object todo data or false
+	  */  
+	public function updateToDo($project_id=null, $todo_id=null, $data=array())
+	{
+		
+	}
+	
+	/**
+	  * Delete the todo item from a ToDoList in a project
+	  * DELETE /projects/$PROJECT_ID/todos/$TODO_ID.json
+	  *
+	  * @param int $project_id, int $todo_id
+	  * @return boolean success/fail
+	  */  
+	public function deleteToDo($project_id=null, $todo_id=null)
+	{
+		
+	}
+	
+	// --------------------------------------------------------------------
+	//		TOPICS
+	// --------------------------------------------------------------------
+	
+	/**
+	  * Retrieves all topics from a project
+	  * GET /projects/$PROJECT_ID/topics.json
+	  *
+	  * @param int $project_id
+	  * @return array list of topic data
+	  */  
+	public function getTopics($project_id=null)
+	{
+		
+	}
 	
 	// --------------------------------------------------------------------
 	//		CONFIGURATION SETTERS
