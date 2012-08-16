@@ -1,5 +1,5 @@
 <?php //if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
-
+date_default_timezone_set('America/Chicago');
 class BasecampAPI {
 	
 	/* 
@@ -8,6 +8,13 @@ class BasecampAPI {
 	 * @private boolean
 	 */
 	private $debug = true;
+	
+	/* 
+	 * Errors
+	 *
+	 * @private array
+	 */
+	private $errors = array();
 	
 	/* 
 	 * Basecamp primary account ID
@@ -79,18 +86,8 @@ class BasecampAPI {
 	 */
 	private $url = "";
 		
-	/*
-	 * Codeigniter object, to enable use $basecamp->useCI(true);
-	 *
-	 * @private object
-	 */
-	private $CI = false;
-	
 	public function __construct($app_name="", $account_id=null, $username="", $password="")
 	{
-		// Is this library being used with Codeigniter?
-		$this->integrateCI(function_exists('config_item'));
-		
 		// Set defaults
 		$this->setAppName($app_name);
 		$this->setAccountID($account_id);
@@ -111,7 +108,7 @@ class BasecampAPI {
 	  */  
 	public function getAccessesForProject($project_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -128,7 +125,7 @@ class BasecampAPI {
 	  */  
 	public function getAccessesForCalendar($calendar_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -151,7 +148,7 @@ class BasecampAPI {
 	  */  
 	public function grantAccessToProject($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -176,7 +173,7 @@ class BasecampAPI {
 	  */  
 	public function grantAccessToCalendar($calendar_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -195,7 +192,7 @@ class BasecampAPI {
 	  */  
 	public function revokeAccessToProject($project_id=null, $person_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -212,7 +209,7 @@ class BasecampAPI {
 	  */  
 	public function revokeAccessToCalendar($calendar_id=null, $person_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -233,7 +230,7 @@ class BasecampAPI {
 	  */  
 	public function getAttachments($project_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -252,7 +249,7 @@ class BasecampAPI {
 	  */  
 	public function createAttachment($file_path='')
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -279,7 +276,7 @@ class BasecampAPI {
 	  */  
 	public function uploadFile($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -311,7 +308,7 @@ class BasecampAPI {
 	  */  
 	public function getUpload($project_id=null, $upload_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -332,7 +329,7 @@ class BasecampAPI {
 	  */  
 	public function getProjectCalendarEvents($project_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -349,7 +346,7 @@ class BasecampAPI {
 	  */  
 	public function getCalendarEvents($calendar_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -366,7 +363,7 @@ class BasecampAPI {
 	  */  
 	public function getPastProjectCalendarEvents($project_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -383,7 +380,7 @@ class BasecampAPI {
 	  */  
 	public function getPastCalendarEvents($calendar_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -400,7 +397,7 @@ class BasecampAPI {
 	  */ 
 	public function getSingleProjectCalendarEvent($project_id=null, $event_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -417,7 +414,7 @@ class BasecampAPI {
 	  */ 
 	public function getSingleCalendarEvent($calendar_id=null, $event_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -441,7 +438,7 @@ class BasecampAPI {
 	  */  
 	public function createCalendarEvent($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -467,7 +464,7 @@ class BasecampAPI {
 	  */  
 	public function updateProjectCalendarEvent($project_id=null, $event_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -493,7 +490,7 @@ class BasecampAPI {
 	  */  
 	public function updateCalendarEvent($calendar_id=null, $event_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -512,7 +509,7 @@ class BasecampAPI {
 	  */  
 	public function deleteProjectCalendarEvent($project_id=null, $event_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -529,7 +526,7 @@ class BasecampAPI {
 	  */  
 	public function deleteCalendarEvent($calendar_id=null, $event_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -566,7 +563,7 @@ class BasecampAPI {
 	  */  
 	public function getSingleCalendar($calendar_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -586,7 +583,7 @@ class BasecampAPI {
 	  */  
 	public function createCalendar($data=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -608,7 +605,7 @@ class BasecampAPI {
 	  */  
 	public function updateCalendar($calendar_id=null, $data="")
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -627,7 +624,7 @@ class BasecampAPI {
 	  */  
 	public function deleteCalendar($calendar_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -654,7 +651,7 @@ class BasecampAPI {
 	  */  
 	public function createComment($project_id=null, $topic="", $topic_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -687,7 +684,7 @@ class BasecampAPI {
 	  */  
 	public function deleteComment($project_id=null, $comment_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -708,7 +705,7 @@ class BasecampAPI {
 	  */  
 	public function getDocuments($project_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -725,7 +722,7 @@ class BasecampAPI {
 	  */  
 	public function getSingleDocument($project_id=null, $document_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -746,7 +743,7 @@ class BasecampAPI {
 	  */  
 	public function createDocument($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -761,22 +758,22 @@ class BasecampAPI {
 	  * PUT /projects/$PROJECT_ID/documents/$DOCUMENT_ID.json		-> Updates the message
 	  *
 	  *	$DATA:
-	  *		[title]		- string, The title of the document
-	  *		[content]	- string, the content in the document
+	  *		[title]		- (required) string, The title of the document
+	  *		[content]	- (required) string, the content in the document
 	  *
 	  * @param int $project_id, int $document_id, array $data
 	  * @return object document data
 	  */  
 	public function updateDocument($project_id=null, $document_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
 		$data = $this->validateData(array('title', 'content'), $data);
 		
-		return $this->processRequest("")
+		return $this->processRequest("projects/{$project_id}/documents/{$document_id}", 'PUT', $data);
 	}
 	
 	/**
@@ -788,11 +785,12 @@ class BasecampAPI {
 	  */  
 	public function deleteDocument($project_id=null, $document_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/documents/{$document_id}", 'DELETE');
 	}
 	
 	// --------------------------------------------------------------------
@@ -812,11 +810,18 @@ class BasecampAPI {
 	  */  
 	public function getAllEvents($datetime="", $page=1)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		if( ! $this->validateDateTime($datetime))
+		{
+			$this->errors[] = "Invalid datetime given for events (ISO 8601)";
+			return false;
+		}
+		
+		return $this->processRequest("events", 'GET', '', array('since' => $datetime, 'page' => $page));
 	}
 	
 	/**
@@ -830,11 +835,18 @@ class BasecampAPI {
 	  */  
 	public function getProjectEvents($project_id=null, $datetime="", $page=1)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		if( ! $this->validateDateTime($datetime))
+		{
+			$this->errors[] = "Invalid datetime given for events (ISO 8601)";
+			return false;
+		}
+		
+		return $this->processRequest("projects/{$project_id}/events", 'GET', '', array('since' => $datetime, 'page' => $page));
 	}
 	
 	/**
@@ -848,11 +860,18 @@ class BasecampAPI {
 	  */  
 	public function getPersonsEvents($person_id=null, $datetime="", $page=1)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		if( ! $this->validateDateTime($datetime))
+		{
+			$this->errors[] = "Invalid datetime given for events (ISO 8601)";
+			return false;
+		}
+		
+		return $this->processRequest("people/{$person_id}/events", 'GET', '', array('since' => $datetime, 'page' => $page));
 	}
 	
 	// --------------------------------------------------------------------
@@ -868,11 +887,12 @@ class BasecampAPI {
 	  */  
 	public function getSingleMessage($project_id=null, $message_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/messages/{$message_id}", 'GET');
 	}
 	
 	/**
@@ -890,11 +910,14 @@ class BasecampAPI {
 	  */  
 	public function createMessage($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		$data = $this->validateData(array('subject', 'content', 'subscribers', 'attachments'), $data);
+		
+		return $this->processRequest("projects/{$project_id}/messages", 'POST', $data);
 	}
 	
 	/**
@@ -912,11 +935,14 @@ class BasecampAPI {
 	  */  
 	public function updateMessage($project_id=null, $message_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		$data = $this->validateDate(array('subject', 'content', 'subscribers', 'attachments'), $data);
+		
+		return $this->processRequest("projects/{$project_id}/messages/{$message_id}", 'PUT', $data);
 	}
 	
 	/**
@@ -928,11 +954,12 @@ class BasecampAPI {
 	  */  
 	public function deleteMessage($project_id=null, $message_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/messages/{$message_id}", 'DELETE');
 	}
 	
 	// --------------------------------------------------------------------
@@ -953,6 +980,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("people", 'GET');
 	}
 	
 	/**
@@ -964,11 +992,12 @@ class BasecampAPI {
 	  */  
 	public function getPerson($person_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		return $this->processRequest("people/{$person_id}", 'GET');
 	}
 	
 	/**
@@ -984,6 +1013,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("people/me", 'GET');
 	}
 	
 	/**
@@ -995,11 +1025,12 @@ class BasecampAPI {
 	  */  
 	public function deletePerson($person_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		return $this->processRequest("people/{$person_id}", 'DELETE');
 	}
 	
 	// --------------------------------------------------------------------
@@ -1019,7 +1050,7 @@ class BasecampAPI {
 			return false;
 		}
 		
-		return $this->processRequest('projects', 'GET');
+		return $this->processRequest("projects", 'GET');
 	}
 	
 	/**
@@ -1035,6 +1066,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/archived", 'GET');
 	}
 	
 	/**
@@ -1046,11 +1078,12 @@ class BasecampAPI {
 	  */  
 	public function getSingleProject($project_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}", 'GET');
 	}
 	
 	/**
@@ -1066,11 +1099,14 @@ class BasecampAPI {
 	  */  
 	public function createProject($data=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		$data = $this->validateData(array('name', 'description'), $data);
+		
+		return $this->processRequest("projects", 'POST', $data);
 	}
 	
 	/**
@@ -1086,11 +1122,14 @@ class BasecampAPI {
 	  */  
 	public function updateProject($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		$data = $this->validateData(array('name', 'description'), $data);
+		
+		return $this->processRequest("projects/{$project_id}", 'PUT', $data);
 	}
 	
 	/**
@@ -1102,11 +1141,12 @@ class BasecampAPI {
 	  */  
 	public function activateProject($project_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}", 'PUT', array('archived' => false));
 	}
 	
 	/**
@@ -1118,11 +1158,12 @@ class BasecampAPI {
 	  */  
 	public function archiveProject($project_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}", 'PUT', array('archived' => true));
 	}
 	
 	/**
@@ -1134,11 +1175,12 @@ class BasecampAPI {
 	  */  
 	public function deleteProject($project_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}", 'DELETE');
 	}
 	
 	// --------------------------------------------------------------------
@@ -1170,7 +1212,7 @@ class BasecampAPI {
 	  */  
 	public function getProjectsCompletedToDoLists($project_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -1198,7 +1240,7 @@ class BasecampAPI {
 	  */  
 	public function getPersonsAssignedToDoLists($person_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -1226,7 +1268,7 @@ class BasecampAPI {
 	  */  
 	public function getSingleToDoList($project_id=null, $todolist_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -1246,7 +1288,7 @@ class BasecampAPI {
 	  */  
 	public function createProjectToDoList($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -1279,7 +1321,7 @@ class BasecampAPI {
 	  */  
 	public function updateProjectToDoList($project_id=null, $todolist_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -1307,7 +1349,7 @@ class BasecampAPI {
 	  */  
 	public function deleteToDoList($project_id=null, $todolist_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -1327,7 +1369,7 @@ class BasecampAPI {
 	  */  
 	public function getToDo($project_id=null, $todo_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -1350,7 +1392,7 @@ class BasecampAPI {
 	  */  
 	public function createToDo($project_id=null, $todolist_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -1374,7 +1416,7 @@ class BasecampAPI {
 	  */  
 	public function updateToDo($project_id=null, $todo_id=null, $data=array())
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -1390,7 +1432,7 @@ class BasecampAPI {
 	  */  
 	public function deleteToDo($project_id=null, $todo_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -1410,7 +1452,7 @@ class BasecampAPI {
 	  */  
 	public function getTopics($project_id=null)
 	{
-		if( ! $this->function_check())
+		if( ! $this->function_check(__METHOD__, func_get_args()))
 		{
 			return false;
 		}
@@ -1420,6 +1462,19 @@ class BasecampAPI {
 	// --------------------------------------------------------------------
 	//		CONFIGURATION SETTERS/GETTERS
 	// --------------------------------------------------------------------
+	
+	public function basecamp_errors($prefix='<p>', $suffix='</p>')
+	{
+		$string = '';
+		if(count($this->errors))
+		{
+			foreach($this->errors as $error)
+			{
+				$string .= $suffix.$error.$suffix;
+			}
+		}
+		return $string;
+	}
 	
 	public function setAccountID($id=null)
 	{
@@ -1478,42 +1533,71 @@ class BasecampAPI {
 	/**
 	  * Validate function arguments and makes sure we've got basic necessities set
 	  *
-	  * @param 
-	  * @return 
+	  * @param string $method, array $args
+	  * @return boolean, success/fail
 	  */  
-	private function function_check()
+	private function function_check($method='', $args=array())
 	{
 		if(empty($this->basecamp_url))
 		{
+			$this->errors[] = 'Basecamp URL is not set.';
 			$this->logit('Basecamp URL is not set.', 'error');
 			return false;
 		}
 		
 		if(empty($this->app_name))
 		{
+			$this->errors[] = 'Application name is not set.';
 			$this->logit('Application name is not set.', 'error');
 			return false;
 		}
 		
 		if(empty($this->account_id))
 		{
+			$this->errors[] = 'Account ID is not set.';
 			$this->logit('Account ID is not set.', 'error');
 			return false;
 		}
 		
 		if(empty($this->username))
 		{
+			$this->errors[] = 'Username is not set.';
 			$this->logit('Username is not set.', 'error');
 			return false;
 		}
 		
 		if(empty($this->password))
 		{
+			$this->errors[] = 'Password is not set.';
 			$this->logit('Password is not set.', 'error');
 			return false;
 		}
 		
+		// Validate the method arguments
+		if(count($args))
+		{
+			foreach($args as $arg)
+			{
+				if(empty($arg) || $arg = '')
+				{
+					$this->logit(ucfirst($method) . ' requires the ' . $arg . ' argument');
+					return false;
+				}
+			}
+		}
+		
 		return true;
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	private function validateDateTime($datetime='')
+	{
+		return preg_match('/^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/', $datetime);
 	}
 	
 	/**
@@ -1529,58 +1613,41 @@ class BasecampAPI {
 			return;
 		}
 		
+		// If debug message and debug is turned off
 		if($debug == false && $level == 'debug')
 		{
 			return;
 		}
 		
+		// PHP Console error
 		if(class_exists('Console'))
 		{
 			Console::log($message);
 		}
 		
-		if($this->CI)
+		// Codeigniter error
+		if(function_exists('log_message'))
 		{
 			log_message($level, $message);
 		}
-		else
-		{
-			error_log('[BasecampAPI] '.ucfirst($level).': '.$message, 0);
-		}
+		
+		// PHP error log
+		error_log('[BasecampAPI] '.ucfirst($level).': '.$message, 0);
 	}
-	
-	/**
-	  * Attach Codeigniter.
-	  *
-	  * @param boolean $enable
-	  * @return void
-	  */  
-	public function integrateCI($enable=false)
-	{
-		if($enable == true)
-		{
-			$this->CI =& get_instance();
-			$this->logit('The BasecampAPI library is being used with the Codeigniter framework.');
-		}
-		else
-		{
-			$this->logit('The BasecampAPI library is NOT being used with the Codeigniter framework.');
-		}
-	}
-	
+		
 	/**
 	  * Process the RESTful Request
 	  *
 	  * @param string $url, string $type
 	  * @return 
 	  */  
-	private function processRequest($url="", $type="", $data=array())
+	private function processRequest($url="", $type="", $data=array(), $url_params=array())
 	{
 	    // Set Request Body
 	    $this->setRequestBody($data);
 	    
 	    // Set URL
-	    $this->buildURL($url);
+	    $this->buildURL($url, $url_params);
 	    
 	    // Execute Request
 	    if($this->execute($type) === FALSE)
@@ -1608,9 +1675,11 @@ class BasecampAPI {
 	  * @param 
 	  * @return 
 	  */  
-	private function buildURL($url="")
+	private function buildURL($url="", $params=array())
 	{
-		$this->url = $this->basecamp_url.$this->account_id.'/api/v'.$this->api_version.'/'.$url.'.'.array_pop(explode('/', $this->content_type));
+		$this->url = $this->basecamp_url . $this->account_id . '/api/v' . $this->api_version .
+					 '/' . $url . '.' . array_pop(explode('/', $this->content_type)) .
+					 (! empty($params) ? '?'.http_build_query($params) : '');
 	}
 	
 	// --------------------------------------------------------------------
