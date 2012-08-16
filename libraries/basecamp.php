@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+<?php //if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 
 class BasecampAPI {
 	
@@ -50,6 +50,13 @@ class BasecampAPI {
 	 * @private string
 	 */
 	private $basecamp_url = "https://basecamp.com/";
+	
+	/*
+	 * Basecamp API Version
+	 *
+	 * @private int
+	 */
+	private $api_version = 1;
 	
 	/*
 	 * Stored RESTful request
@@ -109,6 +116,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/accesses", 'GET');
 	}
 	
 	/**
@@ -125,6 +133,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("calendars/{$calendar_id}/accesses.json", 'GET');
 	}
 	
 	/**
@@ -147,6 +156,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('ids', 'email_addresses'), $data);
+		
+		return $this->processRequest("projects/{$project_id}/accesses", 'POST', $data);
 	}
 	
 	/**
@@ -169,6 +181,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('ids', 'email_addresses'), $data);
+		
+		return $this->processRequest("calendar/{$calendar_id}/accesses", 'POST', $data);
 	}
 	
 	/**
@@ -185,6 +200,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/accesses/{$person_id}", 'DELETE');
 	}
 	
 	/**
@@ -201,6 +217,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("calendars/{$calendar_id}/accesses/{$person_id}", 'DELETE');
 	}
 	
 	// --------------------------------------------------------------------
@@ -221,6 +238,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/attachments", 'GET');
 	}
 	
 	/**
@@ -228,17 +246,20 @@ class BasecampAPI {
 	  * POST /attachments.json		-> Uploads a file
 	  * 
 	  *	$DATA:
-	  *		[]
+	  *		[content_type]
 	  *
 	  * @return string token to save locally to upload file
 	  */  
-	public function createAttachment()
+	public function createAttachment($file_path='')
 	{
 		if( ! $this->function_check())
 		{
 			return false;
 		}
 		
+		$this->setFileContentType(@mime_content_type($file_path));
+		
+		return $this->processRequest("attachments", 'POSTFILE', file_get_contents($file_path));
 	}
 	
 	/**
@@ -249,18 +270,36 @@ class BasecampAPI {
 	  * Subscribers (optional) is a list of $PERSON_IDs that will be notified of file
 	  *
 	  * $DATA:
-	  * 	[]
+	  * 	[content]
+	  *		[subscribers]
+	  *		[attachments]
 	  *
 	  * @param int $project_id, array $data
 	  * @return boolean success/fails
 	  */  
-	public function createUpload($project_id=null, $data=array())
+	public function uploadFile($project_id=null, $data=array())
 	{
 		if( ! $this->function_check())
 		{
 			return false;
 		}
 		
+		$data = $this->validateData(array('content', 'subscribers', 'attachments'), $data);
+		
+		// only one file can be uploaded at a time
+		if(is_array($data['attachments']))
+		{
+			$data['attachments'] = array_pop($data['attachments']);
+		}
+		$file_path = $data['attachments'];
+		
+		// format the new attachment
+		$data['attachments'][0] = array(
+			'token'	=> $this->createAttachment($file_path),
+			'name'	=> basename($file_path)
+		);
+		
+		return $this->processRequest("projects/{$project_id}/uploads", 'POST', $data);
 	}
 	
 	/**
@@ -277,6 +316,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/uploads/{$upload_id}", 'GET');
 	}
 	
 	// --------------------------------------------------------------------
@@ -297,6 +337,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/calendar_events", 'GET');
 	}
 	
 	/**
@@ -313,6 +354,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("calendars/{$calendar_id}/calendar_events", 'GET');
 	}
 	
 	/**
@@ -329,6 +371,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/calendar_events/past", 'GET');
 	}
 	
 	/**
@@ -345,6 +388,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("calendars/{$calendar_id}/calendar_events/past", 'GET');
 	}
 	
 	/**
@@ -361,11 +405,12 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/calendar_events/{$event_id}", 'GET');
 	}
 	
 	/**
 	  * Get single calendar event in a calendar
-	  * GET /calendars/$PROJECT_ID/calendar_events/$EVENT_ID.json	-> Returns the specified calendar event
+	  * GET /calendars/$CALENDAR_ID/calendar_events/$EVENT_ID.json	-> Returns the specified calendar event
 	  *
 	  * @param int $calendar_id, int $event_id 
 	  * @return object event data
@@ -377,6 +422,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("calendars/{$calendar_id}/calendar_events/{$event_id}", 'GET');
 	}
 	
 	/**
@@ -400,6 +446,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('summary', 'description', 'all_day', 'starts_at', 'ends_at'), $data);
+		
+		return $this->processRequest("projects/{$project_id}/calendar_events", 'POST', $data);
 	}
 	
 	/**
@@ -423,6 +472,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('summary', 'description', 'all_day', 'starts_at', 'ends_at'), $data);
+		
+		return $this->processRequest("projects/{$project_id}/calendar_events/{$event_id}", 'PUT');
 	}
 	
 	/**
@@ -446,6 +498,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('summary', 'description', 'all_day', 'starts_at', 'ends_at'), $data);
+		
+		return $this->processRequest("calendars/{$calendar_id}/calendar_events/{$event_id}", 'PUT', $data);
 	}
 	
 	/**
@@ -462,6 +517,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/calendar_events/{$event_id}", 'DELETE');
 	}
 	
 	/**
@@ -478,6 +534,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("calendars/{$calendar_id}/calendar_events/{$event_id}", 'DELETE');
 	}
 	
 	// --------------------------------------------------------------------
@@ -497,6 +554,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("calendars", 'GET');
 	}
 	
 	/**
@@ -513,6 +571,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("calendars/{$calendar_id}", 'GET');
 	}
 	
 	/**
@@ -532,12 +591,17 @@ class BasecampAPI {
 			return false;
 		}
 		
-		// if $data is_array or is_string
+		$data = $this->validateData(array('name'), $data);
+		
+		return $this->processRequest("calendars", 'POST', $data);
 	}
 	
 	/**
 	  * Updates a single calendar
 	  * PUT /calendars/$CALENDAR_ID.json		-> Updates the calendar from the params passed
+	  *
+	  * $DATA:
+	  *		[name]	- string, The name of the calendar
 	  *
 	  * @param int $calendar_id, string $data
 	  * @return object calendar data or false
@@ -549,6 +613,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('name'), $data);
+		
+		return $this->processRequest("calendars/{$calendar_id}", 'PUT', $data);
 	}
 	
 	/**
@@ -565,6 +632,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("calendars/{$calendar_id}", 'DELETE');
 	}
 	
 	// --------------------------------------------------------------------
@@ -576,6 +644,11 @@ class BasecampAPI {
 	  * Creates a new comment for specified project and topic
 	  * POST /projects/$PROJECT_ID/<topic>/$TOPIC_ID/comments.json
 	  *
+	  * $DATA:
+	  *		[content]		- (required) The comment content
+	  *		[subscribers]	- (optional) List of people IDs that you want to notify
+	  *		[attachments]	- (optional) Attaching a file to the comment
+	  *
 	  * @param int $project_id, string $topic, int $topic_id, array $data
 	  * @return object comment data or false
 	  */  
@@ -586,7 +659,23 @@ class BasecampAPI {
 			return false;
 		}
 		
-		// Files can be attached
+		$data = $this->validateData(array('content', 'subscribers', 'attachments'), $data);
+		
+		// multiple files can be uploaded
+		if(isset($data['attachments']))
+		{
+			$cleaned_attachments = array();
+			foreach($data['attachments'] as $file_path)
+			{
+				$cleaned_attachments[] = array(
+					'token'	=> $this->createAttachment($file_path),
+					'name'	=> basename($file_path)
+				);
+			}
+			$data['attachments'] = $cleaned_attachments;
+		}
+		
+		return $this->processRequest("projects/{$project_id}/{$topic}/{$topic_id}/comments", 'POST', $data);
 	}
 	
 	/**
@@ -596,13 +685,14 @@ class BasecampAPI {
 	  * @param int $project_id, int $comment_id
 	  * @return boolean success/fail
 	  */  
-	public function deleteComment()
+	public function deleteComment($project_id=null, $comment_id=null)
 	{
 		if( ! $this->function_check())
 		{
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/comments/{$comment_id}", 'DELETE');
 	}
 	
 	// --------------------------------------------------------------------
@@ -623,6 +713,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/document", 'GET');
 	}
 	
 	/**
@@ -639,6 +730,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/documents/{$document_id}", 'GET');
 	}
 	
 	/**
@@ -646,8 +738,8 @@ class BasecampAPI {
 	  * POST /projects/$PROJECT_ID/documents.json		-> Creates new document
 	  *
 	  * $DATA:
-	  *		[title]		- string, The title of the document
-	  *		[content]	- string, the content in the document
+	  *		[title]		- (required) string, The title of the document
+	  *		[content]	- (required) string, the content in the document
 	  *
 	  * @param int $project_id, array $data
 	  * @return object document data or false
@@ -659,6 +751,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('title', 'content'), $data);
+		
+		return $this->processRequest("projects/{$project_id}/documents". 'POST', $data);
 	}
 	
 	/**
@@ -679,6 +774,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('title', 'content'), $data);
+		
+		return $this->processRequest("")
 	}
 	
 	/**
@@ -921,6 +1019,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest('projects', 'GET');
 	}
 	
 	/**
@@ -1357,6 +1456,16 @@ class BasecampAPI {
 	    $this->password = $password;
 	}
 	
+	public function setFileContentType($file_content_type="")
+	{
+		$this->file_content_type = $file_content_type;
+	}
+	
+	public function getFileContentType()
+	{
+		return $this->file_content_type;
+	}
+	
 	protected function getPassword()
 	{
 		return $this->password;
@@ -1430,13 +1539,13 @@ class BasecampAPI {
 			Console::log($message);
 		}
 		
-		if(isset($this->CI))
+		if($this->CI)
 		{
 			log_message($level, $message);
 		}
 		else
 		{
-			error_log('[BasecampAPI:'.__METHOD__.'] '.ucfirst($level).': '.$message, 0);
+			error_log('[BasecampAPI] '.ucfirst($level).': '.$message, 0);
 		}
 	}
 	
@@ -1471,7 +1580,7 @@ class BasecampAPI {
 	    $this->setRequestBody($data);
 	    
 	    // Set URL
-	    $this->url = $this->basecamp_url . $url;
+	    $this->buildURL($url);
 	    
 	    // Execute Request
 	    if($this->execute($type) === FALSE)
@@ -1491,6 +1600,17 @@ class BasecampAPI {
 	    $this->flush();
 	    
 	    return $response;
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	private function buildURL($url="")
+	{
+		$this->url = $this->basecamp_url.$this->account_id.'/api/v'.$this->api_version.'/'.$url.'.'.array_pop(explode('/', $this->content_type));
 	}
 	
 	// --------------------------------------------------------------------
@@ -1525,7 +1645,7 @@ class BasecampAPI {
 	  * @param 
 	  * @return 
 	  */  
-	protected getReponseBody()
+	protected function getReponseBody()
 	{
 		return json_decode(substr($this->response['body'], $this->response['info']['header_size']));
 	}
@@ -1538,7 +1658,7 @@ class BasecampAPI {
 	  */  
 	protected function getResponseStatus()
 	{
-		if(preg_match('!^Status: (.*)$!m', $this->getReponseHeaders(), $match))
+		if(preg_match('!^Status: (.*)$!m', $this->getResponseHeaders(), $match))
 		{
 			return trim($match[1]);
 		}
@@ -1556,7 +1676,7 @@ class BasecampAPI {
 	  */  
 	protected function getResponseLocation()
 	{
-		if(preg_match('!^Location: (.*)$!m', $this->getReponseHeaders(), $match))
+		if(preg_match('!^Location: (.*)$!m', $this->getResponseHeaders(), $match))
 		{
 			return trim($match[1]);
 		}
@@ -1615,6 +1735,11 @@ class BasecampAPI {
 	  */  
 	protected function executeGet($ch)
 	{
+		$this->setRequestHeaders($ch, array(
+									'User-Agent' => $this->app_name . ' ('.$this->username.')',
+	    							'Accept' => $this->content_type,
+	    							'Content-Type' => $this->content_type
+								));
 		$this->doExecute($ch);
 	}
 	
@@ -1628,7 +1753,11 @@ class BasecampAPI {
 	{
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->request['body']);
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: '.$this->content_type, 'Content-Type: '.$this->content_type));
+		$this->setRequestHeaders($ch, array(
+									'User-Agent' => $this->app_name . ' ('.$this->username.')',
+	    							'Accept' => $this->content_type,
+	    							'Content-Type' => $this->content_type
+								));
 		
 		$this->doExecute($ch);
 	}
@@ -1642,8 +1771,12 @@ class BasecampAPI {
 	protected function executePostFile($ch)
 	{
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->request['body']);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: '.$this->content_type, 'Content-Type: application/octet-stream'));
 		curl_setopt($ch, CURLOPT_POST, 1);
+		$this->setRequestHeaders($ch, array(
+									'User-Agent' => $this->app_name . ' ('.$this->username.')',
+	    							'Accept' => $this->content_type,
+	    							'Content-Type' => $this->file_content_type
+								));
 		
 		$this->doExecute($ch);
 	}
@@ -1665,7 +1798,11 @@ class BasecampAPI {
 		curl_setopt($ch, CURLOPT_INFILE, $fh);
 		curl_setopt($ch, CURLOPT_INFILESIZE, 0);
 		curl_setopt($ch, CURLOPT_PUT, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: '.$this->content_type, 'Content-Type: '.$this->content_type));
+		$this->setRequestHeaders($ch, array(
+									'User-Agent' => $this->app_name . ' ('.$this->username.')',
+	    							'Accept' => $this->content_type,
+	    							'Content-Type' => $this->content_type
+								));
 		
 		$this->doExecute($ch);
 		
@@ -1681,7 +1818,11 @@ class BasecampAPI {
 	protected function executeDelete($ch)
 	{
 	    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-	    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: '.$this->content_type, 'Content-Type: '.$this->content_type));
+	    $this->setRequestHeaders($ch, array(
+	    							'User-Agent' => $this->app_name . ' ('.$this->username.')',
+	    							'Accept' => $this->content_type,
+	    							'Content-Type' => $this->content_type
+	    						));
 	    
 	    $this->doExecute($ch);
 	}
@@ -1697,6 +1838,7 @@ class BasecampAPI {
 		$this->setCurlOpts($curlHandle);
 		$this->response['body'] = curl_exec($curlHandle);
 		$this->response['info'] = curl_getinfo($curlHandle);
+		
 		curl_close($curlHandle);
 	}
 	
@@ -1713,6 +1855,18 @@ class BasecampAPI {
 		curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curlHandle, CURLOPT_HEADER, true);
 		curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, !preg_match("!^https!i",$this->url));
+	}
+	
+	/**
+	  * 
+	  *
+	  * @param 
+	  * @return 
+	  */  
+	protected function setRequestHeaders($ch, $data=array())
+	{
+		foreach($data as $key => $value) $headers[] = $key . ': ' . $value;
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 	}
 	
 	/**
