@@ -1201,6 +1201,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/todolists", 'GET');
 	}
 	
 	/**
@@ -1217,6 +1218,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/todolists/completed", 'GET');
 	}
 	
 	/**
@@ -1245,6 +1247,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("people/{$person_id}/assigned_todos", 'GET');
 	}
 	
 	/**
@@ -1273,6 +1276,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/todolists/{$todolist_id}", 'GET');
 	}
 	
 	/**
@@ -1293,6 +1297,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('name', 'description'), $data);
+		
+		return $this->processRequest("projects/{$project_id}/todolists", 'POST', $data);
 	}
 	
 	/**
@@ -1326,6 +1333,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('name', 'description', 'position'), $data);
+		
+		return $this->processRequest("projects/{$project_id}/todolists/{$todolist_id}", 'PUT', $data);
 	}
 	
 	/**
@@ -1354,6 +1364,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/todolists/{$todolist_id}", 'DELETE');
 	}
 	
 	// --------------------------------------------------------------------
@@ -1374,6 +1385,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/todos/{$todo_id}", 'GET');
 	}
 	
 	/**
@@ -1397,6 +1409,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('content', 'due_at', 'assignee'), $data);
+		
+		return $this->processRequest("projects/{$project_id}/todolists/{$todolist_id}/todos", 'POST', $data);
 	}
 	
 	/**
@@ -1421,6 +1436,9 @@ class BasecampAPI {
 			return false;
 		}
 		
+		$data = $this->validateData(array('content', 'due_at', 'assignee', 'position'), $data);
+		
+		return $this->processRequest("projects/{$project_id}/todos/{$todo_id}", 'PUT', $data);
 	}
 	
 	/**
@@ -1437,6 +1455,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/todos/{$todo_id}", 'DELETE');
 	}
 	
 	// --------------------------------------------------------------------
@@ -1457,6 +1476,7 @@ class BasecampAPI {
 			return false;
 		}
 		
+		return $this->processRequest("projects/{$project_id}/topics", 'GET');
 	}
 	
 	// --------------------------------------------------------------------
