@@ -144,7 +144,7 @@ class BasecampAPI {
 			return false;
 		}
 		
-		return $this->processRequest("calendars/{$calendar_id}/accesses.json", 'GET');
+		return $this->processRequest("calendars/{$calendar_id}/accesses", 'GET');
 	}
 	
 	/**
@@ -218,7 +218,7 @@ class BasecampAPI {
 			return false;
 		}
 		
-		return $this->processRequest("calendar/{$calendar_id}/accesses", 'POST', $data);
+		return $this->processRequest("calendars/{$calendar_id}/accesses", 'POST', $data);
 	}
 	
 	/**
@@ -373,9 +373,10 @@ class BasecampAPI {
 		$file_path = $data['attachments'];
 		
 		// Attempt to upload file and retrieve token
-		if($token = $this->createAttachment($file_path))
+		if($token = $this->createAttachment($file_path)->token)
 		{
 			// format the new attachment
+			unset($data['attachments']);
 			$data['attachments'][0] = array(
 				'token'	=> $token,
 				'name'	=> basename($file_path)
@@ -386,7 +387,7 @@ class BasecampAPI {
 			$this->errors[] = "Unable to upload file attachment.";
 			return false;
 		}
-		
+
 		return $this->processRequest("projects/{$project_id}/uploads", 'POST', $data);
 	}
 	
@@ -591,7 +592,7 @@ class BasecampAPI {
 	  * @param int $project_id, array $data
 	  * @return object calendar data or false
 	  */  
-	public function createCalendarEvent($project_id=null, $data=array())
+	public function createProjectCalendarEvent($project_id=null, $data=array())
 	{
 		if( ! $this->function_check())
 		{
@@ -611,8 +612,66 @@ class BasecampAPI {
 			$this->errors[] = "Invalid data input for creating a calendar event.";
 			return false;
 		}
+		if(isset($data['starts_at']) && ! $this->validateDateTime($data['starts_at']))
+		{
+			$this->errors[] = "Starts_at requires ISO 8601 formatting.";
+			return false;
+		}
+		if(isset($data['ends_at']) && ! $this->validateDateTime($data['ends_at']))
+		{
+			$this->errors[] = "Ends_at requires ISO 8601 formatting.";
+			return false;
+		}
 		
 		return $this->processRequest("projects/{$project_id}/calendar_events", 'POST', $data);
+	}
+	
+	/**
+	  * Create a calendar event
+	  * POST /calendars/$CALENDAR_ID/calendar_events.json		-> Creates a new calendar event
+	  *
+	  * $DATA:
+	  *		[summary]		- string Summary of calendar event
+	  *		[description]	- string Description of calendar event
+	  *		[all_day]		- boolean Is this an all day event?
+	  *		[starts_at]		- string Start time of event (ISO 8601 format - time not required)
+	  *		[ends_at]		- string End time of event (ISO 8601 format - time not required)
+	  *
+	  * @param int $project_id, array $data
+	  * @return object calendar data or false
+	  */  
+	public function createCalendarEvent($calendar_id=null, $data=array())
+	{
+		if( ! $this->function_check())
+		{
+			return false;
+		}
+		
+		// validate argument
+		if( ! isset($calendar_id))
+		{
+			$this->errors[] = "Calendar ID is required for creating a calendar event.";
+			return false;
+		}
+		
+		// validate data
+		if( ! $this->validateData(array('*summary', 'description', '|all_day', '|starts_at', 'ends_at'), $data))
+		{
+			$this->errors[] = "Invalid data input for creating a calendar event.";
+			return false;
+		}
+		if(isset($data['starts_at']) && ! $this->validateDateTime($data['starts_at']))
+		{
+			$this->errors[] = "Starts_at requires ISO 8601 formatting.";
+			return false;
+		}
+		if(isset($data['ends_at']) && ! $this->validateDateTime($data['ends_at']))
+		{
+			$this->errors[] = "Ends_at requires ISO 8601 formatting.";
+			return false;
+		}
+		
+		return $this->processRequest("calendars/{$calendar_id}/calendar_events", 'POST', $data);
 	}
 	
 	/**
@@ -649,13 +708,23 @@ class BasecampAPI {
 		}
 		
 		// validate data
-		if( ! $this->validateData(array('*summary', 'description', '|all_day', '|starts_at', 'ends_at'), $data))
+		if( ! $this->validateData(array('*summary', 'description', 'all_day', 'starts_at', 'ends_at'), $data))
 		{
 			$this->errors[] = "Invalid data input for updating the project calendar event.";
 			return false;
 		}
+		if(isset($data['starts_at']) && ! $this->validateDateTime($data['starts_at']))
+		{
+			$this->errors[] = "Starts_at requires ISO 8601 formatting.";
+			return false;
+		}
+		if(isset($data['ends_at']) && ! $this->validateDateTime($data['ends_at']))
+		{
+			$this->errors[] = "Ends_at requires ISO 8601 formatting.";
+			return false;
+		}
 		
-		return $this->processRequest("projects/{$project_id}/calendar_events/{$event_id}", 'PUT');
+		return $this->processRequest("projects/{$project_id}/calendar_events/{$event_id}", 'PUT', $data);
 	}
 	
 	/**
@@ -692,9 +761,19 @@ class BasecampAPI {
 		}
 		
 		// validate data
-		if( ! $this->validateData(array('*summary', 'description', '|all_day', '|starts_at', 'ends_at'), $data))
+		if( ! $this->validateData(array('*summary', 'description', 'all_day', 'starts_at', 'ends_at'), $data))
 		{
 			$this->errors[] = "Invalid data input for updating the calendar event.";
+			return false;
+		}
+		if(isset($data['starts_at']) && ! $this->validateDateTime($data['starts_at']))
+		{
+			$this->errors[] = "Starts_at requires ISO 8601 formatting.";
+			return false;
+		}
+		if(isset($data['ends_at']) && ! $this->validateDateTime($data['ends_at']))
+		{
+			$this->errors[] = "Ends_at requires ISO 8601 formatting.";
 			return false;
 		}
 		
@@ -938,15 +1017,24 @@ class BasecampAPI {
 		// multiple files can be uploaded
 		if(isset($data['attachments']))
 		{
-			$cleaned_attachments = array();
 			foreach($data['attachments'] as $file_path)
 			{
-				$cleaned_attachments[] = array(
-					'token'	=> $this->createAttachment($file_path),
-					'name'	=> basename($file_path)
-				);
+				// Attempt to upload file and retrieve token
+				if($token = $this->createAttachment($file_path)->token)
+				{
+					// format the new attachment
+					unset($data['attachments']);
+					$data['attachments'][0] = array(
+						'token'	=> $token,
+						'name'	=> basename($file_path)
+					);
+				}
+				else
+				{
+					$this->errors[] = "Unable to upload file attachment.";
+					return false;
+				}
 			}
-			$data['attachments'] = $cleaned_attachments;
 		}
 		
 		return $this->processRequest("projects/{$project_id}/{$topic}/{$topic_id}/comments", 'POST', $data);
@@ -1006,7 +1094,7 @@ class BasecampAPI {
 			return false;
 		}
 		
-		return $this->processRequest("projects/{$project_id}/document", 'GET');
+		return $this->processRequest("projects/{$project_id}/documents", 'GET');
 	}
 	
 	/**
@@ -1029,7 +1117,7 @@ class BasecampAPI {
 			$this->errors[] = "Project ID is required for retrieving documents.";
 			return false;
 		}
-		if( ! isset($docunent_id))
+		if( ! isset($document_id))
 		{
 			$this->errors[] = "Document ID is required for retrieving documents.";
 			return false;
@@ -1070,7 +1158,7 @@ class BasecampAPI {
 			return false;
 		}
 		
-		return $this->processRequest("projects/{$project_id}/documents". 'POST', $data);
+		return $this->processRequest("projects/{$project_id}/documents", 'POST', $data);
 	}
 	
 	/**
@@ -1147,7 +1235,7 @@ class BasecampAPI {
 	// --------------------------------------------------------------------
 	
 	/**
-	  * Returns all events between specified dates passed
+	  * Returns all global events between specified dates passed
 	  * GET /events.json?since=0000-00-00T00:00:00-00:00&page=0		-> Returns all events on account since datetime
 	  *
 	  * Returns 50 events per page. If the result has 50 entries, check next page.
@@ -1157,7 +1245,7 @@ class BasecampAPI {
 	  * @param string $datetime, int $page
 	  * @return array list of global event data
 	  */  
-	public function getAllEvents($datetime="", $page=1)
+	public function getGlobalEvents($datetime="", $page=1)
 	{
 		if( ! $this->function_check())
 		{
@@ -1301,6 +1389,29 @@ class BasecampAPI {
 		{
 			$this->errors[] = "Invalid data input for creating messages.";
 			return false;
+		}
+		
+		// multiple files can be uploaded
+		if(isset($data['attachments']))
+		{
+			foreach($data['attachments'] as $file_path)
+			{
+				// Attempt to upload file and retrieve token
+				if($token = $this->createAttachment($file_path)->token)
+				{
+					// format the new attachment
+					unset($data['attachments']);
+					$data['attachments'][0] = array(
+						'token'	=> $token,
+						'name'	=> basename($file_path)
+					);
+				}
+				else
+				{
+					$this->errors[] = "Unable to upload file attachment.";
+					return false;
+				}
+			}
 		}
 		
 		return $this->processRequest("projects/{$project_id}/messages", 'POST', $data);
@@ -1576,7 +1687,7 @@ class BasecampAPI {
 		}
 		
 		// validate data
-		if( ! $this->validateData(array('*name', 'description'), $data))
+		if( ! $this->validateData(array('name', 'description'), $data))
 		{
 			$this->errors[] = "Invalid data input for updating a project.";
 			return false;
@@ -1867,7 +1978,7 @@ class BasecampAPI {
 		// validate data
 		if( ! $this->validateData(array('*name', 'description', 'position'), $data))
 		{
-			$this->errors[] = "Invalid data input for ";
+			$this->errors[] = "Invalid data input for updating a project todo list.";
 			return false;
 		}
 		
@@ -1984,7 +2095,7 @@ class BasecampAPI {
 		// validate data
 		if( ! $this->validateData(array('*content', 'due_at', 'assignee'), $data))
 		{
-			$this->errors[] = "Invalid data input for ";
+			$this->errors[] = "Invalid data input for creating a task.";
 			return false;
 		}
 		
@@ -2028,7 +2139,7 @@ class BasecampAPI {
 		// validate date
 		if( ! $this->validateData(array('*content', 'due_at', 'assignee', 'position'), $data))
 		{
-			$this->errors[] = "Invalid data input for ";
+			$this->errors[] = "Invalid data input for updating a task.";
 			return false;
 		}
 		
@@ -2306,7 +2417,7 @@ class BasecampAPI {
 		// check for required data
 		foreach($keys as $index => $key)
 		{
-			if(preg_match('*', $key))
+			if(preg_match('/\*/', $key))
 			{
 				$keys[$index] = $key = str_replace('*', '', $key);
 				if( ! isset($data[$key]))
@@ -2335,7 +2446,7 @@ class BasecampAPI {
 			// if neither have value, show error
 			if(count($matches[0]) >= count($matches[1]))
 			{
-				$this->errors[] = ucfirst($key)." is required.";
+				$this->errors[] = "One of the following is required: ". join(', ',$matches[1]) . ".";
 				return false;
 			}
 		}
@@ -2416,9 +2527,9 @@ class BasecampAPI {
 	    	'location'	=> $this->getResponseLocation(),
 	    	'body'		=> $this->getReponseBody()
 	    );
-	    
+	    	    
 	    // Flush data to reuse
-	   // $this->flush();
+	    $this->flush();
 	    
 	    switch($response['status'])
 	    {
@@ -2438,6 +2549,10 @@ class BasecampAPI {
 		    case '403 Forbidden':
 		    	$this->errors[] = "Your access is restricted";
 		    	return false;
+		    
+		    case '404 Not Found':
+		    	$this->errors[] = "Request not found.";
+		    	return false;
 		    	
 		    default:
 		    	return false;
@@ -2456,6 +2571,7 @@ class BasecampAPI {
 		$this->url = $this->basecamp_url . $this->account_id . '/api/v' . $this->api_version .
 					 '/' . $url . '.' . array_pop(explode('/', $this->content_type)) .
 					 (! empty($params) ? '?'.http_build_query($params) : '');
+		var_dump($this->url);
 	}
 	
 	// --------------------------------------------------------------------
@@ -2646,7 +2762,7 @@ class BasecampAPI {
 		rewind($fh);
 		
 		curl_setopt($ch, CURLOPT_INFILE, $fh);
-		curl_setopt($ch, CURLOPT_INFILESIZE, 0);
+		curl_setopt($ch, CURLOPT_INFILESIZE, $this->request['length']);
 		curl_setopt($ch, CURLOPT_PUT, true);
 		$this->setRequestHeaders($ch, array(
 									'User-Agent' => $this->app_name . ' ('.$this->username.')',
