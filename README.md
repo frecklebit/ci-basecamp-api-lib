@@ -8,7 +8,7 @@ Accesses
 
 - Retrieve all accesses for a specific project
 
-`getAccessesForProject($project_id)`
+	`getAccessesForProject($project_id)`
 
 * `getAccessesForCalendar($calendar_id)` - Retrieve all accesses for a specific calendar
 * `grantAccessToProject($project_id, $data)` - Grant access to a specific project
