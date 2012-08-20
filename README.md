@@ -18,21 +18,31 @@ Retrieve all accesses for a specific project
 
 Retrieve all accesses for a specific calendar
 
-`grantAccessToProject($project_id, $data)`
-
-Grant access to a specific project
+-
 
 `grantAccessToProject($project_id, $data)`
 
 Grant access to a specific project
+
+-
+
+`grantAccessToProject($project_id, $data)`
+
+Grant access to a specific project
+
+-
 
 `grantAccessToCalendar($calendar_id, $data)`
 
 Grant access to a specific calendar
 
+-
+
 `revokeAccessToProject($project_id, $person_id)`
 
 Revoke access to projects
+
+-
 
 `revokeAccessToCalendar($calendar_id, $person_id)`
 
