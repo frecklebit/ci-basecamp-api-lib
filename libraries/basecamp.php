@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
   * PHP Class: Basecamp
   *
@@ -33,47 +33,7 @@ class Basecamp {
 	 * @access private
 	 */
 	private $errors = array();
-	
-	/**
-	 * Basecamp primary account ID, use setters/getters
-	 *
-	 * @var int
-	 * @access private
-	 */
-	private $account_id = null;
-	
-	/**
-	 * Basecamp username, use setters/getters
-	 *
-	 * @var string
-	 * @access private
-	 */
-	private $username = '';
-	
-	/**
-	 * Basecamp password, use setters/getters
-	 *
-	 * @var string
-	 * @access private
-	 */
-	private $password = '';
-	
-	/**
-	 * Application name using this library
-	 *
-	 * @var string
-	 * @access public
-	 */
-	public $app_name = '';
-	
-	/**
-	 * Content type, Basecamp requires JSON
-	 *
-	 * @var string
-	 * @access public
-	 */
-	public $content_type = "application/json";
-	
+		
 	/**
 	 * Basecamp base URL
 	 *
@@ -115,31 +75,28 @@ class Basecamp {
 	private $url = "";
 	
 	/**
+	 * Codeigniter instance
+	 *
+	 * @var object
+	 * @access private
+	 */
+	private $CI = null;
+	
+	/**
 	 * Initialization
 	 * 
 	 * The Basecamp constructor doesn't require the arguments, you can set them afterwards.
 	 *
-	 * Here's an example of instantiation:
-	 * <code>
-	 * required_once 'libraries/basecamp.php';
-	 *
-	 * $basecamp = new Basecamp('My App', 123456, 'tjones', 'abc123');
-	 * </code>
-	 * 
-	 * @param string	$app_name The name of your application
-	 * @param int		$account_id Your new Basecamp account identifier
-	 * @param string	$username The username of an administrator
-	 * @param string	$password The password of the administrator
-	 *
 	 * @return void
 	 */
-	public function __construct($app_name="", $account_id=null, $username="", $password="")
+	public function __construct()
 	{
-		// Set defaults
-		$this->setAppName($app_name);
-		$this->setAccountID($account_id);
-		$this->setUsername($username);
-		$this->setPassword($password);
+		// Get CI instance
+		$this->CI =& get_instance();
+		
+		// Check config file
+		$this->CI->load->config('basecamp');
+		$this->api_check();
 	}
 	
 	// --------------------------------------------------------------------
@@ -156,16 +113,10 @@ class Basecamp {
 	  */  
 	public function getAccessesForProject($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for project accesses.";
-			return false;
+			$this->show_error('method requires a project ID', 'getAccessesForProject($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/accesses", 'GET');
@@ -181,16 +132,10 @@ class Basecamp {
 	  */  
 	public function getAccessesForCalendar($calendar_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required for calendar accesses.";
-			return false;
+			$this->show_error('method requires a calendar ID', 'getAccessesForCalendar($calendar_id)');
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}/accesses", 'GET');
@@ -216,23 +161,16 @@ class Basecamp {
 	  */  
 	public function grantAccessToProject($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for granting project accesses.";
-			return false;
+			$this->show_error('method requires project ID', 'grantAccessToProject($project_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('|ids', '|email_addresses'), $data))
 		{
-			$this->errors[] = "Invalid input for granting access to projects.";
-			return false;
+			$this->show_error('invalid data input', 'array("ids" => array(1, 4, 5), "email_addresses" => array("user@example.com"))');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/accesses", 'POST', $data);
@@ -258,23 +196,16 @@ class Basecamp {
 	  */  
 	public function grantAccessToCalendar($calendar_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required for granting calendar access.";
-			return false;
+			$this->show_error('method requires calendar ID', 'grantAccessToCalendar($calendar_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('|ids', '|email_addresses'), $data))
 		{
-			$this->errors[] = "Invalid input for granting access to calendars.";
-			return false;
+			$this->show_error('invalid data input', 'array("ids" => array(1, 4, 5), "email_addresses" => array("user@example.com"))');
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}/accesses", 'POST', $data);
@@ -291,21 +222,14 @@ class Basecamp {
 	  */  
 	public function revokeAccessToProject($project_id=null, $person_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for revoking access to a project.";
-			return false;
+			$this->show_error('method requires project ID', 'revokeAccessToProject($project_id, $person_id)');
 		}
 		if (! isset($person_id))
 		{
-			$this->errors[] = "Person ID is required for revoking access to a project.";
-			return false;
+			$this->show_error('method requires person ID', 'revokeAccessToProject($project_id, $person_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/accesses/{$person_id}", 'DELETE');
@@ -322,21 +246,14 @@ class Basecamp {
 	  */  
 	public function revokeAccessToCalendar($calendar_id=null, $person_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required for revoking access to calendars.";
-			return false;
+			$this->show_error('method requires calendar ID', 'revokeAccessToCalendar($calendar_id, $person_id)');
 		}
 		if( ! isset($person_id))
 		{
-			$this->errors[] = "Person ID is required for revoking access to calendars.";
-			return false;
+			$this->show_error('method requires person ID', 'revokeAccessToCalendar($calendar_id, $person_id)');
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}/accesses/{$person_id}", 'DELETE');
@@ -356,16 +273,10 @@ class Basecamp {
 	  */  
 	public function getAttachments($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for attachments.";
-			return false;
+			$this->show_error('method requires project ID', 'getAttachments($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/attachments", 'GET');
@@ -386,11 +297,6 @@ class Basecamp {
 	  */  
 	public function createAttachment($file_path='')
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate file path
 		if( ! isset($file_path) || empty($file_path) || ! file_exists($file_path))
 		{
@@ -424,16 +330,10 @@ class Basecamp {
 	  */  
 	public function uploadFile($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate data
 		if( ! $this->validateData(array('content', 'subscribers', '*attachments'), $data))
 		{
-			$this->errors[] = "Invalid data input for uploading a file.";
-			return false;
+			$this->show_error('invalid data input', 'array("content" => "Lorem ipsum...", "subscribers" => array(1, 4, 2), "attachments" => array("/path/to/file.png"))');
 		}
 		
 		// only one file can be uploaded at a time
@@ -473,21 +373,14 @@ class Basecamp {
 	  */  
 	public function getUpload($project_id=null, $upload_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for retrieving upload.";
-			return false;
+			$this->show_error('method requires project ID', 'getUpload($project_id, $upload_id)');
 		}
 		if( ! isset($upload_id))
 		{
-			$this->errors[] = "Upload ID is required for retrieving upload.";
-			return false;
+			$this->show_error('method requires upload ID', 'getUpload($project_id, $upload_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/uploads/{$upload_id}", 'GET');
@@ -507,16 +400,10 @@ class Basecamp {
 	  */  
 	public function getProjectCalendarEvents($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for project calendar events.";
-			return false;
+			$this->show_error('method requires project ID', 'getProjectCalendarEvents($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/calendar_events", 'GET');
@@ -532,16 +419,10 @@ class Basecamp {
 	  */  
 	public function getCalendarEvents($calendar_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required for calendar events.";
-			return false;
+			$this->show_error('method requires calendar ID', 'getCalendarEvents($calendar_id)');
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}/calendar_events", 'GET');
@@ -557,16 +438,10 @@ class Basecamp {
 	  */  
 	public function getPastProjectCalendarEvents($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for past project calendar events.";
-			return false;
+			$this->show_error('method requires project ID', 'getPastProjectCalendarEvents($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/calendar_events/past", 'GET');
@@ -582,16 +457,10 @@ class Basecamp {
 	  */  
 	public function getPastCalendarEvents($calendar_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required for past calendar events.";
-			return false;
+			$this->show_error('method requires calendar ID', 'getPastCalendarEvents($calendar_id)');
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}/calendar_events/past", 'GET');
@@ -608,21 +477,14 @@ class Basecamp {
 	  */ 
 	public function getSingleProjectCalendarEvent($project_id=null, $event_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for the project calendar event.";
-			return false;
+			$this->show_error('method requires project ID', 'getSingleProjectCalendarEvent($project_id, $event_id)');
 		}
 		if( ! isset($event_id))
 		{
-			$this->errors[] = "Event ID is required for the project calendar event.";
-			return false;
+			$this->show_error('method requires event ID', 'getSingleProjectCalendarEvent($project_id, $event_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/calendar_events/{$event_id}", 'GET');
@@ -639,21 +501,14 @@ class Basecamp {
 	  */ 
 	public function getSingleCalendarEvent($calendar_id=null, $event_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required for the calendar event.";
-			return false;
+			$this->show_error('method requires calendar ID', 'getSingleCalendarEvent($calendar_id, $event_id)');
 		}
 		if( ! isset($event_id))
 		{
-			$this->errors[] = "Event ID is required for the calendar event.";
-			return false;
+			$this->show_error('method requires event ID', 'getSingleCalendarEvent($calendar_id, $event_id)');
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}/calendar_events/{$event_id}", 'GET');
@@ -673,33 +528,24 @@ class Basecamp {
 	  */  
 	public function createProjectCalendarEvent($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for creating a calendar event.";
-			return false;
+			$this->show_error('method requires project ID', 'createProjectCalendarEvent($project_id, $data');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*summary', 'description', '|all_day', '|starts_at', 'ends_at'), $data))
 		{
-			$this->errors[] = "Invalid data input for creating a calendar event.";
-			return false;
+			$this->show_error("invalid data input", 'array("summary" => "Lorem ipsum...", "description" => "", "all_day" => true, "starts_at" => "0000-00-00", "ends_at" => "0000-00-00")');
 		}
 		if(isset($data['starts_at']) && ! $this->validateDateTime($data['starts_at']))
 		{
-			$this->errors[] = "Starts_at requires ISO 8601 formatting.";
-			return false;
+			$this->show_error("starts_at requires ISO 8601 formatting <em>0000-00-00T00:00:00-00:00</em>");
 		}
 		if(isset($data['ends_at']) && ! $this->validateDateTime($data['ends_at']))
 		{
-			$this->errors[] = "Ends_at requires ISO 8601 formatting.";
-			return false;
+			$this->show_error("ends_at requires ISO 8601 formatting <em>0000-00-00T00:00:00-00:00</em>");
 		}
 		
 		return $this->processRequest("projects/{$project_id}/calendar_events", 'POST', $data);
@@ -719,33 +565,24 @@ class Basecamp {
 	  */  
 	public function createCalendarEvent($calendar_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required for creating a calendar event.";
-			return false;
+			$this->show_error('method requires calendar ID', 'createCalendarEvent($calendar_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*summary', 'description', '|all_day', '|starts_at', 'ends_at'), $data))
 		{
-			$this->errors[] = "Invalid data input for creating a calendar event.";
-			return false;
+			$this->show_error("invalid data input", 'array("summary" => "Lorem ipsum...", "description" => "", "all_day" => true, "starts_at" => "0000-00-00", "ends_at" => "0000-00-00")');
 		}
 		if(isset($data['starts_at']) && ! $this->validateDateTime($data['starts_at']))
 		{
-			$this->errors[] = "Starts_at requires ISO 8601 formatting.";
-			return false;
+			$this->show_error("starts_at requires ISO 8601 formatting <em>0000-00-00T00:00:00-00:00</em>");
 		}
 		if(isset($data['ends_at']) && ! $this->validateDateTime($data['ends_at']))
 		{
-			$this->errors[] = "Ends_at requires ISO 8601 formatting.";
-			return false;
+			$this->show_error("ends_at requires ISO 8601 formatting <em>0000-00-00T00:00:00-00:00</em>");
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}/calendar_events", 'POST', $data);
@@ -766,38 +603,28 @@ class Basecamp {
 	  */  
 	public function updateProjectCalendarEvent($project_id=null, $event_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for updating project calendar events.";
-			return false;
+			$this->show_error('method requires project ID', 'updateProjectCalendarEvent($project_id, $event_id, $data)');
 		}
 		if( ! isset($event_id))
 		{
-			$this->errors[] = "Event ID is required for updating project calendar events.";
-			return false;
+			$this->show_error('method requires event ID', 'updateProjectCalendarEvent($project_id, $event_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*summary', 'description', 'all_day', 'starts_at', 'ends_at'), $data))
 		{
-			$this->errors[] = "Invalid data input for updating the project calendar event.";
-			return false;
+			$this->show_error("invalid data input", 'array("summary" => "Lorem ipsum...", "description" => "", "all_day" => true, "starts_at" => "0000-00-00", "ends_at" => "0000-00-00")');
 		}
 		if(isset($data['starts_at']) && ! $this->validateDateTime($data['starts_at']))
 		{
-			$this->errors[] = "Starts_at requires ISO 8601 formatting.";
-			return false;
+			$this->show_error("starts_at requires ISO 8601 formatting <em>0000-00-00T00:00:00-00:00</em>");
 		}
 		if(isset($data['ends_at']) && ! $this->validateDateTime($data['ends_at']))
 		{
-			$this->errors[] = "Ends_at requires ISO 8601 formatting.";
-			return false;
+			$this->show_error("ends_at requires ISO 8601 formatting <em>0000-00-00T00:00:00-00:00</em>");
 		}
 		
 		return $this->processRequest("projects/{$project_id}/calendar_events/{$event_id}", 'PUT', $data);
@@ -818,38 +645,28 @@ class Basecamp {
 	  */  
 	public function updateCalendarEvent($calendar_id=null, $event_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required for updating a calendar event.";
-			return false;
+			$this->show_error('method requires calendar ID', 'updateCalendarEvent($calendar_id, $event_id, $data)');
 		}
 		if( ! isset($event_id))
 		{
-			$this->errors[] = "Event ID is required for updating a calendar event.";
-			return false;
+			$this->show_error('method requires event ID', 'updateCalendarEvent($calendar_id, $event_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*summary', 'description', 'all_day', 'starts_at', 'ends_at'), $data))
 		{
-			$this->errors[] = "Invalid data input for updating the calendar event.";
-			return false;
+			$this->show_error("invalid data input", 'array("summary" => "Lorem ipsum...", "description" => "", "all_day" => true, "starts_at" => "0000-00-00", "ends_at" => "0000-00-00")');
 		}
 		if(isset($data['starts_at']) && ! $this->validateDateTime($data['starts_at']))
 		{
-			$this->errors[] = "Starts_at requires ISO 8601 formatting.";
-			return false;
+			$this->show_error("starts_at requires ISO 8601 formatting <em>0000-00-00T00:00:00-00:00</em>");
 		}
 		if(isset($data['ends_at']) && ! $this->validateDateTime($data['ends_at']))
 		{
-			$this->errors[] = "Ends_at requires ISO 8601 formatting.";
-			return false;
+			$this->show_error("ends_at requires ISO 8601 formatting <em>0000-00-00T00:00:00-00:00</em>");
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}/calendar_events/{$event_id}", 'PUT', $data);
@@ -866,20 +683,14 @@ class Basecamp {
 	  */  
 	public function deleteProjectCalendarEvent($project_id=null, $event_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for deleting project calendar events.";
-			return false;
+			$this->show_error('method requires project ID', 'deleteProjectCalendarEvent($project_id, $event_id)');
 		}
 		if( ! isset($event_id))
 		{
-			$this->errors[] = "Event ID is required for deleting project calendar events.";
+			$this->show_error('method requires event ID', 'deleteProjectCalendarEvent($project_id, $event_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/calendar_events/{$event_id}", 'DELETE');
@@ -896,21 +707,15 @@ class Basecamp {
 	  */  
 	public function deleteCalendarEvent($calendar_id=null, $event_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required for deleting calendar events.";
+			$this->show_error('method requires calendar ID', 'deleteCalendarEvent($calendar_id, $event_id)');
 			return false;
 		}
 		if( ! isset($event_id))
 		{
-			$this->errors[] = "Event ID is required for deleting calendar events.";
-			return false;
+			$this->show_error('method requires event ID', 'deleteCalendarEvent($calendar_id, $event_id)');
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}/calendar_events/{$event_id}", 'DELETE');
@@ -929,11 +734,6 @@ class Basecamp {
 	  */  
 	public function getCalendars()
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		return $this->processRequest("calendars", 'GET');
 	}
 	
@@ -947,16 +747,10 @@ class Basecamp {
 	  */  
 	public function getSingleCalendar($calendar_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required to retrieve a calendar.";
-			return false;
+			$this->show_error('method requires calendar ID', 'getSingleCalendar($calendar_id)');
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}", 'GET');
@@ -977,16 +771,10 @@ class Basecamp {
 	  */  
 	public function createCalendar($data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate data
 		if( ! $this->validateData(array('*name'), $data))
 		{
-			$this->errors[] = "Invalid data input for creating a calendar.";
-			return false;
+			$this->show_error('invalid data input', 'array("name" => "Birthdays")');
 		}
 		
 		return $this->processRequest("calendars", 'POST', $data);
@@ -1008,23 +796,16 @@ class Basecamp {
 	  */  
 	public function updateCalendar($calendar_id=null, $data="")
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required for updating a calendar.";
-			return false;
+			$this->show_error('method requires calendar ID', 'updateCalendar($calendar_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*name'), $data))
 		{
-			$this->errors[] = "Invalid data input for updating a calendar.";
-			return false;
+			$this->show_error('invalid data input', 'array("name" => "Birthdays")');
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}", 'PUT', $data);
@@ -1040,16 +821,10 @@ class Basecamp {
 	  */  
 	public function deleteCalendar($calendar_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($calendar_id))
 		{
-			$this->errors[] = "Calendar ID is required for deleting a calendar.";
-			return false;
+			$this->show_error('method requires calendar ID', 'deleteCalendar($calendar_id)');
 		}
 		
 		return $this->processRequest("calendars/{$calendar_id}", 'DELETE');
@@ -1077,33 +852,24 @@ class Basecamp {
 	  */  
 	public function createComment($project_id=null, $topic="", $topic_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for creating comments.";
-			return false;
+			$this->show_error('method requires project ID', 'createComment($project_id, $topic, $topic_id, $data)');
 		}
 		if( ! isset($topic) && empty($topic))
 		{
-			$this->errors[] = "A topic (messages, todos, uploads, etc) is required to create a comment.";
-			return false;
+			$this->show_error('method requires a topic (messages, todos, uploads, etc)', 'createComment($project_id, $topic, $topic_id, $data)');
 		}
 		if( ! isset($topic_id))
 		{
-			$this->errors[] = "Topic ID is required to create a comment.";
-			return false;
+			$this->show_error('method requires topic ID', 'createComment($project_id, $topic, $topic_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*content', 'subscribers', 'attachments'), $data))
 		{
-			$this->errors[] = "Invalid data input for creating a comment.";
-			return false;
+			$this->show_error('invalid data input', 'array("content" => "Lorem ipsum...", "subscribers" => array(1, 4, 6), "attachments" => array("/path/to/file.png"))');
 		}
 		
 		// multiple files can be uploaded
@@ -1143,21 +909,14 @@ class Basecamp {
 	  */  
 	public function deleteComment($project_id=null, $comment_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for deleting comments.";
-			return false;
+			$this->show_error('method requires project ID', 'deleteComment($project_id, $comment_id)');
 		}
 		if( ! isset($comment_id))
 		{
-			$this->errors[] = "Comment ID is required for deleting comments.";
-			return false;
+			$this->show_error('method requires comment ID', 'deleteComment($project_id, $comment_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/comments/{$comment_id}", 'DELETE');
@@ -1177,16 +936,10 @@ class Basecamp {
 	  */  
 	public function getDocuments($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for retrieving documents.";
-			return false;
+			$this->show_error('method requires project ID', 'getDocuments($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/documents", 'GET');
@@ -1203,21 +956,14 @@ class Basecamp {
 	  */  
 	public function getSingleDocument($project_id=null, $document_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for retrieving documents.";
-			return false;
+			$this->show_error('method requires project ID', 'getSingleDocument($project_id, $document_id)');
 		}
 		if( ! isset($document_id))
 		{
-			$this->errors[] = "Document ID is required for retrieving documents.";
-			return false;
+			$this->show_error('method requires document ID', 'getSingleDocument($project_id, $document_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/documents/{$document_id}", 'GET');
@@ -1236,23 +982,16 @@ class Basecamp {
 	  */  
 	public function createDocument($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to create a document.";
-			return false;
+			$this->show_error('method requires project ID', 'createDocument($project_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*title', '*content'), $data))
 		{
-			$this->errors[] = "Invalid data input for ";
-			return false;
+			$this->show_error('invalid data input', 'array("title" => "My Happy Dog", "content" => "Lorem ipsum dolor...")');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/documents", 'POST', $data);
@@ -1272,28 +1011,20 @@ class Basecamp {
 	  */  
 	public function updateDocument($project_id=null, $document_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to update a document.";
-			return false;
+			$this->show_error('method requires project ID', 'updateDocument($project_id, $document_id, $data)');
 		}
 		if( ! isset($document_id))
 		{
-			$this->errors[] = "Document ID is required to update a document.";
-			return false;
+			$this->show_error('method requires document ID', 'updateDocument($project_id, $document_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*title', '*content'), $data))
 		{
-			$this->errors[] = "Invalid data input for ";
-			return false;
+			$this->show_error('invalid data input', 'array("title" => "My Happy Dog", "content" => "Lorem ipsum dolor...")');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/documents/{$document_id}", 'PUT', $data);
@@ -1310,21 +1041,14 @@ class Basecamp {
 	  */  
 	public function deleteDocument($project_id=null, $document_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to delete a document.";
-			return false;
+			$this->show_error('method requires project ID', 'deleteDocument($project_id, $document_id)');
 		}
 		if( ! isset($document_id))
 		{
-			$this->errors[] = "Document ID is required to deleting a document.";
-			return false;
+			$this->show_error('method requires document ID', 'deleteDocument($project_id, $document_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/documents/{$document_id}", 'DELETE');
@@ -1348,11 +1072,6 @@ class Basecamp {
 	  */  
 	public function getGlobalEvents($datetime="", $page=1)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($datetime) || empty($datetime) || ! $this->validateDateTime($datetime))
 		{
@@ -1378,16 +1097,10 @@ class Basecamp {
 	  */  
 	public function getProjectEvents($project_id=null, $datetime="", $page=1)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to get project events.";
-			return false;
+			$this->show_error('method requires project ID', 'getProjectEvents($project_id, $datetime, $page)');
 		}
 		if( ! isset($datetime) || empty($datetime) || ! $this->validateDateTime($datetime))
 		{
@@ -1413,16 +1126,10 @@ class Basecamp {
 	  */  
 	public function getPersonsEvents($person_id=null, $datetime="", $page=1)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($person_id))
 		{
-			$this->errors[] = "Person ID is required to get user's events.";
-			return false;
+			$this->show_error('method requires person ID', 'getPersonsEvents($person_id, $datetime, $page)');
 		}
 		if( ! isset($datetime) || empty($datetime) || ! $this->validateDateTime($datetime))
 		{
@@ -1448,21 +1155,14 @@ class Basecamp {
 	  */  
 	public function getSingleMessage($project_id=null, $message_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to get messages.";
-			return false;
+			$this->show_error('method requires project ID', 'getSingleMessage($project_id, $message_id)');
 		}
 		if( ! isset($message_id))
 		{
-			$this->errors[] = "Message ID is required to get messages.";
-			return false;
+			$this->show_error('method requires message ID', 'getSingleMessage($project_id, $message_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/messages/{$message_id}", 'GET');
@@ -1483,23 +1183,16 @@ class Basecamp {
 	  */  
 	public function createMessage($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to create messages.";
-			return false;
+			$this->show_error('method requires project ID', 'createMessage($project_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*subject', '*content', 'subscribers', 'attachments'), $data))
 		{
-			$this->errors[] = "Invalid data input for creating messages.";
-			return false;
+			$this->show_error('invalid data input', 'createMessage($project_id, array("subject" => "", "content" => "", "subscribers" => array(1,4,6), "attachments" => array("/path/to/file.png")))');
 		}
 		
 		// multiple files can be uploaded
@@ -1543,28 +1236,20 @@ class Basecamp {
 	  */  
 	public function updateMessage($project_id=null, $message_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for updating messages.";
-			return false;
+			$this->show_error('method requires project ID', 'updateMessage($project_id, $message_id, $data)');
 		}
 		if( ! isset($message_id))
 		{
-			$this->errors[] = "Message ID is required for updating messages.";
-			return false;
+			$this->show_error('method requires message ID', 'updateMessage($project_id, $message_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*subject', '*content', 'subscribers', 'attachments'), $data))
 		{
-			$this->errors[] = "Invalid data input for updating messages.";
-			return false;
+			$this->show_error('invalid data input', 'updateMessage($project_id, $message_id, array("subject" => "", "content" => "", "subscribers" => array(1,4,6), "attachments" => array("/path/to/file.png")))');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/messages/{$message_id}", 'PUT', $data);
@@ -1581,21 +1266,14 @@ class Basecamp {
 	  */  
 	public function deleteMessage($project_id=null, $message_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for deleting messages.";
-			return false;
+			$this->show_error('method requires project ID', 'deleteMessage($project_id, $message_id)');
 		}
 		if( ! isset($message_id))
 		{
-			$this->errors[] = "Message ID is required for deleting messages.";
-			return false;
+			$this->show_error('method requires message ID', 'deleteMessage($project_id, $message_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/messages/{$message_id}", 'DELETE');
@@ -1615,11 +1293,6 @@ class Basecamp {
 	  */  
 	public function getPeople()
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		return $this->processRequest("people", 'GET');
 	}
 	
@@ -1633,16 +1306,10 @@ class Basecamp {
 	  */  
 	public function getPerson($person_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($person_id))
 		{
-			$this->errors[] = "Person ID is required to retrieve user info.";
-			return false;
+			$this->show_error('method requires person ID', 'getPerson($person_id)');
 		}
 		
 		return $this->processRequest("people/{$person_id}", 'GET');
@@ -1657,11 +1324,6 @@ class Basecamp {
 	  */  
 	public function getMe()
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		return $this->processRequest("people/me", 'GET');
 	}
 	
@@ -1675,16 +1337,10 @@ class Basecamp {
 	  */  
 	public function deletePerson($person_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($person_id))
 		{
-			$this->errors[] = "Person ID is required to delete a user.";
-			return false;
+			$this->show_error('method requires person ID', 'deletePerson($person_id)');
 		}
 		
 		return $this->processRequest("people/{$person_id}", 'DELETE');
@@ -1703,11 +1359,6 @@ class Basecamp {
 	  */  
 	public function getProjects()
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		return $this->processRequest("projects", 'GET');
 	}
 	
@@ -1720,11 +1371,6 @@ class Basecamp {
 	  */  
 	public function getArchivedProjects()
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		return $this->processRequest("projects/archived", 'GET');
 	}
 	
@@ -1738,16 +1384,10 @@ class Basecamp {
 	  */  
 	public function getSingleProject($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to retrieve a project.";
-			return false;
+			$this->show_error('method requires project ID', 'getSingleProject($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}", 'GET');
@@ -1763,16 +1403,10 @@ class Basecamp {
 	  */  
 	public function createProject($data=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate data
 		if( ! $this->validateData(array('*name', 'description'), $data))
 		{
-			$this->errors[] = "Invalid data input for creating a project";
-			return false;
+			$this->show_error('invalid data input', 'createProject(array("name" => "New Project", "description" => "Lorem ipsum dolor..."))');
 		}
 		
 		return $this->processRequest("projects", 'POST', $data);
@@ -1789,23 +1423,16 @@ class Basecamp {
 	  */  
 	public function updateProject($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to update project.";
-			return false;
+			$this->show_error('method requires project ID', 'updateProject($project_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('name', 'description'), $data))
 		{
-			$this->errors[] = "Invalid data input for updating a project.";
-			return false;
+			$this->show_error('invalid data input', 'updateProject($project_id, array("name" => "New Project", "description" => "Lorem ipsum dolor..."))');
 		}
 		
 		return $this->processRequest("projects/{$project_id}", 'PUT', $data);
@@ -1821,16 +1448,10 @@ class Basecamp {
 	  */  
 	public function activateProject($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to activate a project.";
-			return false;
+			$this->show_error('method requires project ID', 'activateProject($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}", 'PUT', array('archived' => false));
@@ -1846,16 +1467,10 @@ class Basecamp {
 	  */  
 	public function archiveProject($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to archive a project.";
-			return false;
+			$this->show_error('method requires project ID', 'archiveProject($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}", 'PUT', array('archived' => true));
@@ -1871,16 +1486,10 @@ class Basecamp {
 	  */  
 	public function deleteProject($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to delete a project.";
-			return false;
+			$this->show_error('method requires project ID', 'deleteProject($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}", 'DELETE');
@@ -1900,16 +1509,10 @@ class Basecamp {
 	  */  
 	public function getProjectToDoLists($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required for project todo lists.";
-			return false;
+			$this->show_error('method requires project ID', 'getProjectToDoLists($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/todolists", 'GET');
@@ -1925,16 +1528,10 @@ class Basecamp {
 	  */  
 	public function getProjectsCompletedToDoLists($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to retrieve completed project todo lists.";
-			return false;
+			$this->show_error('method requires project ID', 'getProjectsCompletedToDoLists($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/todolists/completed", 'GET');
@@ -1963,16 +1560,10 @@ class Basecamp {
 	  */  
 	public function getPersonsAssignedToDoLists($person_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($person_id))
 		{
-			$this->errors[] = "Person ID is required to retrieve user's todo lists.";
-			return false;
+			$this->show_error('method requires person ID', 'getPersonsAssignedToDoLists($person_id)');
 		}
 		
 		return $this->processRequest("people/{$person_id}/assigned_todos", 'GET');
@@ -2002,21 +1593,14 @@ class Basecamp {
 	  */  
 	public function getSingleToDoList($project_id=null, $todolist_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to retrieve a todo list.";
-			return false;
+			$this->show_error('method requires project ID', 'getSingleToDoList($project_id, $todolist_id)');
 		}
 		if( ! isset($todolist_id))
 		{
-			$this->errors[] = "Todo List ID is required to retrieve a todo list.";
-			return false;
+			$this->show_error('method requires todo list ID', 'getSingleToDoList($project_id, $todolist_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/todolists/{$todolist_id}", 'GET');
@@ -2033,23 +1617,16 @@ class Basecamp {
 	  */  
 	public function createProjectToDoList($project_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to create a project todo list.";
-			return false;
+			$this->show_error('method requires project ID', 'createProjectToDoList($project_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*name', 'description'), $data))
 		{
-			$this->errors[] = "Invalid data input for ";
-			return false;
+			$this->show_error('invalid data input', 'createProjectToDoList($project_id, array("name" => "My Todo List", "description" => "Lorem ipsum dolor..."))');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/todolists", 'POST', $data);
@@ -2079,28 +1656,20 @@ class Basecamp {
 	  */  
 	public function updateProjectToDoList($project_id=null, $todolist_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to update a project todo list.";
-			return false;
+			$this->show_error('method requires project ID', 'updateProjectToDoList($project_id, $todolist_id, $data)');
 		}
 		if( ! isset($todolist_id))
 		{
-			$this->errors[] = "Todo list ID is required to update a project todo list.";
-			return false;
+			$this->show_error('method requires todo list ID', 'updateProjectToDoList($project_id, $todolist_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*name', 'description', 'position'), $data))
 		{
-			$this->errors[] = "Invalid data input for updating a project todo list.";
-			return false;
+			$this->show_error('invalid data input', 'updateProjectToDoList($project_id, $todolist_id, array("name" => "My Todo List", "description" => "Lorem ipsum dolor...", "position" => 1))');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/todolists/{$todolist_id}", 'PUT', $data);
@@ -2132,21 +1701,14 @@ class Basecamp {
 	  */  
 	public function deleteToDoList($project_id=null, $todolist_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to delete a todo list.";
-			return false;
+			$this->show_error('method requires project ID', 'deleteToDoList($project_id, $todolist_id)');
 		}
 		if( ! isset($todolist_id))
 		{
-			$this->errors[] = "Todo List ID is required to delete a todo list.";
-			return false;
+			$this->show_error('method requires todo list ID', 'deleteToDoList($project_id, $todolist_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/todolists/{$todolist_id}", 'DELETE');
@@ -2167,21 +1729,14 @@ class Basecamp {
 	  */  
 	public function getToDo($project_id=null, $todo_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to get a task.";
-			return false;
+			$this->show_error('method requires project ID', 'getToDo($project_id, $todo_id)');
 		}
 		if( ! isset($todo_id))
 		{
-			$this->errors[] = "Todo ID is required to get a task.";
-			return false;
+			$this->show_error('method requires todo ID', 'getToDo($project_id, $todo_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/todos/{$todo_id}", 'GET');
@@ -2203,28 +1758,20 @@ class Basecamp {
 	  */  
 	public function createToDo($project_id=null, $todolist_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to create a task.";
-			return false;
+			$this->show_error('method requires project ID', 'createToDo($project_id, $todolist_id, $data)');
 		}
 		if( ! isset($todolist_id))
 		{
-			$this->errors[] = "Todo List ID is required to create a task.";
-			return false;
+			$this->show_error('method requires todo list ID', 'createToDo($project_id, $todolist_id, $data)');
 		}
 		
 		// validate data
 		if( ! $this->validateData(array('*content', 'due_at', 'assignee'), $data))
 		{
-			$this->errors[] = "Invalid data input for creating a task.";
-			return false;
+			$this->show_error('invalid data input', 'createToDo($project_id, $todolist_id, array("content" => "", "due_at" => "0000:00:00T00:00:00-00:00"), "assignee" => array("id" => 1, "type" => "Person"))');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/todolists/{$todolist_id}/todos", 'POST', $data);
@@ -2246,28 +1793,20 @@ class Basecamp {
 	  */  
 	public function updateToDo($project_id=null, $todo_id=null, $data=array())
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to update a task.";
-			return false;
+			$this->show_error('method requires project ID', 'updateToDo($project_id, $todo_id, $data)');
 		}
 		if( ! isset($todo_id))
 		{
-			$this->errors[] = "Task ID is requied to update a task.";
-			return false;
+			$this->show_error('method requires task ID', 'updateToDo($project_id, $todo_id, $data)');
 		}
 		
 		// validate date
 		if( ! $this->validateData(array('*content', 'due_at', 'assignee', 'position'), $data))
 		{
-			$this->errors[] = "Invalid data input for updating a task.";
-			return false;
+			$this->show_error('invalid data input', 'createToDo($project_id, $todolist_id, array("content" => "", "due_at" => "0000:00:00T00:00:00-00:00"), "assignee" => array("id" => 1, "type" => "Person"), "position" => 3)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/todos/{$todo_id}", 'PUT', $data);
@@ -2284,21 +1823,14 @@ class Basecamp {
 	  */  
 	public function deleteToDo($project_id=null, $todo_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate arguments
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to delete a task.";
-			return false;
+			$this->show_error('method requires project ID', 'deleteToDo($project_id, $todo_id)');
 		}
 		if( ! isset($todo_id))
 		{
-			$this->errors[] = "Task ID is required to delete a task.";
-			return false;
+			$this->show_error('method requires todo ID', 'deleteToDo($project_id, $todo_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/todos/{$todo_id}", 'DELETE');
@@ -2318,23 +1850,17 @@ class Basecamp {
 	  */  
 	public function getTopics($project_id=null)
 	{
-		if( ! $this->function_check())
-		{
-			return false;
-		}
-		
 		// validate argument
 		if( ! isset($project_id))
 		{
-			$this->errors[] = "Project ID is required to retrieve topics.";
-			return false;
+			$this->show_error('method requires project ID', 'getTopics($project_id)');
 		}
 		
 		return $this->processRequest("projects/{$project_id}/topics", 'GET');
 	}
 	
 	// --------------------------------------------------------------------
-	//		CONFIGURATION SETTERS/GETTERS
+	//		BRAINS OF THE OPERATION
 	// --------------------------------------------------------------------
 	
 	/**
@@ -2356,92 +1882,7 @@ class Basecamp {
 		}
 		return $string;
 	}
-	
-	/**
-	  * Allows you to set/change accountID after instantiation
-	  *
-	  * @param int $id
-	  * @return void
-	  */  
-	public function setAccountID($id=null)
-	{
-		$this->account_id = $id;
-	}
-	
-	/**
-	  * Allows you to get the current account ID
-	  *
-	  * @return int account id
-	  */  
-	public function getAccountID()
-	{
-		return $this->account_id;
-	}
-	
-	/**
-	  * Allows you to set/change the app name after instantiation
-	  *
-	  * @param string $app_name
-	  * @return void
-	  */  
-	public function setAppName($app_name="")
-	{
-		$this->app_name = $app_name;
-	}
-	
-	/**
-	  * Allows you to get the current app name
-	  *
-	  * @return string app name
-	  */  
-	public function getAppName()
-	{
-		return $this->app_name;
-	}
-	
-	/**
-	  * Allows you to set/change the username after instantiation
-	  *
-	  * @param string $username
-	  * @return void
-	  */  
-	public function setUsername($username="")
-	{
-	    $this->username = $username;
-	}
-	
-	/**
-	  * Allows you to get the current username
-	  *
-	  * @return string username
-	  */  
-	public function getUsername()
-	{
-		return $this->username;
-	}
-	
-	/**
-	  * Allows you to set/change the password after instantiation
-	  *
-	  * @param string $password
-	  * @return void
-	  */  
-	public function setPassword($password="")
-	{
-	    $this->password = $password;
-	}
-	
-	/**
-	  * Allows you to get the current password
-	  *
-	  * @access protected
-	  * @return string password
-	  */  
-	protected function getPassword()
-	{
-		return $this->password;
-	}
-	
+		
 	/**
 	  * Allows you to set the file content type for the upload headers
 	  *
@@ -2462,52 +1903,33 @@ class Basecamp {
 	{
 		return $this->file_content_type;
 	}
-	
-	// --------------------------------------------------------------------
-	//		BRAINS OF THE OPERATION
-	// --------------------------------------------------------------------
-	
+		
 	/**
-	  * Validate function arguments and makes sure we've got basic necessities set
+	  * Makes sure we've got basic necessities set
 	  *
 	  * @access private
 	  * @return boolean, success/fail
 	  */  
-	private function function_check()
+	private function api_check()
 	{
-		if(empty($this->basecamp_url))
+		if( ! $this->CI->config->item('basecamp.app_name'))
 		{
-			$this->errors[] = 'Basecamp URL is not set.';
-			$this->logit('Basecamp URL is not set.', 'error');
-			return false;
+			show_error('Please set your application name in the Basecamp config file.', 500);
 		}
 		
-		if(empty($this->app_name))
+		if( ! $this->CI->config->item('basecamp.account_id'))
 		{
-			$this->errors[] = 'Application name is not set.';
-			$this->logit('Application name is not set.', 'error');
-			return false;
+			show_error('Please set your account ID in the Basecamp config file.', 500);
 		}
 		
-		if(empty($this->account_id))
+		if( ! $this->CI->config->item('basecamp.username'))
 		{
-			$this->errors[] = 'Account ID is not set.';
-			$this->logit('Account ID is not set.', 'error');
-			return false;
+			show_error('Please set your username in the Basecamp config file.', 500);
 		}
 		
-		if(empty($this->username))
+		if( ! $this->CI->config->item('basecamp.password'))
 		{
-			$this->errors[] = 'Username is not set.';
-			$this->logit('Username is not set.', 'error');
-			return false;
-		}
-		
-		if(empty($this->password))
-		{
-			$this->errors[] = 'Password is not set.';
-			$this->logit('Password is not set.', 'error');
-			return false;
+			show_error('Please set your password in the Basecamp config file.', 500);
 		}
 		
 		return true;
@@ -2603,14 +2025,14 @@ class Basecamp {
 	  * @return void
 	  */  
 	private function logit($message="", $level="debug")
-	{
-		if(empty($message))
+	{		
+		// If debug message and debug is turned off
+		if($this->debug == false && $level == 'debug')
 		{
 			return;
 		}
 		
-		// If debug message and debug is turned off
-		if($debug == false && $level == 'debug')
+		if(empty($message))
 		{
 			return;
 		}
@@ -2621,7 +2043,7 @@ class Basecamp {
 			Console::log($message);
 		}
 		
-		// Codeigniter error
+		// Codeigniter errors
 		if(function_exists('log_message'))
 		{
 			log_message($level, $message);
@@ -2630,7 +2052,22 @@ class Basecamp {
 		// PHP error log
 		error_log('[BasecampAPI] '.ucfirst($level).': '.$message, 0);
 	}
-		
+	
+	/**
+	  * Logs message if debug is enables
+	  *
+	  * @param string $message
+	  * @param string $level
+	  * @access private
+	  * @return void
+	  */ 
+	private function show_error($error="", $example=null)
+	{
+		if($example)
+			$error .= "<code>".$example."</code>";
+		show_error("<strong>Basecamp Library Error:</strong> {$error}");
+	}
+	
 	/**
 	  * Process the RESTful Request
 	  *
@@ -2702,10 +2139,9 @@ class Basecamp {
 	  */  
 	private function buildURL($url="", $params=array())
 	{
-		$this->url = $this->basecamp_url . $this->account_id . '/api/v' . $this->api_version .
-					 '/' . $url . '.' . array_pop(explode('/', $this->content_type)) .
+		$this->url = $this->basecamp_url . $this->CI->config->item('basecamp.account_id') . '/api/v' . $this->api_version .
+					 '/' . $url . '.' . array_pop(explode('/', $this->CI->config->item('basecamp.content_type'))) .
 					 (! empty($params) ? '?'.http_build_query($params) : '');
-		var_dump($this->url);
 	}
 	
 	// --------------------------------------------------------------------
@@ -2792,8 +2228,7 @@ class Basecamp {
 		
 		if(empty($this->url))
 		{
-			$this->logit('URL has not been set.', 'error');
-			return false;
+			show_error("Unable to execute request without the URL.", 500);
 		}
 		
 		switch($verb)
@@ -2814,7 +2249,7 @@ class Basecamp {
 				$this->executeDelete($ch);
 				break;
 			default:
-				$this->logit('Current verb (' . $verb . ') is an invalid REST verb.', 'error');
+				show_error('Current verb (' . $verb . ') is an invalid REST verb.', 500);
 				curl_close($ch);
 				return false;
 		}
@@ -2830,7 +2265,7 @@ class Basecamp {
 	protected function executeGet($ch)
 	{
 		$this->setRequestHeaders($ch, array(
-									'User-Agent' => $this->app_name . ' ('.$this->username.')',
+									'User-Agent' => $this->CI->config->item('basecamp.app_name') . ' ('.$this->CI->config->item('basecamp.username').')',
 	    							'Accept' => $this->content_type,
 	    							'Content-Type' => $this->content_type
 								));
@@ -2849,7 +2284,7 @@ class Basecamp {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->request['body']);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		$this->setRequestHeaders($ch, array(
-									'User-Agent' => $this->app_name . ' ('.$this->username.')',
+									'User-Agent' => $this->CI->config->item('basecamp.app_name') . ' ('.$this->CI->config->item('basecamp.username').')',
 	    							'Accept' => $this->content_type,
 	    							'Content-Type' => $this->content_type
 								));
@@ -2869,7 +2304,7 @@ class Basecamp {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->request['body']);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		$this->setRequestHeaders($ch, array(
-									'User-Agent' => $this->app_name . ' ('.$this->username.')',
+									'User-Agent' => $this->CI->config->item('basecamp.app_name') . ' ('.$this->CI->config->item('basecamp.username').')',
 	    							'Accept' => $this->content_type,
 	    							'Content-Type' => $this->file_content_type
 								));
@@ -2896,7 +2331,7 @@ class Basecamp {
 		curl_setopt($ch, CURLOPT_INFILESIZE, $this->request['length']);
 		curl_setopt($ch, CURLOPT_PUT, true);
 		$this->setRequestHeaders($ch, array(
-									'User-Agent' => $this->app_name . ' ('.$this->username.')',
+									'User-Agent' => $this->CI->config->item('basecamp.app_name') . ' ('.$this->CI->config->item('basecamp.username').')',
 	    							'Accept' => $this->content_type,
 	    							'Content-Type' => $this->content_type
 								));
@@ -2917,7 +2352,7 @@ class Basecamp {
 	{
 	    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
 	    $this->setRequestHeaders($ch, array(
-	    							'User-Agent' => $this->app_name . ' ('.$this->username.')',
+	    							'User-Agent' => $this->CI->config->item('basecamp.app_name') . ' ('.$this->CI->config->item('basecamp.username').')',
 	    							'Accept' => $this->content_type,
 	    							'Content-Type' => $this->content_type
 	    						));
@@ -2980,7 +2415,7 @@ class Basecamp {
 	protected function setAuth(&$ch)
 	{
 		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-		curl_setopt($ch, CURLOPT_USERPWD, $this->username . ':' . $this->password);
+		curl_setopt($ch, CURLOPT_USERPWD, $this->CI->config->item('basecamp.username') . ':' . $this->CI->config->item('basecamp.password'));
 	}
 	
 	/**
