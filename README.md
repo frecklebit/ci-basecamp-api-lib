@@ -9,3 +9,15 @@ This CodeIgniter library connects to the NEW Basecamp API. It does not work with
 ========
 
 ### Accesses
+
+`getAccessesForProject` - Retrieves all accesses for a specific project
+
+```php
+getAccessesForProject($project_id=null);
+```
+
+`getAccessesForCalendar` - Retrieves all accesses for a specific calendar
+
+```php
+getAccessesForProject($project_id=null);
+```
