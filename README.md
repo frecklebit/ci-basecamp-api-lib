@@ -92,8 +92,9 @@ Updates a single calendar event in a project, accepted data: `summary`, `descrip
 
 	updateProjectCalendarEvent($project_id, $event_id, $data)
 
-Updates a single calendar event in a specified calendar, accepted data: `summary`, `description`, `all_day`, `starts_at`, `ends_at`
+Updates a single calendar event in a specified calendar
 
+	// accepted data: `summary`, `description`, `all_day`, `starts_at`, `ends_at`
 	updateCalendarEvent($calendar_id, $event_id, $data)
 
 Deletes a single calendar event
