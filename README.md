@@ -1,6 +1,12 @@
 The New Basecamp API CI Library
 ===================
 
-This library is not yet complete. More to come.
+This CodeIgniter library connects to the NEW Basecamp API. It does not work with Basecamp Classic. For more information on the Basecamp API, visit the [37signals Github page](https://github.com/37signals/bcx-api).
 
-The New Basecamp API Codeigniter library (can also be used as PHP class).
+Sections
+========
+
+Accesses
+--------
+
+
