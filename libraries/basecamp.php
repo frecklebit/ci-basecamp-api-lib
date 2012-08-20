@@ -1637,7 +1637,8 @@ class Basecamp {
 	  * 
 	  * <strong>See method <samp>createProjectToDoList()</samp></strong>
 	  *
-	  * @param int $project_id, array $data
+	  * @param int $project_id
+	  * @param array $data
 	  * @return object Current JSON representation of the project todo list
 	  */  
 	public function createToDoList($project_id=null, $data=array())

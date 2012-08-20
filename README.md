@@ -14,16 +14,19 @@ Retrieve all accesses for a specific calendar
 
 	getAccessesForCalendar($calendar_id)
 		
-Grant access to a specific project, accepted data: `ids`, `email_addresses`
+Grant access to a specific project
 
+	// accepted data: ids, email_addresses
 	grantAccessToProject($project_id, $data)
 
-Grant access to a specific project, accepted data: `ids`, `email_addresses`
+Grant access to a specific project
 
+	// accepted data: ids, email_addresses
 	grantAccessToProject($project_id, $data)
 
-Grant access to a specific calendar, accepted data: `ids`, `email_addresses`
+Grant access to a specific calendar
 
+	// accepted data: ids, email_addresses
 	grantAccessToCalendar($calendar_id, $data)
 
 Revoke access to projects
@@ -45,8 +48,9 @@ Retrieves token for attachment upload
 
 	createAttachment($file_path)
 
-Creates new entry in the files section, data: `content`, `subscribers`, `attachments`
+Creates new entry in the files section
 
+	// accepted data: content, subscribers, attachments
 	uploadFile($project_id, $data)
 
 Get content, comments and attachments of a specific upload
@@ -80,21 +84,24 @@ Retrieve single calendar event in a calendar
 
 	getSingleCalendarEvent($calendar_id, $event_id)
 
-Create a calendar event in a project, accepted data: `summary`, `description`, `all_day`, `starts_at`, `ends_at`
+Create a calendar event in a project
 
+	// accepted data: summary, description, all_day, starts_at, ends_at
 	createProjectCalendarEvent($project_id, $data)
 
-Create a calendar event, accepted data: `summary`, `description`, `all_day`, `starts_at`, `ends_at`
+Create a calendar event
 
+	// accepted data: summary, description, all_day, starts_at, ends_at
 	createCalendarEvent($calendar_id, $data)
 
-Updates a single calendar event in a project, accepted data: `summary`, `description`, `all_day`, `starts_at`, `ends_at`
+Updates a single calendar event in a project
 
+	// accepted data: summary, description, all_day, starts_at, ends_at
 	updateProjectCalendarEvent($project_id, $event_id, $data)
 
 Updates a single calendar event in a specified calendar
 
-	// accepted data: `summary`, `description`, `all_day`, `starts_at`, `ends_at`
+	// accepted data: summary, description, all_day, starts_at, ends_at
 	updateCalendarEvent($calendar_id, $event_id, $data)
 
 Deletes a single calendar event
@@ -118,10 +125,12 @@ Retrieves single calendar
 
 Creates a new calendar or multiple calendars if $data is array
 
+	// accepted data: name
 	createCalendar($data)
 
 Updates a single calendar
 
+	// accepted data: name
 	updateCalendar($calendar_id, $data)
 
 Deletes a single calendar
@@ -133,6 +142,7 @@ Comments
 
 Creates a new comment for specified project and topic
 
+	// accepted data: content, subscribers, attachments
 	createComment($project_id, $topic, $topic_id, $data)
 
 Deletes a comment specified
@@ -152,10 +162,12 @@ Retrieves recent version of single document
 
 Creates a new document from the parameters passed
 
+	// accepted data: title, content
 	createDocument($project_id, $data)
 
 Updates a document in a specified project
 
+	// accepted data: title, content
 	updateDocument($project_id, $document_id, $data)
 
 Deletes a specified document from a project
@@ -167,14 +179,17 @@ Events
 
 Returns all global events between specified dates passed
 
+	// datetime format: ISO 8601 0000-00-00T00:00:00-00:00
 	getGlobalEvents($datetime, $page)
 
 Retieves 50 project events at a time, with pagination
 
+	// datetime format: ISO 8601 0000-00-00T00:00:00-00:00
 	getProjectEvents($project_id, $datetime, $page)
 
 Retrieves 50 person events at a time, with pagination
 
+	// datetime format: ISO 8601 0000-00-00T00:00:00-00:00
 	getPersonsEvents($person_id, $datetime, $page)
 
 Messages/Discussions
@@ -186,10 +201,12 @@ Retrieves specified message/discussion from project
 
 Creates a message/discussion in a project
 
+	// accepted data: subject, content, subscribers, attachments
 	createMessage($project_id, $data)
 
 Updates the message/discussion in a project
 
+	// accepted data: subject, content, subscribers, attachments
 	updateMessage($project_id, $message_id, $data)
 
 Deletes the specified message/discussion from a project
@@ -232,10 +249,12 @@ Retrieves single project
 
 Creates a new project
 
+	// accepted data: name, description
 	createProject($data)
 
 Updates a single project
 
+	// accepted data: name, description
 	updateProject($project_id, $data)
 
 Activates an archived project
@@ -279,18 +298,22 @@ Retrieves a single ToDo List in specified project
 
 Creates a new ToDo List in a specified project
 
+	// accepted data: name, description
 	createProjectToDoList($project_id, $data)
 
 Shorthand method to create a project todo list
 
+	// accepted data: name, description
 	createToDoList($project_id, $data)
 
 Update a ToDoList in a specified project
 
+	// accepted data: name, description, position
 	updateProjectToDoList($project_id, $todolist_id, $data)
 
 Shorthand method to update a project todo list
 
+	// accepted data: name, description, position
 	updateToDoList($project_id, $todolist_id, $data)
 
 Deletes a specified project ToDo List
@@ -306,10 +329,12 @@ Retrieves a single todo from a project
 
 Creates a todo item for a project
 
+	// accepted data: content, due_at, assignee
 	createToDo($project_id, $todolist_id, $data)
 
 Update a single todo in a project
 
+	// accepted data: content, due_at, assignee, position
 	updateToDo($project_id, $todo_id, $data)
 
 Delete the todo item from a ToDoList in a project
