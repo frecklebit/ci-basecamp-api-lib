@@ -14,15 +14,15 @@ Retrieve all accesses for a specific calendar
 
 	getAccessesForCalendar($calendar_id)
 		
-Grant access to a specific project `Data: ids, email_addresses`
+Grant access to a specific project, accepted data: `ids`, `email_addresses`
 
 	grantAccessToProject($project_id, $data)
 
-Grant access to a specific project `Data: ids, email_addresses`
+Grant access to a specific project, accepted data: `ids`, `email_addresses`
 
 	grantAccessToProject($project_id, $data)
 
-Grant access to a specific calendar `Data: ids, email_addresses`
+Grant access to a specific calendar, accepted data: `ids`, `email_addresses`
 
 	grantAccessToCalendar($calendar_id, $data)
 
