@@ -10,8 +10,6 @@ This CodeIgniter library connects to the NEW Basecamp API. It does not work with
 
 ### Accesses
 
-`getAccessesForProject($project_id)` - Retrieve all accesses for a specific project
-
-`getAccessesForCalendar($calendar_id)` - Retrieve all accesses for a specific calendar
-
-`grantAccessToProject($project_id, $data)` - Grant access to a specific project
+*`getAccessesForProject($project_id)` - Retrieve all accesses for a specific project
+*`getAccessesForCalendar($calendar_id)` - Retrieve all accesses for a specific calendar
+*`grantAccessToProject($project_id, $data)` - Grant access to a specific project
