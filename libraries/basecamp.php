@@ -467,7 +467,7 @@ class Basecamp {
 	}
 	
 	/**
-	  * Get single calendar event in a project
+	  * Retrieve single calendar event in a project
 	  *
 	  * <pre>GET /projects/1/calendar_events/1.json</pre>
 	  *
@@ -491,7 +491,7 @@ class Basecamp {
 	}
 	
 	/**
-	  * Get single calendar event in a calendar
+	  * Retrieve single calendar event in a calendar
 	  * 
 	  * <pre>GET /calendars/1/calendar_events/1.json</pre>
 	  *
@@ -794,7 +794,7 @@ class Basecamp {
 	  * @param array $data Accepted data: <samp>name</samp>
 	  * @return object calendar data or false
 	  */  
-	public function updateCalendar($calendar_id=null, $data="")
+	public function updateCalendar($calendar_id=null, $data=array())
 	{
 		// validate argument
 		if( ! isset($calendar_id))
