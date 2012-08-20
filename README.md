@@ -9,6 +9,3 @@ This CodeIgniter library connects to the NEW Basecamp API. It does not work with
 ========
 
 ### Accesses
---------
-
-
