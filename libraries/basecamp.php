@@ -2267,8 +2267,8 @@ class Basecamp {
 	{
 		$this->setRequestHeaders($ch, array(
 									'User-Agent' => $this->CI->config->item('basecamp.app_name') . ' ('.$this->CI->config->item('basecamp.username').')',
-	    							'Accept' => $this->content_type,
-	    							'Content-Type' => $this->content_type
+	    							'Accept' => $this->CI->config->item('basecamp.content_type'),
+	    							'Content-Type' => $this->CI->config->item('basecamp.content_type')
 								));
 		$this->doExecute($ch);
 	}
@@ -2286,8 +2286,8 @@ class Basecamp {
 		curl_setopt($ch, CURLOPT_POST, 1);
 		$this->setRequestHeaders($ch, array(
 									'User-Agent' => $this->CI->config->item('basecamp.app_name') . ' ('.$this->CI->config->item('basecamp.username').')',
-	    							'Accept' => $this->content_type,
-	    							'Content-Type' => $this->content_type
+	    							'Accept' => $this->CI->config->item('basecamp.content_type'),
+	    							'Content-Type' => $this->CI->config->item('basecamp.content_type')
 								));
 		
 		$this->doExecute($ch);
@@ -2306,8 +2306,8 @@ class Basecamp {
 		curl_setopt($ch, CURLOPT_POST, 1);
 		$this->setRequestHeaders($ch, array(
 									'User-Agent' => $this->CI->config->item('basecamp.app_name') . ' ('.$this->CI->config->item('basecamp.username').')',
-	    							'Accept' => $this->content_type,
-	    							'Content-Type' => $this->file_content_type
+	    							'Accept' => $this->CI->config->item('basecamp.content_type'),
+	    							'Content-Type' => $this->CI->config->item('basecamp.content_type')
 								));
 		
 		$this->doExecute($ch);
@@ -2333,8 +2333,8 @@ class Basecamp {
 		curl_setopt($ch, CURLOPT_PUT, true);
 		$this->setRequestHeaders($ch, array(
 									'User-Agent' => $this->CI->config->item('basecamp.app_name') . ' ('.$this->CI->config->item('basecamp.username').')',
-	    							'Accept' => $this->content_type,
-	    							'Content-Type' => $this->content_type
+	    							'Accept' => $this->CI->config->item('basecamp.content_type'),
+	    							'Content-Type' => $this->CI->config->item('basecamp.content_type')
 								));
 		
 		$this->doExecute($ch);
@@ -2354,8 +2354,8 @@ class Basecamp {
 	    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
 	    $this->setRequestHeaders($ch, array(
 	    							'User-Agent' => $this->CI->config->item('basecamp.app_name') . ' ('.$this->CI->config->item('basecamp.username').')',
-	    							'Accept' => $this->content_type,
-	    							'Content-Type' => $this->content_type
+	    							'Accept' => $this->CI->config->item('basecamp.content_type'),
+	    							'Content-Type' => $this->CI->config->item('basecamp.content_type')
 	    						));
 	    
 	    $this->doExecute($ch);
