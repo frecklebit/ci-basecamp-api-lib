@@ -7,6 +7,7 @@ This CodeIgniter library connects to the NEW Basecamp API. It does not work with
 ========
 
 ### Accesses
+======
 
 * `getAccessesForProject($project_id)` - Retrieve all accesses for a specific project
 * `getAccessesForCalendar($calendar_id)` - Retrieve all accesses for a specific calendar
@@ -20,6 +21,7 @@ This CodeIgniter library connects to the NEW Basecamp API. It does not work with
 * `revokeAccessToCalendar($calendar_id, $person_id)` - Revoke access to calendars
 
 ### Attachments/Files
+=====================
 
 * `getAttachments($project_id)` - Retrieve all attachments
 * `createAttachment($file_path)` - Retrieves token for attachment upload
