@@ -15,7 +15,7 @@ This CodeIgniter library connects to the NEW Basecamp API. It does not work with
 * `grantAccessToProject($project_id, $data)` - Grant access to a specific project
 	* Accepted Data: `ids`, `email_addresses` 
 * `grantAccessToCalendar($calendar_id, $data)` - Grant access to a specific calendar
-	* Accepted Data: `ids`, `email_addresses` 
+	* $data: `ids`, `email_addresses` 
 * `revokeAccessToProject($project_id, $person_id)` - Revoke access to projects
 * `revokeAccessToCalendar($calendar_id, $person_id)` - Revoke access to calendars
 
