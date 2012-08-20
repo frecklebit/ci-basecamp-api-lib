@@ -1,0 +1,2202 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>Basecamp API Library » \Basecamp</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">Basecamp API Library</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/Basecamp.html"><i class="icon-folder-open"></i> Basecamp</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">10</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Initialization"><span class="description">Initialization</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#activateProject" title="activateProject :: Activates an archived project"><span class="description">Activates an archived project</span><pre>activateProject()</pre></a></li>
+<li class="method public "><a href="#archiveProject" title="archiveProject :: Archives an active project"><span class="description">Archives an active project</span><pre>archiveProject()</pre></a></li>
+<li class="method public "><a href="#createAttachment" title="createAttachment :: Retrieves token for attachment upload"><span class="description">Retrieves token for attachment upload</span><pre>createAttachment()</pre></a></li>
+<li class="method public "><a href="#createCalendar" title="createCalendar :: Creates a new calendar or multiple calendars if $data is array"><span class="description">Creates a new calendar or multiple calendars if $data is array</span><pre>createCalendar()</pre></a></li>
+<li class="method public "><a href="#createCalendarEvent" title="createCalendarEvent :: Create a calendar event"><span class="description">Create a calendar event</span><pre>createCalendarEvent()</pre></a></li>
+<li class="method public "><a href="#createComment" title="createComment :: Creates a new comment for specified project and topic"><span class="description">Creates a new comment for specified project and topic</span><pre>createComment()</pre></a></li>
+<li class="method public "><a href="#createDocument" title="createDocument :: Creates a new document from the parameters passed"><span class="description">Creates a new document from the parameters passed</span><pre>createDocument()</pre></a></li>
+<li class="method public "><a href="#createMessage" title="createMessage :: Creates a message/discussion in a project"><span class="description">Creates a message/discussion in a project</span><pre>createMessage()</pre></a></li>
+<li class="method public "><a href="#createProject" title="createProject :: Creates a new project"><span class="description">Creates a new project</span><pre>createProject()</pre></a></li>
+<li class="method public "><a href="#createProjectCalendarEvent" title="createProjectCalendarEvent :: Create a calendar event in a project"><span class="description">Create a calendar event in a project</span><pre>createProjectCalendarEvent()</pre></a></li>
+<li class="method public "><a href="#createProjectToDoList" title="createProjectToDoList :: Creates a new ToDo List in a specified project"><span class="description">Creates a new ToDo List in a specified project</span><pre>createProjectToDoList()</pre></a></li>
+<li class="method public "><a href="#createToDo" title="createToDo :: Creates a todo item for a project"><span class="description">Creates a todo item for a project</span><pre>createToDo()</pre></a></li>
+<li class="method public "><a href="#createToDoList" title="createToDoList :: Shorthand method to create a project todo list"><span class="description">Shorthand method to create a project todo list</span><pre>createToDoList()</pre></a></li>
+<li class="method public "><a href="#deleteCalendar" title="deleteCalendar :: Deletes a single calendar"><span class="description">Deletes a single calendar</span><pre>deleteCalendar()</pre></a></li>
+<li class="method public "><a href="#deleteCalendarEvent" title="deleteCalendarEvent :: Deletes a single calendar event"><span class="description">Deletes a single calendar event</span><pre>deleteCalendarEvent()</pre></a></li>
+<li class="method public "><a href="#deleteComment" title="deleteComment :: Deletes a comment specified"><span class="description">Deletes a comment specified</span><pre>deleteComment()</pre></a></li>
+<li class="method public "><a href="#deleteDocument" title="deleteDocument :: Deletes a specified document from a project"><span class="description">Deletes a specified document from a project</span><pre>deleteDocument()</pre></a></li>
+<li class="method public "><a href="#deleteMessage" title="deleteMessage :: Deletes the specified message/discussion from a project"><span class="description">Deletes the specified message/discussion from a project</span><pre>deleteMessage()</pre></a></li>
+<li class="method public "><a href="#deletePerson" title="deletePerson :: Deletes a specified person"><span class="description">Deletes a specified person</span><pre>deletePerson()</pre></a></li>
+<li class="method public "><a href="#deleteProject" title="deleteProject :: Deletes a specified project"><span class="description">Deletes a specified project</span><pre>deleteProject()</pre></a></li>
+<li class="method public "><a href="#deleteProjectCalendarEvent" title="deleteProjectCalendarEvent :: Deletes a single calendar event"><span class="description">Deletes a single calendar event</span><pre>deleteProjectCalendarEvent()</pre></a></li>
+<li class="method public "><a href="#deleteToDo" title="deleteToDo :: Delete the todo item from a ToDoList in a project"><span class="description">Delete the todo item from a ToDoList in a project</span><pre>deleteToDo()</pre></a></li>
+<li class="method public "><a href="#deleteToDoList" title="deleteToDoList :: Deletes a specified project ToDo List"><span class="description">Deletes a specified project ToDo List</span><pre>deleteToDoList()</pre></a></li>
+<li class="method public "><a href="#errors" title="errors :: Retrieve any user-end errors for display."><span class="description">Retrieve any user-end errors for display.</span><pre>errors()</pre></a></li>
+<li class="method public "><a href="#getAccessesForCalendar" title="getAccessesForCalendar :: Retrieve all accesses for a specific calendar"><span class="description">Retrieve all accesses for a specific calendar</span><pre>getAccessesForCalendar()</pre></a></li>
+<li class="method public "><a href="#getAccessesForProject" title="getAccessesForProject :: Retrieve all accesses for a specific project"><span class="description">Retrieve all accesses for a specific project</span><pre>getAccessesForProject()</pre></a></li>
+<li class="method public "><a href="#getAccountID" title="getAccountID :: Allows you to get the current account ID"><span class="description">Allows you to get the current account ID</span><pre>getAccountID()</pre></a></li>
+<li class="method public "><a href="#getAppName" title="getAppName :: Allows you to get the current app name"><span class="description">Allows you to get the current app name</span><pre>getAppName()</pre></a></li>
+<li class="method public "><a href="#getArchivedProjects" title="getArchivedProjects :: Retrieves all archived projects"><span class="description">Retrieves all archived projects</span><pre>getArchivedProjects()</pre></a></li>
+<li class="method public "><a href="#getAssignedTDL" title="getAssignedTDL :: Shorthand method to retrieve person's assigned todo lists"><span class="description">Shorthand method to retrieve person's assigned todo lists</span><pre>getAssignedTDL()</pre></a></li>
+<li class="method public "><a href="#getAttachments" title="getAttachments :: Retrieve all attachments"><span class="description">Retrieve all attachments</span><pre>getAttachments()</pre></a></li>
+<li class="method public "><a href="#getCalendarEvents" title="getCalendarEvents :: Retrieve all calendar events for a calendar"><span class="description">Retrieve all calendar events for a calendar</span><pre>getCalendarEvents()</pre></a></li>
+<li class="method public "><a href="#getCalendars" title="getCalendars :: Retrieve all calendars"><span class="description">Retrieve all calendars</span><pre>getCalendars()</pre></a></li>
+<li class="method public "><a href="#getCompletedTDL" title="getCompletedTDL :: Shorthand method to retrieve completed todolists"><span class="description">Shorthand method to retrieve completed todolists</span><pre>getCompletedTDL()</pre></a></li>
+<li class="method public "><a href="#getDocuments" title="getDocuments :: Retrieves most recent version of documents"><span class="description">Retrieves most recent version of documents</span><pre>getDocuments()</pre></a></li>
+<li class="method public "><a href="#getFileContentType" title="getFileContentType :: Allows you to get the current file content type previous set"><span class="description">Allows you to get the current file content type previous set</span><pre>getFileContentType()</pre></a></li>
+<li class="method public "><a href="#getGlobalEvents" title="getGlobalEvents :: Returns all global events between specified dates passed"><span class="description">Returns all global events between specified dates passed</span><pre>getGlobalEvents()</pre></a></li>
+<li class="method public "><a href="#getMe" title="getMe :: Retrieves the person logged in (you)"><span class="description">Retrieves the person logged in (you)</span><pre>getMe()</pre></a></li>
+<li class="method public "><a href="#getPastCalendarEvents" title="getPastCalendarEvents :: Retrieve all past calendar events for a calendar"><span class="description">Retrieve all past calendar events for a calendar</span><pre>getPastCalendarEvents()</pre></a></li>
+<li class="method public "><a href="#getPastProjectCalendarEvents" title="getPastProjectCalendarEvents :: Retrieve all past calendar events for a project"><span class="description">Retrieve all past calendar events for a project</span><pre>getPastProjectCalendarEvents()</pre></a></li>
+<li class="method public "><a href="#getPeople" title="getPeople :: Retrieves all the people on the account"><span class="description">Retrieves all the people on the account</span><pre>getPeople()</pre></a></li>
+<li class="method public "><a href="#getPerson" title="getPerson :: Retrieves a single person"><span class="description">Retrieves a single person</span><pre>getPerson()</pre></a></li>
+<li class="method public "><a href="#getPersonsAssignedToDoLists" title="getPersonsAssignedToDoLists :: Retrieves assigned todolists of the specified person"><span class="description">Retrieves assigned todolists of the specified person</span><pre>getPersonsAssignedToDoLists()</pre></a></li>
+<li class="method public "><a href="#getPersonsEvents" title="getPersonsEvents :: Retrieves 50 person events at a time, with pagination"><span class="description">Retrieves 50 person events at a time, with pagination</span><pre>getPersonsEvents()</pre></a></li>
+<li class="method public "><a href="#getProjectCalendarEvents" title="getProjectCalendarEvents :: Retrieve all calendar events for a project"><span class="description">Retrieve all calendar events for a project</span><pre>getProjectCalendarEvents()</pre></a></li>
+<li class="method public "><a href="#getProjectEvents" title="getProjectEvents :: Retieves 50 project events at a time, with pagination"><span class="description">Retieves 50 project events at a time, with pagination</span><pre>getProjectEvents()</pre></a></li>
+<li class="method public "><a href="#getProjectToDoLists" title="getProjectToDoLists :: Retrieves the todo lists of a specified project"><span class="description">Retrieves the todo lists of a specified project</span><pre>getProjectToDoLists()</pre></a></li>
+<li class="method public "><a href="#getProjects" title="getProjects :: Retrieves all active projects"><span class="description">Retrieves all active projects</span><pre>getProjects()</pre></a></li>
+<li class="method public "><a href="#getProjectsCompletedToDoLists" title="getProjectsCompletedToDoLists :: Retrieves completed todolists"><span class="description">Retrieves completed todolists</span><pre>getProjectsCompletedToDoLists()</pre></a></li>
+<li class="method public "><a href="#getReponseBody" title="getReponseBody :: Retrieves the REST response body"><span class="description">Retrieves the REST response body</span><pre>getReponseBody()</pre></a></li>
+<li class="method public "><a href="#getResponseHeaders" title="getResponseHeaders :: Retrieves the REST response headers"><span class="description">Retrieves the REST response headers</span><pre>getResponseHeaders()</pre></a></li>
+<li class="method public "><a href="#getResponseLocation" title="getResponseLocation :: Retrieves the REST response location"><span class="description">Retrieves the REST response location</span><pre>getResponseLocation()</pre></a></li>
+<li class="method public "><a href="#getResponseStatus" title="getResponseStatus :: Retrieves the REST response status"><span class="description">Retrieves the REST response status</span><pre>getResponseStatus()</pre></a></li>
+<li class="method public "><a href="#getSingleCalendar" title="getSingleCalendar :: Retrieves single calendar"><span class="description">Retrieves single calendar</span><pre>getSingleCalendar()</pre></a></li>
+<li class="method public "><a href="#getSingleCalendarEvent" title="getSingleCalendarEvent :: Get single calendar event in a calendar"><span class="description">Get single calendar event in a calendar</span><pre>getSingleCalendarEvent()</pre></a></li>
+<li class="method public "><a href="#getSingleDocument" title="getSingleDocument :: Retrieves recent version of single document"><span class="description">Retrieves recent version of single document</span><pre>getSingleDocument()</pre></a></li>
+<li class="method public "><a href="#getSingleMessage" title="getSingleMessage :: Retrieves specified message/discussion from project"><span class="description">Retrieves specified message/discussion from project</span><pre>getSingleMessage()</pre></a></li>
+<li class="method public "><a href="#getSingleProject" title="getSingleProject :: Retrieves single project"><span class="description">Retrieves single project</span><pre>getSingleProject()</pre></a></li>
+<li class="method public "><a href="#getSingleProjectCalendarEvent" title="getSingleProjectCalendarEvent :: Get single calendar event in a project"><span class="description">Get single calendar event in a project</span><pre>getSingleProjectCalendarEvent()</pre></a></li>
+<li class="method public "><a href="#getSingleToDoList" title="getSingleToDoList :: Retrieves a single ToDo List in specified project"><span class="description">Retrieves a single ToDo List in specified project</span><pre>getSingleToDoList()</pre></a></li>
+<li class="method public "><a href="#getToDo" title="getToDo :: Retrieves a single todo from a project"><span class="description">Retrieves a single todo from a project</span><pre>getToDo()</pre></a></li>
+<li class="method public "><a href="#getTopics" title="getTopics :: Retrieves all topics from a project"><span class="description">Retrieves all topics from a project</span><pre>getTopics()</pre></a></li>
+<li class="method public "><a href="#getUpload" title="getUpload :: Get content, comments and attachments of a specific upload"><span class="description">Get content, comments and attachments of a specific upload</span><pre>getUpload()</pre></a></li>
+<li class="method public "><a href="#getUsername" title="getUsername :: Allows you to get the current username"><span class="description">Allows you to get the current username</span><pre>getUsername()</pre></a></li>
+<li class="method public "><a href="#grantAccessToCalendar" title="grantAccessToCalendar :: Grant access to a specific calendar"><span class="description">Grant access to a specific calendar</span><pre>grantAccessToCalendar()</pre></a></li>
+<li class="method public "><a href="#grantAccessToProject" title="grantAccessToProject :: Grant access to a specific project"><span class="description">Grant access to a specific project</span><pre>grantAccessToProject()</pre></a></li>
+<li class="method public "><a href="#revokeAccessToCalendar" title="revokeAccessToCalendar :: Revoke access to calendars"><span class="description">Revoke access to calendars</span><pre>revokeAccessToCalendar()</pre></a></li>
+<li class="method public "><a href="#revokeAccessToProject" title="revokeAccessToProject :: Revoke access to projects"><span class="description">Revoke access to projects</span><pre>revokeAccessToProject()</pre></a></li>
+<li class="method public "><a href="#setAccountID" title="setAccountID :: Allows you to set/change accountID after instantiation"><span class="description">Allows you to set/change accountID after instantiation</span><pre>setAccountID()</pre></a></li>
+<li class="method public "><a href="#setAppName" title="setAppName :: Allows you to set/change the app name after instantiation"><span class="description">Allows you to set/change the app name after instantiation</span><pre>setAppName()</pre></a></li>
+<li class="method public "><a href="#setFileContentType" title="setFileContentType :: Allows you to set the file content type for the upload headers"><span class="description">Allows you to set the file content type for the upload headers</span><pre>setFileContentType()</pre></a></li>
+<li class="method public "><a href="#setPassword" title="setPassword :: Allows you to set/change the password after instantiation"><span class="description">Allows you to set/change the password after instantiation</span><pre>setPassword()</pre></a></li>
+<li class="method public "><a href="#setUsername" title="setUsername :: Allows you to set/change the username after instantiation"><span class="description">Allows you to set/change the username after instantiation</span><pre>setUsername()</pre></a></li>
+<li class="method public "><a href="#updateCalendar" title="updateCalendar :: Updates a single calendar"><span class="description">Updates a single calendar</span><pre>updateCalendar()</pre></a></li>
+<li class="method public "><a href="#updateCalendarEvent" title="updateCalendarEvent :: Updates a single calendar event in a specified calendar"><span class="description">Updates a single calendar event in a specified calendar</span><pre>updateCalendarEvent()</pre></a></li>
+<li class="method public "><a href="#updateDocument" title="updateDocument :: Updates a document in a specified project"><span class="description">Updates a document in a specified project</span><pre>updateDocument()</pre></a></li>
+<li class="method public "><a href="#updateMessage" title="updateMessage :: Updates the message/discussion in a project
+PUT /projects/1/messages/1.json		-&gt; Updates the message"><span class="description">Updates the message/discussion in a project
+PUT /projects/1/messages/1.json		-&gt; Updates the message</span><pre>updateMessage()</pre></a></li>
+<li class="method public "><a href="#updateProject" title="updateProject :: Updates a single project"><span class="description">Updates a single project</span><pre>updateProject()</pre></a></li>
+<li class="method public "><a href="#updateProjectCalendarEvent" title="updateProjectCalendarEvent :: Updates a single calendar event in a project"><span class="description">Updates a single calendar event in a project</span><pre>updateProjectCalendarEvent()</pre></a></li>
+<li class="method public "><a href="#updateProjectToDoList" title="updateProjectToDoList :: Update a ToDoList in a specified project
+PUT /projects/1/todolists/1.json"><span class="description">Update a ToDoList in a specified project
+PUT /projects/1/todolists/1.json</span><pre>updateProjectToDoList()</pre></a></li>
+<li class="method public "><a href="#updateToDo" title="updateToDo :: Update a single todo in a project"><span class="description">Update a single todo in a project</span><pre>updateToDo()</pre></a></li>
+<li class="method public "><a href="#updateToDoList" title="updateToDoList :: Shorthand method to update a project todo list"><span class="description">Shorthand method to update a project todo list</span><pre>updateToDoList()</pre></a></li>
+<li class="method public "><a href="#uploadFile" title="uploadFile :: Creates new entry in the files section"><span class="description">Creates new entry in the files section</span><pre>uploadFile()</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="method protected "><a href="#doExecute" title="doExecute :: Execute the request and get response/info"><span class="description">Execute the request and get response/info</span><pre>doExecute()</pre></a></li>
+<li class="method protected "><a href="#execute" title="execute :: Executes curl command"><span class="description">Executes curl command</span><pre>execute()</pre></a></li>
+<li class="method protected "><a href="#executeDelete" title="executeDelete :: Execuses delete request"><span class="description">Execuses delete request</span><pre>executeDelete()</pre></a></li>
+<li class="method protected "><a href="#executeGet" title="executeGet :: Executes a get request"><span class="description">Executes a get request</span><pre>executeGet()</pre></a></li>
+<li class="method protected "><a href="#executePost" title="executePost :: Executes post request"><span class="description">Executes post request</span><pre>executePost()</pre></a></li>
+<li class="method protected "><a href="#executePostFile" title="executePostFile :: Executes post file request"><span class="description">Executes post file request</span><pre>executePostFile()</pre></a></li>
+<li class="method protected "><a href="#executePut" title="executePut :: Executes put request"><span class="description">Executes put request</span><pre>executePut()</pre></a></li>
+<li class="method protected "><a href="#flush" title="flush :: Cleans response for reuse"><span class="description">Cleans response for reuse</span><pre>flush()</pre></a></li>
+<li class="method protected "><a href="#getPassword" title="getPassword :: Allows you to get the current password"><span class="description">Allows you to get the current password</span><pre>getPassword()</pre></a></li>
+<li class="method protected "><a href="#setAuth" title="setAuth :: Set the request authentication"><span class="description">Set the request authentication</span><pre>setAuth()</pre></a></li>
+<li class="method protected "><a href="#setCurlOpts" title="setCurlOpts :: Set the Curl options"><span class="description">Set the Curl options</span><pre>setCurlOpts()</pre></a></li>
+<li class="method protected "><a href="#setRequestBody" title="setRequestBody :: Set the REST request body"><span class="description">Set the REST request body</span><pre>setRequestBody()</pre></a></li>
+<li class="method protected "><a href="#setRequestHeaders" title="setRequestHeaders :: Set the request headers"><span class="description">Set the request headers</span><pre>setRequestHeaders()</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="method private "><a href="#buildURL" title="buildURL :: Build's the URL to be sent to the request"><span class="description">Build's the URL to be sent to the request</span><pre>buildURL()</pre></a></li>
+<li class="method private "><a href="#function_check" title="function_check :: Validate function arguments and makes sure we've got basic necessities set"><span class="description">Validate function arguments and makes sure we've got basic necessities set</span><pre>function_check()</pre></a></li>
+<li class="method private "><a href="#logit" title="logit :: Logs message if debug is enables"><span class="description">Logs message if debug is enables</span><pre>logit()</pre></a></li>
+<li class="method private "><a href="#processRequest" title="processRequest :: Process the RESTful Request"><span class="description">Process the RESTful Request</span><pre>processRequest()</pre></a></li>
+<li class="method private "><a href="#validateData" title="validateData :: Validates and removes unwanted data."><span class="description">Validates and removes unwanted data.</span><pre>validateData()</pre></a></li>
+<li class="method private "><a href="#validateDateTime" title="validateDateTime :: Validates datetime for ISO 8601"><span class="description">Validates datetime for ISO 8601</span><pre>validateDateTime()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24api_version" title="$api_version :: Basecamp API Version"><span class="description">Basecamp API Version</span><pre>$api_version</pre></a></li>
+<li class="property public "><a href="#%24app_name" title="$app_name :: Application name using this library"><span class="description">Application name using this library</span><pre>$app_name</pre></a></li>
+<li class="property public "><a href="#%24basecamp_url" title="$basecamp_url :: Basecamp base URL"><span class="description">Basecamp base URL</span><pre>$basecamp_url</pre></a></li>
+<li class="property public "><a href="#%24content_type" title="$content_type :: Content type, Basecamp requires JSON"><span class="description">Content type, Basecamp requires JSON</span><pre>$content_type</pre></a></li>
+<li class="property public "><a href="#%24debug" title="$debug :: "><span class="description">$debug</span><pre>$debug</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="property private "><a href="#%24account_id" title="$account_id :: Basecamp primary account ID, use setters/getters"><span class="description">Basecamp primary account ID, use setters/getters</span><pre>$account_id</pre></a></li>
+<li class="property private "><a href="#%24errors" title="$errors :: An array containing any errors, use getter"><span class="description">An array containing any errors, use getter</span><pre>$errors</pre></a></li>
+<li class="property private "><a href="#%24password" title="$password :: Basecamp password, use setters/getters"><span class="description">Basecamp password, use setters/getters</span><pre>$password</pre></a></li>
+<li class="property private "><a href="#%24request" title="$request :: Stored RESTful request"><span class="description">Stored RESTful request</span><pre>$request</pre></a></li>
+<li class="property private "><a href="#%24response" title="$response :: Stored RESTful Response"><span class="description">Stored RESTful Response</span><pre>$response</pre></a></li>
+<li class="property private "><a href="#%24url" title="$url :: The full built URL"><span class="description">The full built URL</span><pre>$url</pre></a></li>
+<li class="property private "><a href="#%24username" title="$username :: Basecamp username, use setters/getters"><span class="description">Basecamp username, use setters/getters</span><pre>$username</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CBasecamp" id="\Basecamp"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/Basecamp.html">Basecamp</a>
+</li>
+</ul>
+<div href="../classes/Basecamp.html" class="element class">
+<p class="short_description">PHP Class: Basecamp</p>
+<div class="details">
+<p class="long_description"><p>This class allows you to connect to the new Basecamp API.
+It is not compatible with the Basecamp Classic API. This class
+contains its own built-in RESTful service.</p>
+
+<p>The Basecamp class is fully cusomizable and easy to use!</p></p>
+<table class="table table-bordered">
+<tr>
+<th>category</th>
+<td>PHP Class</td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Basecamp.html">Basecamp</a></td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="mailto:adam@comicfuse.com">Adam Jenkins</a></td>
+</tr>
+<tr>
+<th>copyright</th>
+<td>2012, Comicfuse/Adam Jenkins</td>
+</tr>
+<tr>
+<th>license</th>
+<td><a href="http://www.php.net/license/3_01.txt">PHP License 3.01</a></td>
+</tr>
+<tr>
+<th>version</th>
+<td>Release: 1.0</td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="https://github.com/adamcole83/ci-basecamp-api-lib">https://github.com/adamcole83/ci-basecamp-api-lib</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Initialization</h2>
+<pre>__construct(string $app_name, int $account_id, string $username, string $password) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The Basecamp constructor doesn't require the arguments, you can set them afterwards.</p>
+
+<p>Here's an example of instantiation:</p>
+
+<pre><code>required_once 'libraries/basecamp.php';
+
+$basecamp = new Basecamp('My App', 123456, 'tjones', 'abc123');
+</code></pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$app_name</h4>
+<code>string</code><p>The name of your application</p></div>
+<div class="subelement argument">
+<h4>$account_id</h4>
+<code>int</code><p>Your new Basecamp account identifier</p></div>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code><p>The username of an administrator</p></div>
+<div class="subelement argument">
+<h4>$password</h4>
+<code>string</code><p>The password of the administrator</p></div>
+</div></div>
+</div>
+<a name="activateProject" id="activateProject"></a><div class="element clickable method public activateProject" data-toggle="collapse" data-target=".activateProject .collapse">
+<h2>Activates an archived project</h2>
+<pre>activateProject(int $project_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>PUT /projects/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the project</div>
+</div></div>
+</div>
+<a name="archiveProject" id="archiveProject"></a><div class="element clickable method public archiveProject" data-toggle="collapse" data-target=".archiveProject .collapse">
+<h2>Archives an active project</h2>
+<pre>archiveProject(int $project_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>PUT /projects/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the project</div>
+</div></div>
+</div>
+<a name="createAttachment" id="createAttachment"></a><div class="element clickable method public createAttachment" data-toggle="collapse" data-target=".createAttachment .collapse">
+<h2>Retrieves token for attachment upload</h2>
+<pre>createAttachment(string $file_path) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /attachments.json</pre>
+
+<p>Example:</p>
+
+<pre><code>$basecamp->createAttachment('/var/www/assets/images/monkey.png');
+</code></pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$file_path</h4>
+<code>string</code><p>The path of the file to be uploaded</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>Token to save locally to upload file</div>
+</div></div>
+</div>
+<a name="createCalendar" id="createCalendar"></a><div class="element clickable method public createCalendar" data-toggle="collapse" data-target=".createCalendar .collapse">
+<h2>Creates a new calendar or multiple calendars if $data is array</h2>
+<pre>createCalendar(array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /calendars.json</pre>
+
+<p>Example:</p>
+
+<pre><code>$basecamp->createCalendar(array('name' => 'My New Calendar'));
+</code></pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>name</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>calendar data or false</div>
+</div></div>
+</div>
+<a name="createCalendarEvent" id="createCalendarEvent"></a><div class="element clickable method public createCalendarEvent" data-toggle="collapse" data-target=".createCalendarEvent .collapse">
+<h2>Create a calendar event</h2>
+<pre>createCalendarEvent(int $calendar_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /calendars/1/calendar_events.json</pre>
+
+<p>The <samp>starts_at</samp> and <samp>ends_at</samp> parameters should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+The <samp>all_day</samp> parameter should be <samp>true</samp> or <samp>false</samp>.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$calendar_id</h4>
+<code>int</code><p>The calendar ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>summary</samp>, <samp>description</samp>, <samp>all_day</samp>, <samp>starts_at</samp>, <samp>ends_at</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the calendar event</div>
+</div></div>
+</div>
+<a name="createComment" id="createComment"></a><div class="element clickable method public createComment" data-toggle="collapse" data-target=".createComment .collapse">
+<h2>Creates a new comment for specified project and topic</h2>
+<pre>createComment(int $project_id, string $topic, int $topic_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /projects/1/<topic>/1/comments.json</pre>
+
+<p>The <samp>subscribers</samp> (optional) is a list of <samp>ids</samp> that will be notified of file.
+The <samp>attachments</samp> should be an array of file paths. Tokens are returned from
+<samp>createAttachment()</samp> and names will be created automatically.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$topic</h4>
+<code>string</code><p>The topic to place comment</p></div>
+<div class="subelement argument">
+<h4>$topic_id</h4>
+<code>int</code><p>The topic ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>content</samp>, <samp>subscribers</samp>, <samp>attachments</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>comment data or false</div>
+</div></div>
+</div>
+<a name="createDocument" id="createDocument"></a><div class="element clickable method public createDocument" data-toggle="collapse" data-target=".createDocument .collapse">
+<h2>Creates a new document from the parameters passed</h2>
+<pre>createDocument(int $project_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /projects/1/documents.json</pre>
+
+<p>Basic HTML is allowed in the data content.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>title</samp>, <samp>content</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the document data</div>
+</div></div>
+</div>
+<a name="createMessage" id="createMessage"></a><div class="element clickable method public createMessage" data-toggle="collapse" data-target=".createMessage .collapse">
+<h2>Creates a message/discussion in a project</h2>
+<pre>createMessage(int $project_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /projects/1/messages.json</pre>
+
+<p>The <samp>subscribers</samp> (optional) is a list of <samp>ids</samp> that will be notified of file.
+The <samp>attachments</samp> should be an array of file paths. Tokens are returned from
+<samp>createAttachment()</samp> and names will be created automatically.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>subject</samp>, <samp>content</samp>, <samp>subscribers</samp>, <samp>attachments</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the message</div>
+</div></div>
+</div>
+<a name="createProject" id="createProject"></a><div class="element clickable method public createProject" data-toggle="collapse" data-target=".createProject .collapse">
+<h2>Creates a new project</h2>
+<pre>createProject(array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /projects.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>name</samp>, <samp>description</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the project</div>
+</div></div>
+</div>
+<a name="createProjectCalendarEvent" id="createProjectCalendarEvent"></a><div class="element clickable method public createProjectCalendarEvent" data-toggle="collapse" data-target=".createProjectCalendarEvent .collapse">
+<h2>Create a calendar event in a project</h2>
+<pre>createProjectCalendarEvent(int $project_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /projects/1/calendar_events.json</pre>
+
+<p>The <samp>starts_at</samp> and <samp>ends_at</samp> parameters should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+The <samp>all_day</samp> parameter should be <samp>true</samp> or <samp>false</samp>.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>summary</samp>, <samp>description</samp>, <samp>all_day</samp>, <samp>starts_at</samp>, <samp>ends_at</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the project calendar event</div>
+</div></div>
+</div>
+<a name="createProjectToDoList" id="createProjectToDoList"></a><div class="element clickable method public createProjectToDoList" data-toggle="collapse" data-target=".createProjectToDoList .collapse">
+<h2>Creates a new ToDo List in a specified project</h2>
+<pre>createProjectToDoList(int $project_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /projects/1/todolists.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>name</samp>, <samp>description</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the project todo list.</div>
+</div></div>
+</div>
+<a name="createToDo" id="createToDo"></a><div class="element clickable method public createToDo" data-toggle="collapse" data-target=".createToDo .collapse">
+<h2>Creates a todo item for a project</h2>
+<pre>createToDo(int $project_id, int $todolist_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p><samp>POST /projects/1/todolists/1/todos.json</samp></p>
+
+<p>The <samp>due_at</samp> parameter should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+The assignee parameters need a <samp>type</samp> field with either <samp>Person</samp> or <samp>Group</samp>,
+the <samp>id</samp> is the ID of the person or group.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$todolist_id</h4>
+<code>int</code><p>The todolist ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: [content], [due_at], [assignee[id],[type]]</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>todo data</div>
+</div></div>
+</div>
+<a name="createToDoList" id="createToDoList"></a><div class="element clickable method public createToDoList" data-toggle="collapse" data-target=".createToDoList .collapse">
+<h2>Shorthand method to create a project todo list</h2>
+<pre>createToDoList($project_id, $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p><strong>See method <samp>createProjectToDoList()</samp></strong></p></p>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$project_id</h4></div>
+<div class="subelement argument"><h4>$data</h4></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the project todo list</div>
+</div></div>
+</div>
+<a name="deleteCalendar" id="deleteCalendar"></a><div class="element clickable method public deleteCalendar" data-toggle="collapse" data-target=".deleteCalendar .collapse">
+<h2>Deletes a single calendar</h2>
+<pre>deleteCalendar(int $calendar_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>DELETE /calendars/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$calendar_id</h4>
+<code>int</code><p>The calendar ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="deleteCalendarEvent" id="deleteCalendarEvent"></a><div class="element clickable method public deleteCalendarEvent" data-toggle="collapse" data-target=".deleteCalendarEvent .collapse">
+<h2>Deletes a single calendar event</h2>
+<pre>deleteCalendarEvent(int $calendar_id, int $event_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>DELETE /calendars/1/calendar_events/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$calendar_id</h4>
+<code>int</code><p>The calendar ID</p></div>
+<div class="subelement argument">
+<h4>$event_id</h4>
+<code>int</code><p>The event ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="deleteComment" id="deleteComment"></a><div class="element clickable method public deleteComment" data-toggle="collapse" data-target=".deleteComment .collapse">
+<h2>Deletes a comment specified</h2>
+<pre>deleteComment(int $project_id, int $comment_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>DELETE /projects/1/comments/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$comment_id</h4>
+<code>int</code><p>The comment ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="deleteDocument" id="deleteDocument"></a><div class="element clickable method public deleteDocument" data-toggle="collapse" data-target=".deleteDocument .collapse">
+<h2>Deletes a specified document from a project</h2>
+<pre>deleteDocument(int $project_id, int $document_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p><samp>DELETE /projects/1/documents/1.json</samp></p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$document_id</h4>
+<code>int</code><p>The document ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="deleteMessage" id="deleteMessage"></a><div class="element clickable method public deleteMessage" data-toggle="collapse" data-target=".deleteMessage .collapse">
+<h2>Deletes the specified message/discussion from a project</h2>
+<pre>deleteMessage(int $project_id, int $message_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>DELETE /projects/1/messages/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$message_id</h4>
+<code>int</code><p>The message ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="deletePerson" id="deletePerson"></a><div class="element clickable method public deletePerson" data-toggle="collapse" data-target=".deletePerson .collapse">
+<h2>Deletes a specified person</h2>
+<pre>deletePerson(int $person_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>DELETE /people/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$person_id</h4>
+<code>int</code><p>The user ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="deleteProject" id="deleteProject"></a><div class="element clickable method public deleteProject" data-toggle="collapse" data-target=".deleteProject .collapse">
+<h2>Deletes a specified project</h2>
+<pre>deleteProject(int $project_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>DELETE /project/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="deleteProjectCalendarEvent" id="deleteProjectCalendarEvent"></a><div class="element clickable method public deleteProjectCalendarEvent" data-toggle="collapse" data-target=".deleteProjectCalendarEvent .collapse">
+<h2>Deletes a single calendar event</h2>
+<pre>deleteProjectCalendarEvent(int $project_id, int $event_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>DELETE /projects/1/calendar_events/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$event_id</h4>
+<code>int</code><p>The event ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="deleteToDo" id="deleteToDo"></a><div class="element clickable method public deleteToDo" data-toggle="collapse" data-target=".deleteToDo .collapse">
+<h2>Delete the todo item from a ToDoList in a project</h2>
+<pre>deleteToDo(int $project_id, int $todo_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p><samp>DELETE /projects/1/todos/1.json</samp></p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$todo_id</h4>
+<code>int</code><p>The task/todo ID</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="deleteToDoList" id="deleteToDoList"></a><div class="element clickable method public deleteToDoList" data-toggle="collapse" data-target=".deleteToDoList .collapse">
+<h2>Deletes a specified project ToDo List</h2>
+<pre>deleteToDoList(int $project_id, int $todolist_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>DELETE /projects/1/todolists/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$todolist_id</h4>
+<code>int</code><p>The todolist ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="errors" id="errors"></a><div class="element clickable method public errors" data-toggle="collapse" data-target=".errors .collapse">
+<h2>Retrieve any user-end errors for display.</h2>
+<pre>errors(string $prefix, string $suffix) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$prefix</h4>
+<code>string</code><p>The leading html for each error</p></div>
+<div class="subelement argument">
+<h4>$suffix</h4>
+<code>string</code><p>The following html for each error</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>HTML error list</div>
+</div></div>
+</div>
+<a name="getAccessesForCalendar" id="getAccessesForCalendar"></a><div class="element clickable method public getAccessesForCalendar" data-toggle="collapse" data-target=".getAccessesForCalendar .collapse">
+<h2>Retrieve all accesses for a specific calendar</h2>
+<pre>getAccessesForCalendar(int $calendar_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /calendars/1/accesses.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$calendar_id</h4>
+<code>int</code><p>The calendar ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>List of people with access to the calendar</div>
+</div></div>
+</div>
+<a name="getAccessesForProject" id="getAccessesForProject"></a><div class="element clickable method public getAccessesForProject" data-toggle="collapse" data-target=".getAccessesForProject .collapse">
+<h2>Retrieve all accesses for a specific project</h2>
+<pre>getAccessesForProject(int $project_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/accesses.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>List of people with access to the project</div>
+</div></div>
+</div>
+<a name="getAccountID" id="getAccountID"></a><div class="element clickable method public getAccountID" data-toggle="collapse" data-target=".getAccountID .collapse">
+<h2>Allows you to get the current account ID</h2>
+<pre>getAccountID() : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>int</code>account id</div>
+</div></div>
+</div>
+<a name="getAppName" id="getAppName"></a><div class="element clickable method public getAppName" data-toggle="collapse" data-target=".getAppName .collapse">
+<h2>Allows you to get the current app name</h2>
+<pre>getAppName() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>app name</div>
+</div></div>
+</div>
+<a name="getArchivedProjects" id="getArchivedProjects"></a><div class="element clickable method public getArchivedProjects" data-toggle="collapse" data-target=".getArchivedProjects .collapse">
+<h2>Retrieves all archived projects</h2>
+<pre>getArchivedProjects() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/archived.json</pre></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of archived projects</div>
+</div></div>
+</div>
+<a name="getAssignedTDL" id="getAssignedTDL"></a><div class="element clickable method public getAssignedTDL" data-toggle="collapse" data-target=".getAssignedTDL .collapse">
+<h2>Shorthand method to retrieve person's assigned todo lists</h2>
+<pre>getAssignedTDL(int $person_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p><strong>See method <samp>getPersonsAssignedToDoList()</samp></strong></p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$person_id</h4>
+<code>int</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>assigned todolist data</div>
+</div></div>
+</div>
+<a name="getAttachments" id="getAttachments"></a><div class="element clickable method public getAttachments" data-toggle="collapse" data-target=".getAttachments .collapse">
+<h2>Retrieve all attachments</h2>
+<pre>getAttachments(int $project_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/attachments.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Metadata, urls and associated attachables</div>
+</div></div>
+</div>
+<a name="getCalendarEvents" id="getCalendarEvents"></a><div class="element clickable method public getCalendarEvents" data-toggle="collapse" data-target=".getCalendarEvents .collapse">
+<h2>Retrieve all calendar events for a calendar</h2>
+<pre>getCalendarEvents(int $calendar_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /calendars/1/calendar_events.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$calendar_id</h4>
+<code>int</code><p>The calendar ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of calendar events</div>
+</div></div>
+</div>
+<a name="getCalendars" id="getCalendars"></a><div class="element clickable method public getCalendars" data-toggle="collapse" data-target=".getCalendars .collapse">
+<h2>Retrieve all calendars</h2>
+<pre>getCalendars() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /calendars.json</pre></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of the list of calendars</div>
+</div></div>
+</div>
+<a name="getCompletedTDL" id="getCompletedTDL"></a><div class="element clickable method public getCompletedTDL" data-toggle="collapse" data-target=".getCompletedTDL .collapse">
+<h2>Shorthand method to retrieve completed todolists</h2>
+<pre>getCompletedTDL(int $project_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p><strong>See method <samp>getProjectsCompletedToDoLists()</samp></strong></p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of completed project todolists</div>
+</div></div>
+</div>
+<a name="getDocuments" id="getDocuments"></a><div class="element clickable method public getDocuments" data-toggle="collapse" data-target=".getDocuments .collapse">
+<h2>Retrieves most recent version of documents</h2>
+<pre>getDocuments(int $project_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/document.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the document data</div>
+</div></div>
+</div>
+<a name="getFileContentType" id="getFileContentType"></a><div class="element clickable method public getFileContentType" data-toggle="collapse" data-target=".getFileContentType .collapse">
+<h2>Allows you to get the current file content type previous set</h2>
+<pre>getFileContentType() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>content type</div>
+</div></div>
+</div>
+<a name="getGlobalEvents" id="getGlobalEvents"></a><div class="element clickable method public getGlobalEvents" data-toggle="collapse" data-target=".getGlobalEvents .collapse">
+<h2>Returns all global events between specified dates passed</h2>
+<pre>getGlobalEvents(string $datetime, int $page) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /events.json?since=0000-00-00T00:00:00-00:00&page=0</pre>
+
+<p>Returns 50 events per page. If the result has 50 entries, check next page.
+Datetime should be in the ISO 8601 format (like "0000:00:00T00:00:00-00:00").</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$datetime</h4>
+<code>string</code><p>The ISO 8601 datetime</p></div>
+<div class="subelement argument">
+<h4>$page</h4>
+<code>int</code><p>The page number to begin query</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of global events</div>
+</div></div>
+</div>
+<a name="getMe" id="getMe"></a><div class="element clickable method public getMe" data-toggle="collapse" data-target=".getMe .collapse">
+<h2>Retrieves the person logged in (you)</h2>
+<pre>getMe() : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /people/me.json</pre></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of your user data</div>
+</div></div>
+</div>
+<a name="getPastCalendarEvents" id="getPastCalendarEvents"></a><div class="element clickable method public getPastCalendarEvents" data-toggle="collapse" data-target=".getPastCalendarEvents .collapse">
+<h2>Retrieve all past calendar events for a calendar</h2>
+<pre>getPastCalendarEvents(int $calendar_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /calendars/1/calendar_events/past.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$calendar_id</h4>
+<code>int</code><p>The calendar ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON represenation of past calendar events</div>
+</div></div>
+</div>
+<a name="getPastProjectCalendarEvents" id="getPastProjectCalendarEvents"></a><div class="element clickable method public getPastProjectCalendarEvents" data-toggle="collapse" data-target=".getPastProjectCalendarEvents .collapse">
+<h2>Retrieve all past calendar events for a project</h2>
+<pre>getPastProjectCalendarEvents(int $project_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/calendar_events/past.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of project calendar events</div>
+</div></div>
+</div>
+<a name="getPeople" id="getPeople"></a><div class="element clickable method public getPeople" data-toggle="collapse" data-target=".getPeople .collapse">
+<h2>Retrieves all the people on the account</h2>
+<pre>getPeople() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /people.json</pre></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of all users</div>
+</div></div>
+</div>
+<a name="getPerson" id="getPerson"></a><div class="element clickable method public getPerson" data-toggle="collapse" data-target=".getPerson .collapse">
+<h2>Retrieves a single person</h2>
+<pre>getPerson(int $person_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /people/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$person_id</h4>
+<code>int</code><p>The person ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the user</div>
+</div></div>
+</div>
+<a name="getPersonsAssignedToDoLists" id="getPersonsAssignedToDoLists"></a><div class="element clickable method public getPersonsAssignedToDoLists" data-toggle="collapse" data-target=".getPersonsAssignedToDoLists .collapse">
+<h2>Retrieves assigned todolists of the specified person</h2>
+<pre>getPersonsAssignedToDoLists(int $person_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /people/1/assigned_todos.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$person_id</h4>
+<code>int</code><p>The person ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representaion of user's assigned todolists</div>
+</div></div>
+</div>
+<a name="getPersonsEvents" id="getPersonsEvents"></a><div class="element clickable method public getPersonsEvents" data-toggle="collapse" data-target=".getPersonsEvents .collapse">
+<h2>Retrieves 50 person events at a time, with pagination</h2>
+<pre>getPersonsEvents(int $person_id, string $datetime, int $page) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /people/1/events.json?since=0000-00-00T00:00:00-00:00$page=0</pre>
+
+<p>Returns 50 events per page. If the result has 50 entries, check next page.
+Datetime should be in the ISO 8601 format (like "0000:00:00T00:00:00-00:00").</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$person_id</h4>
+<code>int</code><p>The person ID</p></div>
+<div class="subelement argument">
+<h4>$datetime</h4>
+<code>string</code><p>The ISO 8601 datetime</p></div>
+<div class="subelement argument">
+<h4>$page</h4>
+<code>int</code><p>The page number to begin query</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of user's events</div>
+</div></div>
+</div>
+<a name="getProjectCalendarEvents" id="getProjectCalendarEvents"></a><div class="element clickable method public getProjectCalendarEvents" data-toggle="collapse" data-target=".getProjectCalendarEvents .collapse">
+<h2>Retrieve all calendar events for a project</h2>
+<pre>getProjectCalendarEvents(int $project_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/calendar_events.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of the calendar lists</div>
+</div></div>
+</div>
+<a name="getProjectEvents" id="getProjectEvents"></a><div class="element clickable method public getProjectEvents" data-toggle="collapse" data-target=".getProjectEvents .collapse">
+<h2>Retieves 50 project events at a time, with pagination</h2>
+<pre>getProjectEvents(int $project_id, string $datetime, int $page) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>>GET /projects/1/events.json?since=0000-00-00T00:00:00-00:00&page=0</pre>
+
+<p>Returns 50 events per page. If the result has 50 entries, check next page.
+Datetime should be in the ISO 8601 format (like "0000:00:00T00:00:00-00:00").</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$datetime</h4>
+<code>string</code><p>The ISO 8601 datetime</p></div>
+<div class="subelement argument">
+<h4>$page</h4>
+<code>int</code><p>The page number to begin query</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of project events</div>
+</div></div>
+</div>
+<a name="getProjectToDoLists" id="getProjectToDoLists"></a><div class="element clickable method public getProjectToDoLists" data-toggle="collapse" data-target=".getProjectToDoLists .collapse">
+<h2>Retrieves the todo lists of a specified project</h2>
+<pre>getProjectToDoLists(int $project_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/todolists.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of project todolists</div>
+</div></div>
+</div>
+<a name="getProjects" id="getProjects"></a><div class="element clickable method public getProjects" data-toggle="collapse" data-target=".getProjects .collapse">
+<h2>Retrieves all active projects</h2>
+<pre>getProjects() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects.json</pre></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representation of active projects</div>
+</div></div>
+</div>
+<a name="getProjectsCompletedToDoLists" id="getProjectsCompletedToDoLists"></a><div class="element clickable method public getProjectsCompletedToDoLists" data-toggle="collapse" data-target=".getProjectsCompletedToDoLists .collapse">
+<h2>Retrieves completed todolists</h2>
+<pre>getProjectsCompletedToDoLists(int $project_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/todolists/completed.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>Current JSON representaion of completed project todolists</div>
+</div></div>
+</div>
+<a name="getReponseBody" id="getReponseBody"></a><div class="element clickable method public getReponseBody" data-toggle="collapse" data-target=".getReponseBody .collapse">
+<h2>Retrieves the REST response body</h2>
+<pre>getReponseBody() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The REST response body</div>
+</div></div>
+</div>
+<a name="getResponseHeaders" id="getResponseHeaders"></a><div class="element clickable method public getResponseHeaders" data-toggle="collapse" data-target=".getResponseHeaders .collapse">
+<h2>Retrieves the REST response headers</h2>
+<pre>getResponseHeaders() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>the reponse headers</div>
+</div></div>
+</div>
+<a name="getResponseLocation" id="getResponseLocation"></a><div class="element clickable method public getResponseLocation" data-toggle="collapse" data-target=".getResponseLocation .collapse">
+<h2>Retrieves the REST response location</h2>
+<pre>getResponseLocation() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The REST response location</div>
+</div></div>
+</div>
+<a name="getResponseStatus" id="getResponseStatus"></a><div class="element clickable method public getResponseStatus" data-toggle="collapse" data-target=".getResponseStatus .collapse">
+<h2>Retrieves the REST response status</h2>
+<pre>getResponseStatus() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>The REST response status</div>
+</div></div>
+</div>
+<a name="getSingleCalendar" id="getSingleCalendar"></a><div class="element clickable method public getSingleCalendar" data-toggle="collapse" data-target=".getSingleCalendar .collapse">
+<h2>Retrieves single calendar</h2>
+<pre>getSingleCalendar(int $calendar_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /calendars/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$calendar_id</h4>
+<code>int</code><p>The calendar ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the calendar data</div>
+</div></div>
+</div>
+<a name="getSingleCalendarEvent" id="getSingleCalendarEvent"></a><div class="element clickable method public getSingleCalendarEvent" data-toggle="collapse" data-target=".getSingleCalendarEvent .collapse">
+<h2>Get single calendar event in a calendar</h2>
+<pre>getSingleCalendarEvent(int $calendar_id, int $event_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /calendars/1/calendar_events/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$calendar_id</h4>
+<code>int</code><p>The calendar ID</p></div>
+<div class="subelement argument">
+<h4>$event_id</h4>
+<code>int</code><p>The event ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the calendar event data</div>
+</div></div>
+</div>
+<a name="getSingleDocument" id="getSingleDocument"></a><div class="element clickable method public getSingleDocument" data-toggle="collapse" data-target=".getSingleDocument .collapse">
+<h2>Retrieves recent version of single document</h2>
+<pre>getSingleDocument(int $project_id, int $document_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/documents/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$document_id</h4>
+<code>int</code><p>The document ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the document data</div>
+</div></div>
+</div>
+<a name="getSingleMessage" id="getSingleMessage"></a><div class="element clickable method public getSingleMessage" data-toggle="collapse" data-target=".getSingleMessage .collapse">
+<h2>Retrieves specified message/discussion from project</h2>
+<pre>getSingleMessage(int $project_id, int $message_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/messages/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$message_id</h4>
+<code>int</code><p>The message ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the message</div>
+</div></div>
+</div>
+<a name="getSingleProject" id="getSingleProject"></a><div class="element clickable method public getSingleProject" data-toggle="collapse" data-target=".getSingleProject .collapse">
+<h2>Retrieves single project</h2>
+<pre>getSingleProject(int $project_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representaion of the project</div>
+</div></div>
+</div>
+<a name="getSingleProjectCalendarEvent" id="getSingleProjectCalendarEvent"></a><div class="element clickable method public getSingleProjectCalendarEvent" data-toggle="collapse" data-target=".getSingleProjectCalendarEvent .collapse">
+<h2>Get single calendar event in a project</h2>
+<pre>getSingleProjectCalendarEvent(int $project_id, int $event_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/calendar_events/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$event_id</h4>
+<code>int</code><p>The event ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON represenation of the project event data</div>
+</div></div>
+</div>
+<a name="getSingleToDoList" id="getSingleToDoList"></a><div class="element clickable method public getSingleToDoList" data-toggle="collapse" data-target=".getSingleToDoList .collapse">
+<h2>Retrieves a single ToDo List in specified project</h2>
+<pre>getSingleToDoList(int $project_id, int $todolist_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/todolists/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$todolist_id</h4>
+<code>int</code><p>The todo list ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the todolist</div>
+</div></div>
+</div>
+<a name="getToDo" id="getToDo"></a><div class="element clickable method public getToDo" data-toggle="collapse" data-target=".getToDo .collapse">
+<h2>Retrieves a single todo from a project</h2>
+<pre>getToDo(int $project_id, int $todo_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/todos/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$todo_id</h4>
+<code>int</code><p>The task/todo ID</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the task/todo</div>
+</div></div>
+</div>
+<a name="getTopics" id="getTopics"></a><div class="element clickable method public getTopics" data-toggle="collapse" data-target=".getTopics .collapse">
+<h2>Retrieves all topics from a project</h2>
+<pre>getTopics(int $project_id) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p><sample>GET /projects/1/topics.json</sample></p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>List of topic data</div>
+</div></div>
+</div>
+<a name="getUpload" id="getUpload"></a><div class="element clickable method public getUpload" data-toggle="collapse" data-target=".getUpload .collapse">
+<h2>Get content, comments and attachments of a specific upload</h2>
+<pre>getUpload(int $project_id, int $upload_id) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>GET /projects/1/uploads/$UPLOAD_ID.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$upload_id</h4>
+<code>int</code><p>The Upload ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Content, comments and attachments</div>
+</div></div>
+</div>
+<a name="getUsername" id="getUsername"></a><div class="element clickable method public getUsername" data-toggle="collapse" data-target=".getUsername .collapse">
+<h2>Allows you to get the current username</h2>
+<pre>getUsername() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>username</div>
+</div></div>
+</div>
+<a name="grantAccessToCalendar" id="grantAccessToCalendar"></a><div class="element clickable method public grantAccessToCalendar" data-toggle="collapse" data-target=".grantAccessToCalendar .collapse">
+<h2>Grant access to a specific calendar</h2>
+<pre>grantAccessToCalendar(int $calendar_id, array $data) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /calendar/1/accesses.json</pre>
+
+<p>Example:</p>
+
+<pre><code>// Using IDs
+$basecamp->grantAccessToCalendar(123456, array("ids" => array(5, 6, 10)));
+
+// Using email addresses (invite)
+$basecamp->grantAccessToCalendar(12345, array("email_addresses" => array( "someone@example.com", "bob@example.com")));
+</code></pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$calendar_id</h4>
+<code>int</code><p>The calendar ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Allowed data: [ids], [email_addresses]</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="grantAccessToProject" id="grantAccessToProject"></a><div class="element clickable method public grantAccessToProject" data-toggle="collapse" data-target=".grantAccessToProject .collapse">
+<h2>Grant access to a specific project</h2>
+<pre>grantAccessToProject(int $project_id, array $data) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /projects/1/accesses.json</pre>
+
+<p>Example:</p>
+
+<pre><code>// Using IDs
+$basecamp->grantAccessToProject(123456, array("ids" => array(5, 6, 10)));
+
+// Using email addresses (invite)
+$basecamp->grantAccessToProject(12345, array("email_addresses" => array( "someone@example.com", "bob@example.com")));
+</code></pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Allowed data: [ids], [email_addresses]</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="revokeAccessToCalendar" id="revokeAccessToCalendar"></a><div class="element clickable method public revokeAccessToCalendar" data-toggle="collapse" data-target=".revokeAccessToCalendar .collapse">
+<h2>Revoke access to calendars</h2>
+<pre>revokeAccessToCalendar($calendar_id, int $person_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>DELETE /calendars/1/accesses/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$calendar_id</h4></div>
+<div class="subelement argument">
+<h4>$person_id</h4>
+<code>int</code><p>The user ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="revokeAccessToProject" id="revokeAccessToProject"></a><div class="element clickable method public revokeAccessToProject" data-toggle="collapse" data-target=".revokeAccessToProject .collapse">
+<h2>Revoke access to projects</h2>
+<pre>revokeAccessToProject(int $project_id, int $person_id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>DELETE /projects/1/accesses/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$person_id</h4>
+<code>int</code><p>The user ID</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="setAccountID" id="setAccountID"></a><div class="element clickable method public setAccountID" data-toggle="collapse" data-target=".setAccountID .collapse">
+<h2>Allows you to set/change accountID after instantiation</h2>
+<pre>setAccountID(int $id) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>int</code>
+</div>
+</div></div>
+</div>
+<a name="setAppName" id="setAppName"></a><div class="element clickable method public setAppName" data-toggle="collapse" data-target=".setAppName .collapse">
+<h2>Allows you to set/change the app name after instantiation</h2>
+<pre>setAppName(string $app_name) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$app_name</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a name="setFileContentType" id="setFileContentType"></a><div class="element clickable method public setFileContentType" data-toggle="collapse" data-target=".setFileContentType .collapse">
+<h2>Allows you to set the file content type for the upload headers</h2>
+<pre>setFileContentType(string $file_content_type) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$file_content_type</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a name="setPassword" id="setPassword"></a><div class="element clickable method public setPassword" data-toggle="collapse" data-target=".setPassword .collapse">
+<h2>Allows you to set/change the password after instantiation</h2>
+<pre>setPassword(string $password) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$password</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a name="setUsername" id="setUsername"></a><div class="element clickable method public setUsername" data-toggle="collapse" data-target=".setUsername .collapse">
+<h2>Allows you to set/change the username after instantiation</h2>
+<pre>setUsername(string $username) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$username</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a name="updateCalendar" id="updateCalendar"></a><div class="element clickable method public updateCalendar" data-toggle="collapse" data-target=".updateCalendar .collapse">
+<h2>Updates a single calendar</h2>
+<pre>updateCalendar(int $calendar_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>PUT /calendars/1.json</pre>
+
+<p>Example:</p>
+
+<pre><code>$basecamp->updateCalendar(123456, array('name' => 'Meetings'));
+</code></pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$calendar_id</h4>
+<code>int</code><p>The calendar ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>name</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>calendar data or false</div>
+</div></div>
+</div>
+<a name="updateCalendarEvent" id="updateCalendarEvent"></a><div class="element clickable method public updateCalendarEvent" data-toggle="collapse" data-target=".updateCalendarEvent .collapse">
+<h2>Updates a single calendar event in a specified calendar</h2>
+<pre>updateCalendarEvent(int $calendar_id, int $event_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>PUT /calendars/1/calendar_events/1.json</pre>
+
+<p>The <samp>starts_at</samp> and <samp>ends_at</samp> parameters should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+The <samp>all_day</samp> parameter should be <samp>true</samp> or <samp>false</samp>.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$calendar_id</h4>
+<code>int</code><p>The calendar ID</p></div>
+<div class="subelement argument">
+<h4>$event_id</h4>
+<code>int</code><p>The event ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>summary</samp>, <samp>description</samp>, <samp>all_day</samp>, <samp>starts_at</samp>, <samp>ends_at</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the calendar event</div>
+</div></div>
+</div>
+<a name="updateDocument" id="updateDocument"></a><div class="element clickable method public updateDocument" data-toggle="collapse" data-target=".updateDocument .collapse">
+<h2>Updates a document in a specified project</h2>
+<pre>updateDocument(int $project_id, int $document_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p><samp>PUT /projects/1/documents/1.json</samp></p>
+
+<p>Basic HTML is allowed in the data content.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$document_id</h4>
+<code>int</code><p>The document ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>title</samp>, <samp>content</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the document data</div>
+</div></div>
+</div>
+<a name="updateMessage" id="updateMessage"></a><div class="element clickable method public updateMessage" data-toggle="collapse" data-target=".updateMessage .collapse">
+<h2>Updates the message/discussion in a project
+PUT /projects/1/messages/1.json		-&gt; Updates the message</h2>
+<pre>updateMessage(int $project_id, int $message_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The <samp>subscribers</samp> (optional) is a list of <samp>ids</samp> that will be notified of file.
+The <samp>attachments</samp> should be an array of file paths. Tokens are returned from
+<samp>createAttachment()</samp> and names will be created automatically.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$message_id</h4>
+<code>int</code><p>The message ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>subject</samp>, <samp>content</samp>, <samp>subscribers</samp>, <samp>attachments</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the message</div>
+</div></div>
+</div>
+<a name="updateProject" id="updateProject"></a><div class="element clickable method public updateProject" data-toggle="collapse" data-target=".updateProject .collapse">
+<h2>Updates a single project</h2>
+<pre>updateProject(int $project_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>PUT /projects/1.json</pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>name</samp>, <samp>description</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the project</div>
+</div></div>
+</div>
+<a name="updateProjectCalendarEvent" id="updateProjectCalendarEvent"></a><div class="element clickable method public updateProjectCalendarEvent" data-toggle="collapse" data-target=".updateProjectCalendarEvent .collapse">
+<h2>Updates a single calendar event in a project</h2>
+<pre>updateProjectCalendarEvent(int $project_id, int $event_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>PUT /projects/1/calendar_events/1.json</pre>
+
+<p>The <samp>starts_at</samp> and <samp>ends_at</samp> parameters should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+The <samp>all_day</samp> parameter should be <samp>true</samp> or <samp>false</samp>.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$event_id</h4>
+<code>int</code><p>The event ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>summary</samp>, <samp>description</samp>, <samp>all_day</samp>, <samp>starts_at</samp>, <samp>ends_at</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the calendar event</div>
+</div></div>
+</div>
+<a name="updateProjectToDoList" id="updateProjectToDoList"></a><div class="element clickable method public updateProjectToDoList" data-toggle="collapse" data-target=".updateProjectToDoList .collapse">
+<h2>Update a ToDoList in a specified project
+PUT /projects/1/todolists/1.json</h2>
+<pre>updateProjectToDoList(int $project_id, int $todolist_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$todolist_id</h4>
+<code>int</code><p>The todolist ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>name</samp>, <samp>description</samp>, <samp>position</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the project todo list.</div>
+</div></div>
+</div>
+<a name="updateToDo" id="updateToDo"></a><div class="element clickable method public updateToDo" data-toggle="collapse" data-target=".updateToDo .collapse">
+<h2>Update a single todo in a project</h2>
+<pre>updateToDo(int $project_id, int $todo_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p><sample>PUT /projects/1/todos/1.json</sample></p>
+
+<p>The <samp>due_at</samp> parameter should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+The assignee parameters need a <samp>type</samp> field with either <samp>Person</samp> or <samp>Group</samp>,
+the <samp>id</samp> is the ID of the person or group.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$todo_id</h4>
+<code>int</code><p>The task/todo ID</p>
+</div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>content</samp>, <samp>due_at</samp>, <samp>assignee</samp>, <samp>position</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the todo if the creation was a success</div>
+</div></div>
+</div>
+<a name="updateToDoList" id="updateToDoList"></a><div class="element clickable method public updateToDoList" data-toggle="collapse" data-target=".updateToDoList .collapse">
+<h2>Shorthand method to update a project todo list</h2>
+<pre>updateToDoList(int $project_id, int $todolist_id, array $data) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p><strong>See method <samp>updateProjectToDoList()</samp></strong></p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$todolist_id</h4>
+<code>int</code><p>The todolist ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Accepted data: <samp>name</samp>, <samp>description</samp>, <samp>position</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>object</code>Current JSON representation of the project todo list.</div>
+</div></div>
+</div>
+<a name="uploadFile" id="uploadFile"></a><div class="element clickable method public uploadFile" data-toggle="collapse" data-target=".uploadFile .collapse">
+<h2>Creates new entry in the files section</h2>
+<pre>uploadFile(int $project_id, array $data) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><pre>POST /projects/1/uploads.json</pre>
+
+<p>The <samp>attachments</samp> should be an array of file paths. Tokens are returned from
+<samp>createAttachment()</samp> and names will be created automatically. The <samp>subscribers</samp>
+(optional) is a list of <samp>ids</samp> that will be notified of file.</p>
+
+<p>Example:</p>
+
+<pre><code>$basecamp->uploadFile(123456, array('content' => 'Test', 'subscribers' => array(1,4,2), 'attachments' => array('/path/to/file.png')));
+</code></pre></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$project_id</h4>
+<code>int</code><p>The project ID</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>Allowed data: <samp>content</samp>, <samp>subscribers</samp>, </samp>attachments</samp></p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fails</div>
+</div></div>
+</div>
+<a name="doExecute" id="doExecute"></a><div class="element clickable method protected doExecute" data-toggle="collapse" data-target=".doExecute .collapse">
+<h2>Execute the request and get response/info</h2>
+<pre>doExecute(resource $ch) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ch</h4>
+<code>resource</code><p>identifier $ch</p>
+</div>
+</div></div>
+</div>
+<a name="execute" id="execute"></a><div class="element clickable method protected execute" data-toggle="collapse" data-target=".execute .collapse">
+<h2>Executes curl command</h2>
+<pre>execute(string $verb) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$verb</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>success/fail</div>
+</div></div>
+</div>
+<a name="executeDelete" id="executeDelete"></a><div class="element clickable method protected executeDelete" data-toggle="collapse" data-target=".executeDelete .collapse">
+<h2>Execuses delete request</h2>
+<pre>executeDelete(resource $ch) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ch</h4>
+<code>resource</code><p>identifier $ch</p>
+</div>
+</div></div>
+</div>
+<a name="executeGet" id="executeGet"></a><div class="element clickable method protected executeGet" data-toggle="collapse" data-target=".executeGet .collapse">
+<h2>Executes a get request</h2>
+<pre>executeGet(resource $ch) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ch</h4>
+<code>resource</code><p>identifier $ch</p>
+</div>
+</div></div>
+</div>
+<a name="executePost" id="executePost"></a><div class="element clickable method protected executePost" data-toggle="collapse" data-target=".executePost .collapse">
+<h2>Executes post request</h2>
+<pre>executePost(resource $ch) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ch</h4>
+<code>resource</code><p>identifier $ch</p>
+</div>
+</div></div>
+</div>
+<a name="executePostFile" id="executePostFile"></a><div class="element clickable method protected executePostFile" data-toggle="collapse" data-target=".executePostFile .collapse">
+<h2>Executes post file request</h2>
+<pre>executePostFile(resource $ch) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ch</h4>
+<code>resource</code><p>identifier $ch</p>
+</div>
+</div></div>
+</div>
+<a name="executePut" id="executePut"></a><div class="element clickable method protected executePut" data-toggle="collapse" data-target=".executePut .collapse">
+<h2>Executes put request</h2>
+<pre>executePut(resource $ch) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ch</h4>
+<code>resource</code><p>identifier $ch</p>
+</div>
+</div></div>
+</div>
+<a name="flush" id="flush"></a><div class="element clickable method protected flush" data-toggle="collapse" data-target=".flush .collapse">
+<h2>Cleans response for reuse</h2>
+<pre>flush() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+<a name="getPassword" id="getPassword"></a><div class="element clickable method protected getPassword" data-toggle="collapse" data-target=".getPassword .collapse">
+<h2>Allows you to get the current password</h2>
+<pre>getPassword() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>password</div>
+</div></div>
+</div>
+<a name="setAuth" id="setAuth"></a><div class="element clickable method protected setAuth" data-toggle="collapse" data-target=".setAuth .collapse">
+<h2>Set the request authentication</h2>
+<pre>setAuth(resource $ch) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ch</h4>
+<code>resource</code><p>identifier $ch</p>
+</div>
+</div></div>
+</div>
+<a name="setCurlOpts" id="setCurlOpts"></a><div class="element clickable method protected setCurlOpts" data-toggle="collapse" data-target=".setCurlOpts .collapse">
+<h2>Set the Curl options</h2>
+<pre>setCurlOpts(resource $ch) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ch</h4>
+<code>resource</code><p>identifier $ch</p>
+</div>
+</div></div>
+</div>
+<a name="setRequestBody" id="setRequestBody"></a><div class="element clickable method protected setRequestBody" data-toggle="collapse" data-target=".setRequestBody .collapse">
+<h2>Set the REST request body</h2>
+<pre>setRequestBody(array $data) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code>
+</div>
+</div></div>
+</div>
+<a name="setRequestHeaders" id="setRequestHeaders"></a><div class="element clickable method protected setRequestHeaders" data-toggle="collapse" data-target=".setRequestHeaders .collapse">
+<h2>Set the request headers</h2>
+<pre>setRequestHeaders(resource $ch, $data) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ch</h4>
+<code>resource</code><p>identifier $ch</p>
+</div>
+<div class="subelement argument"><h4>$data</h4></div>
+</div></div>
+</div>
+<a name="buildURL" id="buildURL"></a><div class="element clickable method private buildURL" data-toggle="collapse" data-target=".buildURL .collapse">
+<h2>Build's the URL to be sent to the request</h2>
+<pre>buildURL(string $url, array $params) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$url</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>array</code>
+</div>
+</div></div>
+</div>
+<a name="function_check" id="function_check"></a><div class="element clickable method private function_check" data-toggle="collapse" data-target=".function_check .collapse">
+<h2>Validate function arguments and makes sure we've got basic necessities set</h2>
+<pre>function_check() : \boolean,</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>\boolean,</code>success/fail</div>
+</div></div>
+</div>
+<a name="logit" id="logit"></a><div class="element clickable method private logit" data-toggle="collapse" data-target=".logit .collapse">
+<h2>Logs message if debug is enables</h2>
+<pre>logit(string $message, string $level) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$message</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$level</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a name="processRequest" id="processRequest"></a><div class="element clickable method private processRequest" data-toggle="collapse" data-target=".processRequest .collapse">
+<h2>Process the RESTful Request</h2>
+<pre>processRequest(string $url, string $type, $data, $url_params) : </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$url</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code>
+</div>
+<div class="subelement argument"><h4>$data</h4></div>
+<div class="subelement argument"><h4>$url_params</h4></div>
+<h3>Returns</h3>
+<div class="subelement response"></div>
+</div></div>
+</div>
+<a name="validateData" id="validateData"></a><div class="element clickable method private validateData" data-toggle="collapse" data-target=".validateData .collapse">
+<h2>Validates and removes unwanted data.</h2>
+<pre>validateData(array $keys, array $data) : \boolean,</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$keys</h4>
+<code>array</code>
+</div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>\boolean,</code>success/fail</div>
+</div></div>
+</div>
+<a name="validateDateTime" id="validateDateTime"></a><div class="element clickable method private validateDateTime" data-toggle="collapse" data-target=".validateDateTime .collapse">
+<h2>Validates datetime for ISO 8601</h2>
+<pre>validateDateTime(string $datetime) : \boolean,</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$datetime</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>\boolean,</code>success/fail</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24api_version" id="$api_version"> </a><div class="element clickable property public $api_version" data-toggle="collapse" data-target=".$api_version .collapse">
+<h2>Basecamp API Version</h2>
+<pre>$api_version : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24app_name" id="$app_name"> </a><div class="element clickable property public $app_name" data-toggle="collapse" data-target=".$app_name .collapse">
+<h2>Application name using this library</h2>
+<pre>$app_name : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24basecamp_url" id="$basecamp_url"> </a><div class="element clickable property public $basecamp_url" data-toggle="collapse" data-target=".$basecamp_url .collapse">
+<h2>Basecamp base URL</h2>
+<pre>$basecamp_url : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24content_type" id="$content_type"> </a><div class="element clickable property public $content_type" data-toggle="collapse" data-target=".$content_type .collapse">
+<h2>Content type, Basecamp requires JSON</h2>
+<pre>$content_type : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24debug" id="$debug"> </a><div class="element clickable property public $debug" data-toggle="collapse" data-target=".$debug .collapse">
+<h2>$debug</h2>
+<pre>$debug </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24account_id" id="$account_id"> </a><div class="element clickable property private $account_id" data-toggle="collapse" data-target=".$account_id .collapse">
+<h2>Basecamp primary account ID, use setters/getters</h2>
+<pre>$account_id : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24errors" id="$errors"> </a><div class="element clickable property private $errors" data-toggle="collapse" data-target=".$errors .collapse">
+<h2>An array containing any errors, use getter</h2>
+<pre>$errors : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24password" id="$password"> </a><div class="element clickable property private $password" data-toggle="collapse" data-target=".$password .collapse">
+<h2>Basecamp password, use setters/getters</h2>
+<pre>$password : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24request" id="$request"> </a><div class="element clickable property private $request" data-toggle="collapse" data-target=".$request .collapse">
+<h2>Stored RESTful request</h2>
+<pre>$request : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24response" id="$response"> </a><div class="element clickable property private $response" data-toggle="collapse" data-target=".$response .collapse">
+<h2>Stored RESTful Response</h2>
+<pre>$response : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24url" id="$url"> </a><div class="element clickable property private $url" data-toggle="collapse" data-target=".$url .collapse">
+<h2>The full built URL</h2>
+<pre>$url : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24username" id="$username"> </a><div class="element clickable property private $username" data-toggle="collapse" data-target=".$username .collapse">
+<h2>Basecamp username, use setters/getters</h2>
+<pre>$username : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a9</a> and<br>
+            generated on 2012-08-17T17:00:46-05:00.<br></footer></div>
+</div>
+</body>
+</html>

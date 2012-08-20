@@ -1,91 +1,138 @@
-<?php //if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
-date_default_timezone_set('America/Chicago');
-class BasecampAPI {
+<?php
+/**
+  * PHP Class: Basecamp
+  *
+  * This class allows you to connect to the new Basecamp API.
+  * It is not compatible with the Basecamp Classic API. This class
+  * contains its own built-in RESTful service.
+  *
+  * The Basecamp class is fully cusomizable and easy to use!
+  *
+  * @category	PHP Class
+  * @package	Basecamp
+  * @author		Adam Jenkins <adam@comicfuse.com>
+  * @copyright	2012, Comicfuse/Adam Jenkins
+  * @license	http://www.php.net/license/3_01.txt  PHP License 3.01
+  * @version	Release: 1.0
+  * @link		https://github.com/adamcole83/ci-basecamp-api-lib
+  */  
+class Basecamp {
 	
 	/* 
-	 * Use debugging?
+	 * Shall we use debugging?
 	 *
-	 * @private boolean
+	 * @var boolean
+	 * @access public
 	 */
-	private $debug = true;
+	public $debug = true;
 	
-	/* 
-	 * Errors
+	/**
+	 * An array containing any errors, use getter
 	 *
-	 * @private array
+	 * @var array
+	 * @access private
 	 */
 	private $errors = array();
 	
-	/* 
-	 * Basecamp primary account ID
+	/**
+	 * Basecamp primary account ID, use setters/getters
 	 *
-	 * @private string
+	 * @var int
+	 * @access private
 	 */
-	private $account_id;
+	private $account_id = null;
 	
-	/*
-	 * Basecamp username
+	/**
+	 * Basecamp username, use setters/getters
 	 *
-	 * @private string
+	 * @var string
+	 * @access private
 	 */
-	private $username;
+	private $username = '';
 	
-	/*
-	 * Basecamp password
+	/**
+	 * Basecamp password, use setters/getters
 	 *
-	 * @private string
+	 * @var string
+	 * @access private
 	 */
-	private $password;
+	private $password = '';
 	
-	/*
+	/**
 	 * Application name using this library
 	 *
-	 * @private string
+	 * @var string
+	 * @access public
 	 */
-	private $app_name;
+	public $app_name = '';
 	
-	/*
+	/**
 	 * Content type, Basecamp requires JSON
 	 *
-	 * @private string
+	 * @var string
+	 * @access public
 	 */
-	private $content_type = "application/json";
+	public $content_type = "application/json";
 	
-	/*
-	 * Basecamp URL
+	/**
+	 * Basecamp base URL
 	 *
-	 * @private string
+	 * @var string
+	 * @access public
 	 */
-	private $basecamp_url = "https://basecamp.com/";
+	public $basecamp_url = "https://basecamp.com/";
 	
-	/*
+	/**
 	 * Basecamp API Version
 	 *
-	 * @private int
+	 * @var string
+	 * @access public
 	 */
-	private $api_version = 1;
+	public $api_version = 1;
 	
-	/*
+	/**
 	 * Stored RESTful request
 	 *
-	 * @private array
+	 * @var array
+	 * @access private
 	 */
 	private $request = array();
 	
-	/*
+	/**
 	 * Stored RESTful Response
 	 *
-	 * @private array
+	 * @var array
+	 * @access private
 	 */
 	private $response = array();
 	
-	/*
+	/**
 	 * The full built URL
 	 *
-	 * @private string
+	 * @var string
+	 * @access private
 	 */
 	private $url = "";
-		
+	
+	/**
+	 * Initialization
+	 * 
+	 * The Basecamp constructor doesn't require the arguments, you can set them afterwards.
+	 *
+	 * Here's an example of instantiation:
+	 * <code>
+	 * required_once 'libraries/basecamp.php';
+	 *
+	 * $basecamp = new Basecamp('My App', 123456, 'tjones', 'abc123');
+	 * </code>
+	 * 
+	 * @param string	$app_name The name of your application
+	 * @param int		$account_id Your new Basecamp account identifier
+	 * @param string	$username The username of an administrator
+	 * @param string	$password The password of the administrator
+	 *
+	 * @return void
+	 */
 	public function __construct($app_name="", $account_id=null, $username="", $password="")
 	{
 		// Set defaults
@@ -101,10 +148,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieve all accesses for a specific project
-	  * GET /projects/$PROJECT_ID/accesses.json			-> Returns all persons with access to the project
+	  * 
+	  * <pre>GET /projects/1/accesses.json</pre>
 	  *
-	  * @param int $project_id
-	  * @return array list of persons
+	  * @param int $project_id The project ID
+	  * @return array List of people with access to the project
 	  */  
 	public function getAccessesForProject($project_id=null)
 	{
@@ -125,10 +173,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieve all accesses for a specific calendar
-	  * GET /calendars/$CALENDAR_ID/accesses.json		-> Returns all persons with access to the calendar
 	  *
-	  * @param int $calendar_id
-	  * @return array list of persons
+	  * <pre>GET /calendars/1/accesses.json</pre>
+	  *
+	  * @param int $calendar_id The calendar ID
+	  * @return array List of people with access to the calendar
 	  */  
 	public function getAccessesForCalendar($calendar_id=null)
 	{
@@ -149,15 +198,20 @@ class BasecampAPI {
 	
 	/**
 	  * Grant access to a specific project
-	  * POST /projects/$PROJECT_ID/accesses.json		-> Grants access to the project
 	  *
-	  * e.g. grantAccessToProject( array( "ids" => array( 5, 6, 10 ), "email_addresses" => array( "someone@example.com", "bob@example.com" ) ) )
+	  * <pre>POST /projects/1/accesses.json</pre>
 	  *
-	  * $DATA:
-	  * 	[ids]				- array, Grant to existing users
-	  *		[email_addresses]	- array, Grant access to new users (invitation)
+	  * Example:
+	  * <code>
+	  *	// Using IDs
+	  *	$basecamp->grantAccessToProject(123456, array("ids" => array(5, 6, 10)));
 	  *
-	  * @param int $project_id, array $data -OR- string $emailaddress -OR- int $person_id
+	  *	// Using email addresses (invite)
+	  *	$basecamp->grantAccessToProject(12345, array("email_addresses" => array( "someone@example.com", "bob@example.com")));
+	  * </code>
+	  *
+	  * @param int $project_id The project ID
+	  * @param array $data Allowed data: [ids], [email_addresses]
 	  * @return boolean success/fail
 	  */  
 	public function grantAccessToProject($project_id=null, $data=array())
@@ -186,15 +240,20 @@ class BasecampAPI {
 	
 	/**
 	  * Grant access to a specific calendar
-	  * POST /calendar/$CALENDAR_ID/accesses.json		-> Grants access to the calendar
 	  *
-	  * e.g. grantAccessToCalendar( array( "ids" => array( 5, 6, 10 ), "email_addresses" => array( "someone@example.com", "bob@example.com" ) ) )
+	  * <pre>POST /calendar/1/accesses.json</pre>
 	  *
-	  *	$DATA:
-	  * 	[ids]				- array, Grant to existing users
-	  *		[email_addresses]	- array, Grant access to new users (invitation)
+	  * Example:
+	  * <code>
+	  *	// Using IDs
+	  *	$basecamp->grantAccessToCalendar(123456, array("ids" => array(5, 6, 10)));
 	  *
-	  * @param int $calendar_id, array $data -OR- string $emailaddress -OR- int $person_id
+	  *	// Using email addresses (invite)
+	  *	$basecamp->grantAccessToCalendar(12345, array("email_addresses" => array( "someone@example.com", "bob@example.com")));
+	  * </code>
+	  *
+	  * @param int $calendar_id The calendar ID
+	  * @param array $data Allowed data: [ids], [email_addresses]
 	  * @return boolean success/fail
 	  */  
 	public function grantAccessToCalendar($calendar_id=null, $data=array())
@@ -223,9 +282,11 @@ class BasecampAPI {
 	
 	/**
 	  * Revoke access to projects
-	  * DELETE /projects/$PROJECT_ID/accesses/$PERSON_ID.json		-> Revoke access of the person to the project
 	  *
-	  * @param int $project_id, int $person_id
+	  * <pre>DELETE /projects/1/accesses/1.json</pre>
+	  *
+	  * @param int $project_id The project ID
+	  * @param int $person_id The user ID
 	  * @return boolean success/fail
 	  */  
 	public function revokeAccessToProject($project_id=null, $person_id=null)
@@ -252,9 +313,11 @@ class BasecampAPI {
 	
 	/**
 	  * Revoke access to calendars
-	  * DELETE /calendars/$CALENDAR_ID/accesses/$PERSON_ID.json		-> Revoke access of the person to the calendar
 	  *
-	  * @param int $calendar_id, int $person_id
+	  * <pre>DELETE /calendars/1/accesses/1.json</pre>
+	  *
+	  * @param int $project_id The project ID
+	  * @param int $person_id The user ID
 	  * @return boolean success/fail
 	  */  
 	public function revokeAccessToCalendar($calendar_id=null, $person_id=null)
@@ -285,10 +348,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieve all attachments
-	  * GET /projects/$PROJECT_ID/attachments.json		-> Show attachments for the project
 	  *
-	  * @param int $project_id
-	  * @return array metadata, urls and associated attachables
+	  * <pre>GET /projects/1/attachments.json</pre>
+	  *
+	  * @param int $project_id The project ID
+	  * @return array Metadata, urls and associated attachables
 	  */  
 	public function getAttachments($project_id=null)
 	{
@@ -309,12 +373,16 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves token for attachment upload
-	  * POST /attachments.json		-> Uploads a file
-	  * 
-	  *	$DATA:
-	  *		[content_type]
 	  *
-	  * @return string token to save locally to upload file
+	  * <pre>POST /attachments.json</pre>
+	  * 
+	  * Example:
+	  * <code>
+	  *	$basecamp->createAttachment('/var/www/assets/images/monkey.png');
+	  * </code>
+	  *
+	  * @param string $file_path The path of the file to be uploaded
+	  * @return string Token to save locally to upload file
 	  */  
 	public function createAttachment($file_path='')
 	{
@@ -338,17 +406,20 @@ class BasecampAPI {
 	
 	/**
 	  * Creates new entry in the files section
-	  * POST /projects/$PROJECT_ID/uploads.json		-> Uploads file (requires token)
 	  *
-	  * Attaching files requires both the token and the name of the attachement. Token returned from @createAttachment()
-	  * Subscribers (optional) is a list of $PERSON_IDs that will be notified of file
+	  * <pre>POST /projects/1/uploads.json</pre>
 	  *
-	  * $DATA:
-	  * 	[content]
-	  *		[subscribers]
-	  *		[attachments]
+	  * The <samp>attachments</samp> should be an array of file paths. Tokens are returned from 
+	  * <samp>createAttachment()</samp> and names will be created automatically. The <samp>subscribers</samp>
+	  * (optional) is a list of <samp>ids</samp> that will be notified of file.
 	  *
-	  * @param int $project_id, array $data
+	  * Example:
+	  * <code>
+	  * $basecamp->uploadFile(123456, array('content' => 'Test', 'subscribers' => array(1,4,2), 'attachments' => array('/path/to/file.png')));
+	  * </code>
+	  *
+	  * @param int $project_id The project ID
+	  * @param array $data Allowed data: <samp>content</samp>, <samp>subscribers</samp>, </samp>attachments</samp>
 	  * @return boolean success/fails
 	  */  
 	public function uploadFile($project_id=null, $data=array())
@@ -393,10 +464,12 @@ class BasecampAPI {
 	
 	/**
 	  * Get content, comments and attachments of a specific upload
-	  * GET /projects/$PROJECT_ID/uploads/$UPLOAD_ID,json		-> Returns content, comments and attachments for this upload.
 	  *
-	  * @param int $project_id, int $upload_id 
-	  * @return object file data
+	  * <pre>GET /projects/1/uploads/$UPLOAD_ID.json</pre>
+	  *
+	  * @param int $project_id The project ID
+	  * @param int $upload_id The Upload ID
+	  * @return object Content, comments and attachments
 	  */  
 	public function getUpload($project_id=null, $upload_id=null)
 	{
@@ -426,10 +499,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieve all calendar events for a project
-	  * GET /projects/$PROJECT_ID/calendar_events.json			-> Returns upcoming calendar events for the project
 	  *
-	  * @param int $project_id 
-	  * @return array list of calendar events
+	  * <pre>GET /projects/1/calendar_events.json</pre>
+	  *
+	  * @param int $project_id The project ID
+	  * @return array Current JSON representation of the calendar lists
 	  */  
 	public function getProjectCalendarEvents($project_id=null)
 	{
@@ -450,10 +524,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieve all calendar events for a calendar
-	  * GET /calendars/$CALENDAR_ID/calendar_events.json		-> Returns upcoming calendar events for the calendar
 	  *
-	  * @param int $calendar_id 
-	  * @return array list of calendar events
+	  * <pre>GET /calendars/1/calendar_events.json</pre>
+	  *
+	  * @param int $calendar_id The calendar ID
+	  * @return array Current JSON representation of calendar events
 	  */  
 	public function getCalendarEvents($calendar_id=null)
 	{
@@ -474,10 +549,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieve all past calendar events for a project
-	  * GET /projects/$PROJECT_ID/calendar_events/past.json		-> Returns past calendar events for the project
 	  *
-	  * @param int $project_id 
-	  * @return array list of calendar events
+	  * <pre>GET /projects/1/calendar_events/past.json</pre>
+	  *
+	  * @param int $project_id The project ID
+	  * @return array Current JSON representation of project calendar events
 	  */  
 	public function getPastProjectCalendarEvents($project_id=null)
 	{
@@ -498,10 +574,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieve all past calendar events for a calendar
-	  * GET /calendars/$CALENDAR_ID/calendar_events/past.json	-> Returns past calendar events for the calendar
 	  *
-	  * @param int $calendar_id 
-	  * @return array list of calendar events
+	  * <pre>GET /calendars/1/calendar_events/past.json</pre>
+	  *
+	  * @param int $calendar_id The calendar ID
+	  * @return array Current JSON represenation of past calendar events
 	  */  
 	public function getPastCalendarEvents($calendar_id=null)
 	{
@@ -522,10 +599,12 @@ class BasecampAPI {
 	
 	/**
 	  * Get single calendar event in a project
-	  * GET /projects/$PROJECT_ID/calendar_events/$EVENT_ID.json	-> Returns the specified calendar event
 	  *
-	  * @param int $project_id, int $event_id 
-	  * @return object event data
+	  * <pre>GET /projects/1/calendar_events/1.json</pre>
+	  *
+	  * @param int $project_id The project ID
+	  * @param int $event_id The event ID
+	  * @return object Current JSON represenation of the project event data
 	  */ 
 	public function getSingleProjectCalendarEvent($project_id=null, $event_id=null)
 	{
@@ -551,10 +630,12 @@ class BasecampAPI {
 	
 	/**
 	  * Get single calendar event in a calendar
-	  * GET /calendars/$CALENDAR_ID/calendar_events/$EVENT_ID.json	-> Returns the specified calendar event
+	  * 
+	  * <pre>GET /calendars/1/calendar_events/1.json</pre>
 	  *
-	  * @param int $calendar_id, int $event_id 
-	  * @return object event data
+	  * @param int $calendar_id The calendar ID
+	  * @param int $event_id The event ID
+	  * @return object Current JSON representation of the calendar event data
 	  */ 
 	public function getSingleCalendarEvent($calendar_id=null, $event_id=null)
 	{
@@ -580,17 +661,15 @@ class BasecampAPI {
 	
 	/**
 	  * Create a calendar event in a project
-	  * POST /projects/$PROJECT_ID/calendar_events.json		-> Creates a new calendar event
+	  * 
+	  * <pre>POST /projects/1/calendar_events.json</pre>
 	  *
-	  * $DATA:
-	  *		[summary]		- string Summary of calendar event
-	  *		[description]	- string Description of calendar event
-	  *		[all_day]		- boolean Is this an all day event?
-	  *		[starts_at]		- string Start time of event (ISO 8601 format - time not required)
-	  *		[ends_at]		- string End time of event (ISO 8601 format - time not required)
-	  *
-	  * @param int $project_id, array $data
-	  * @return object calendar data or false
+	  * The <samp>starts_at</samp> and <samp>ends_at</samp> parameters should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+	  * The <samp>all_day</samp> parameter should be <samp>true</samp> or <samp>false</samp>.
+	  * 
+	  * @param int $project_id The project ID
+	  * @param array $data Accepted data: <samp>summary</samp>, <samp>description</samp>, <samp>all_day</samp>, <samp>starts_at</samp>, <samp>ends_at</samp>
+	  * @return object Current JSON representation of the project calendar event
 	  */  
 	public function createProjectCalendarEvent($project_id=null, $data=array())
 	{
@@ -628,17 +707,15 @@ class BasecampAPI {
 	
 	/**
 	  * Create a calendar event
-	  * POST /calendars/$CALENDAR_ID/calendar_events.json		-> Creates a new calendar event
 	  *
-	  * $DATA:
-	  *		[summary]		- string Summary of calendar event
-	  *		[description]	- string Description of calendar event
-	  *		[all_day]		- boolean Is this an all day event?
-	  *		[starts_at]		- string Start time of event (ISO 8601 format - time not required)
-	  *		[ends_at]		- string End time of event (ISO 8601 format - time not required)
+	  * <pre>POST /calendars/1/calendar_events.json</pre>
 	  *
-	  * @param int $project_id, array $data
-	  * @return object calendar data or false
+	  * The <samp>starts_at</samp> and <samp>ends_at</samp> parameters should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+	  * The <samp>all_day</samp> parameter should be <samp>true</samp> or <samp>false</samp>.
+	  * 
+	  * @param int $calendar_id The calendar ID
+	  * @param array $data Accepted data: <samp>summary</samp>, <samp>description</samp>, <samp>all_day</samp>, <samp>starts_at</samp>, <samp>ends_at</samp>
+	  * @return object Current JSON representation of the calendar event
 	  */  
 	public function createCalendarEvent($calendar_id=null, $data=array())
 	{
@@ -676,17 +753,16 @@ class BasecampAPI {
 	
 	/**
 	  * Updates a single calendar event in a project
-	  * PUT /projects/$PROJECT_ID/calendar_events/$EVENT_ID.json	-> Updates the specific calendar event on a project
+	  * 
+	  * <pre>PUT /projects/1/calendar_events/1.json</pre>
 	  *
-	  * $DATA:
-	  *		[summary]		- string Summary of calendar event
-	  *		[description]	- string Description of calendar event
-	  *		[all_day]		- boolean Is this an all day event?
-	  *		[starts_at]		- string Start time of event (ISO 8601 format - time not required)
-	  *		[ends_at]		- string End time of event (ISO 8601 format - time not required)
-	  *
-	  * @param int $project_id, int $event_id, array $data 
-	  * @return object calendar data or false
+	  * The <samp>starts_at</samp> and <samp>ends_at</samp> parameters should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+	  * The <samp>all_day</samp> parameter should be <samp>true</samp> or <samp>false</samp>.
+	  * 
+	  * @param int $project_id The project ID
+	  * @param int $event_id The event ID
+	  * @param array $data Accepted data: <samp>summary</samp>, <samp>description</samp>, <samp>all_day</samp>, <samp>starts_at</samp>, <samp>ends_at</samp>
+	  * @return object Current JSON representation of the calendar event
 	  */  
 	public function updateProjectCalendarEvent($project_id=null, $event_id=null, $data=array())
 	{
@@ -729,17 +805,16 @@ class BasecampAPI {
 	
 	/**
 	  * Updates a single calendar event in a specified calendar
-	  * PUT /calendars/$CALENDAR_ID/calendar_events/$EVENT_ID.json	-> Updates the specific calendar event on a project
+	  * 
+	  * <pre>PUT /calendars/1/calendar_events/1.json</pre>
 	  *
-	  * $DATA:
-	  *		[summary]		- string Summary of calendar event
-	  *		[description]	- string Description of calendar event
-	  *		[all_day]		- boolean Is this an all day event?
-	  *		[starts_at]		- string Start time of event (ISO 8601 format - time not required)
-	  *		[ends_at]		- string End time of event (ISO 8601 format - time not required)
-	  *
-	  * @param int $calendar_id, int $event_id, array $data 
-	  * @return object calendar data or false
+	  * The <samp>starts_at</samp> and <samp>ends_at</samp> parameters should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+	  * The <samp>all_day</samp> parameter should be <samp>true</samp> or <samp>false</samp>.
+	  * 
+	  * @param int $calendar_id The calendar ID
+	  * @param int $event_id The event ID
+	  * @param array $data Accepted data: <samp>summary</samp>, <samp>description</samp>, <samp>all_day</samp>, <samp>starts_at</samp>, <samp>ends_at</samp>
+	  * @return object Current JSON representation of the calendar event
 	  */  
 	public function updateCalendarEvent($calendar_id=null, $event_id=null, $data=array())
 	{
@@ -782,9 +857,11 @@ class BasecampAPI {
 	
 	/**
 	  * Deletes a single calendar event
-	  * DELETE /projects/$PROJECT_ID/calendar_events/$EVENT_ID.json 	-> Deletes calendar event specified
+	  * 
+	  * <pre>DELETE /projects/1/calendar_events/1.json</pre>
 	  *
-	  * @param int $project_id, int $event_id
+	  * @param int $project_id The project ID
+	  * @param int $event_id The event ID
 	  * @return boolean success/fail
 	  */  
 	public function deleteProjectCalendarEvent($project_id=null, $event_id=null)
@@ -810,9 +887,11 @@ class BasecampAPI {
 	
 	/**
 	  * Deletes a single calendar event
-	  * DELETE /calendars/$CALENDAR_ID/calendar_events/$EVENT_ID.json 	-> Deletes calendar event specified
+	  * 
+	  * <pre>DELETE /calendars/1/calendar_events/1.json</pre>
 	  *
-	  * @param int $calendar_id, int $event_id
+	  * @param int $calendar_id The calendar ID
+	  * @param int $event_id The event ID
 	  * @return boolean success/fail
 	  */  
 	public function deleteCalendarEvent($calendar_id=null, $event_id=null)
@@ -843,9 +922,10 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieve all calendars
-	  * GET /calendars.json			-> Returns all calendars sorted alphabetically
+	  * 
+	  * <pre>GET /calendars.json</pre>
 	  *	
-	  * @return array list of calendars
+	  * @return array Current JSON representation of the list of calendars
 	  */  
 	public function getCalendars()
 	{
@@ -859,10 +939,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves single calendar
-	  * GET /calendars/$CALENDAR_ID.json	-> Returns the specified calendar
+	  * 
+	  * <pre>GET /calendars/1.json</pre>
 	  *
-	  * @param int $calendar_id
-	  * @return object calendar data
+	  * @param int $calendar_id The calendar ID
+	  * @return object Current JSON representation of the calendar data
 	  */  
 	public function getSingleCalendar($calendar_id=null)
 	{
@@ -883,15 +964,18 @@ class BasecampAPI {
 	
 	/**
 	  * Creates a new calendar or multiple calendars if $data is array
-	  * POST /calendars.json		-> Creates a new calendar from the params passed
+	  * 
+	  * <pre>POST /calendars.json</pre>
 	  *
-	  * $DATA:
-	  *		[name]	- string, The name of the calendar
+	  * Example:
+	  * <code>
+	  * $basecamp->createCalendar(array('name' => 'My New Calendar'));
+	  * </code>
 	  *
-	  * @param array $data -OR- string $name
+	  * @param array $data Accepted data: <samp>name</samp>
 	  * @return object calendar data or false
 	  */  
-	public function createCalendar($data=null)
+	public function createCalendar($data=array())
 	{
 		if( ! $this->function_check())
 		{
@@ -910,12 +994,16 @@ class BasecampAPI {
 	
 	/**
 	  * Updates a single calendar
-	  * PUT /calendars/$CALENDAR_ID.json		-> Updates the calendar from the params passed
+	  * 
+	  * <pre>PUT /calendars/1.json</pre>
 	  *
-	  * $DATA:
-	  *		[name]	- string, The name of the calendar
+	  * Example:
+	  *	<code>
+	  * $basecamp->updateCalendar(123456, array('name' => 'Meetings'));
+	  * </code>
 	  *
-	  * @param int $calendar_id, string $data
+	  * @param int $calendar_id The calendar ID
+	  * @param array $data Accepted data: <samp>name</samp>
 	  * @return object calendar data or false
 	  */  
 	public function updateCalendar($calendar_id=null, $data="")
@@ -944,9 +1032,10 @@ class BasecampAPI {
 	
 	/**
 	  * Deletes a single calendar
-	  * DELETE /calendars/$CALENDAR_ID.json		-> Deletes the calendar specified
+	  * 
+	  * <pre>DELETE /calendars/1.json</pre>
 	  *
-	  * @param int $calendar_id
+	  * @param int $calendar_id The calendar ID
 	  * @return boolean success/fail
 	  */  
 	public function deleteCalendar($calendar_id=null)
@@ -973,14 +1062,17 @@ class BasecampAPI {
 	
 	/**
 	  * Creates a new comment for specified project and topic
-	  * POST /projects/$PROJECT_ID/<topic>/$TOPIC_ID/comments.json
+	  * 
+	  * <pre>POST /projects/1/<topic>/1/comments.json</pre>
 	  *
-	  * $DATA:
-	  *		[content]		- (required) The comment content
-	  *		[subscribers]	- (optional) List of people IDs that you want to notify
-	  *		[attachments]	- (optional) Attaching a file to the comment
+	  * The <samp>subscribers</samp> (optional) is a list of <samp>ids</samp> that will be notified of file.
+	  * The <samp>attachments</samp> should be an array of file paths. Tokens are returned from 
+	  * <samp>createAttachment()</samp> and names will be created automatically. 
 	  *
-	  * @param int $project_id, string $topic, int $topic_id, array $data
+	  * @param int $project_id The project ID
+	  * @param string $topic The topic to place comment
+	  * @param int $topic_id The topic ID
+	  * @param array $data Accepted data: <samp>content</samp>, <samp>subscribers</samp>, <samp>attachments</samp>
 	  * @return object comment data or false
 	  */  
 	public function createComment($project_id=null, $topic="", $topic_id=null, $data=array())
@@ -1042,9 +1134,11 @@ class BasecampAPI {
 	
 	/**
 	  * Deletes a comment specified
-	  * DELETE /projects/$PROJECT_ID/comments/$COMMENT_ID.json
+	  * 
+	  * <pre>DELETE /projects/1/comments/1.json</pre>
 	  *
-	  * @param int $project_id, int $comment_id
+	  * @param int $project_id The project ID
+	  * @param int $comment_id The comment ID
 	  * @return boolean success/fail
 	  */  
 	public function deleteComment($project_id=null, $comment_id=null)
@@ -1075,10 +1169,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves most recent version of documents
-	  * GET /projects/$PROJECT_ID/document.json		-> Returns all the documents on the project
+	  * 
+	  * <pre>GET /projects/1/document.json</pre>
 	  *
-	  * @param int $project_id
-	  * @return object document data
+	  * @param int $project_id The project ID
+	  * @return object Current JSON representation of the document data
 	  */  
 	public function getDocuments($project_id=null)
 	{
@@ -1099,10 +1194,12 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves recent version of single document
-	  * GET /projects/$PROJECT_ID/documents/$DOCUMENT_ID.json		-> Returns specified document with comments
+	  * 
+	  * <pre>GET /projects/1/documents/1.json</pre>
 	  *
-	  * @param int $project_id, int $document_id
-	  * @return object document data 
+	  * @param int $project_id The project ID
+	  * @param int $document_id The document ID
+	  * @return object Current JSON representation of the document data 
 	  */  
 	public function getSingleDocument($project_id=null, $document_id=null)
 	{
@@ -1128,14 +1225,14 @@ class BasecampAPI {
 	
 	/**
 	  * Creates a new document from the parameters passed
-	  * POST /projects/$PROJECT_ID/documents.json		-> Creates new document
+	  * 
+	  * <pre>POST /projects/1/documents.json</pre>
 	  *
-	  * $DATA:
-	  *		[title]		- (required) string, The title of the document
-	  *		[content]	- (required) string, the content in the document
+	  * Basic HTML is allowed in the data content.
 	  *
-	  * @param int $project_id, array $data
-	  * @return object document data or false
+	  * @param int $project_id The project ID
+	  * @param array $data Accepted data: <samp>title</samp>, <samp>content</samp>
+	  * @return object Current JSON representation of the document data
 	  */  
 	public function createDocument($project_id=null, $data=array())
 	{
@@ -1163,14 +1260,15 @@ class BasecampAPI {
 	
 	/**
 	  * Updates a document in a specified project
-	  * PUT /projects/$PROJECT_ID/documents/$DOCUMENT_ID.json		-> Updates the message
+	  * 
+	  * <samp>PUT /projects/1/documents/1.json</samp>
 	  *
-	  *	$DATA:
-	  *		[title]		- (required) string, The title of the document
-	  *		[content]	- (required) string, the content in the document
+	  * Basic HTML is allowed in the data content.
 	  *
-	  * @param int $project_id, int $document_id, array $data
-	  * @return object document data
+	  * @param int $project_id The project ID
+	  * @param int $document_id The document ID
+	  * @param array $data Accepted data: <samp>title</samp>, <samp>content</samp>
+	  * @return object Current JSON representation of the document data
 	  */  
 	public function updateDocument($project_id=null, $document_id=null, $data=array())
 	{
@@ -1203,9 +1301,11 @@ class BasecampAPI {
 	
 	/**
 	  * Deletes a specified document from a project
-	  * DELETE /projects/$PROJECT_ID/documents/$DOCUMENT_ID.json	-> Deletes the document specified
+	  * 
+	  * <samp>DELETE /projects/1/documents/1.json</samp>
 	  *
-	  * @param int $project_id, int $document_id
+	  * @param int $project_id The project ID
+	  * @param int $document_id The document ID
 	  * @return boolean success/fail
 	  */  
 	public function deleteDocument($project_id=null, $document_id=null)
@@ -1236,14 +1336,15 @@ class BasecampAPI {
 	
 	/**
 	  * Returns all global events between specified dates passed
-	  * GET /events.json?since=0000-00-00T00:00:00-00:00&page=0		-> Returns all events on account since datetime
+	  * 
+	  * <pre>GET /events.json?since=0000-00-00T00:00:00-00:00&page=0</pre>
 	  *
 	  * Returns 50 events per page. If the result has 50 entries, check next page.
+	  * Datetime should be in the ISO 8601 format (like "0000:00:00T00:00:00-00:00").
 	  *
-	  * Datetime: ISO 8601 format
-	  *
-	  * @param string $datetime, int $page
-	  * @return array list of global event data
+	  * @param string $datetime The ISO 8601 datetime
+	  * @param int $page The page number to begin query
+	  * @return array Current JSON representation of global events
 	  */  
 	public function getGlobalEvents($datetime="", $page=1)
 	{
@@ -1264,12 +1365,16 @@ class BasecampAPI {
 	
 	/**
 	  * Retieves 50 project events at a time, with pagination
-	  * GET /projects/$PROJECT_ID/events.json?since=0000-00-00T00:00:00-00:00&page=0	-> Returns all project events since datetime
+	  * 
+	  * <pre>>GET /projects/1/events.json?since=0000-00-00T00:00:00-00:00&page=0</pre>
 	  *
-	  * Datetime: ISO 8601 format
+	  * Returns 50 events per page. If the result has 50 entries, check next page.
+	  * Datetime should be in the ISO 8601 format (like "0000:00:00T00:00:00-00:00").
 	  *
-	  * @param int $project_id, string $datetime, int $page
-	  * @return array list of project event data
+	  * @param int $project_id The project ID
+	  * @param string $datetime The ISO 8601 datetime
+	  * @param int $page The page number to begin query
+	  * @return array Current JSON representation of project events
 	  */  
 	public function getProjectEvents($project_id=null, $datetime="", $page=1)
 	{
@@ -1295,12 +1400,16 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves 50 person events at a time, with pagination
-	  * GET /people/$PERSON_ID/events.json?since=0000-00-00T00:00:00-00:00$page=0		-> Returns all events by that person
 	  * 
-	  * Datetime: ISO 8601 format
+	  * <pre>GET /people/1/events.json?since=0000-00-00T00:00:00-00:00$page=0</pre>
+	  * 
+	  * Returns 50 events per page. If the result has 50 entries, check next page.
+	  * Datetime should be in the ISO 8601 format (like "0000:00:00T00:00:00-00:00").
 	  *
-	  * @param int $person_id, string $datetime, int $page
-	  * @return array list of person's event data
+	  * @param int $person_id The person ID
+	  * @param string $datetime The ISO 8601 datetime
+	  * @param int $page The page number to begin query
+	  * @return array Current JSON representation of user's events
 	  */  
 	public function getPersonsEvents($person_id=null, $datetime="", $page=1)
 	{
@@ -1330,10 +1439,12 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves specified message/discussion from project
-	  * GET /projects/$PROJECT_ID/messages/$MESSAGE_ID.json
+	  * 
+	  * <pre>GET /projects/1/messages/1.json</pre>
 	  *
-	  * @param int $project_id, int $message_id
-	  * @return object message data
+	  * @param int $project_id The project ID
+	  * @param int $message_id The message ID
+	  * @return object Current JSON representation of the message
 	  */  
 	public function getSingleMessage($project_id=null, $message_id=null)
 	{
@@ -1359,16 +1470,16 @@ class BasecampAPI {
 	
 	/**
 	  * Creates a message/discussion in a project
-	  * POST /projects/$PROJECT_ID/messages.json		-> Creates a new message
+	  * 
+	  * <pre>POST /projects/1/messages.json</pre>
 	  *
-	  *	$DATA:
-	  *		[subject]		- string, The subject of the message/discussion
-	  *		[content]		- string, The content of the message/discussion
-	  *		[subscribers]	- array, The people IDs that should be notified of message/discussion
-	  *		[attachments]	- array, The files that need to be attached, tokens will be added
+	  *	The <samp>subscribers</samp> (optional) is a list of <samp>ids</samp> that will be notified of file.
+	  * The <samp>attachments</samp> should be an array of file paths. Tokens are returned from 
+	  * <samp>createAttachment()</samp> and names will be created automatically. 
 	  *
-	  * @param int $project_id, array $data
-	  * @return object message data or false
+	  * @param int $project_id The project ID
+	  * @param array $data Accepted data: <samp>subject</samp>, <samp>content</samp>, <samp>subscribers</samp>, <samp>attachments</samp>
+	  * @return object Current JSON representation of the message
 	  */  
 	public function createMessage($project_id=null, $data=array())
 	{
@@ -1419,16 +1530,16 @@ class BasecampAPI {
 	
 	/**
 	  * Updates the message/discussion in a project
-	  * PUT /projects/$PROJECT_ID/messages/$MESSAGE_ID.json		-> Updates the message
+	  * PUT /projects/1/messages/1.json		-> Updates the message
+	  * 
+	  *	The <samp>subscribers</samp> (optional) is a list of <samp>ids</samp> that will be notified of file.
+	  * The <samp>attachments</samp> should be an array of file paths. Tokens are returned from 
+	  * <samp>createAttachment()</samp> and names will be created automatically. 
 	  *
-	  *	$DATA:
-	  *		[subject]		- string, The subject of the message/discussion
-	  *		[content]		- string, The content of the message/discussion
-	  *		[subscribers]	- array, The people IDs that should be notified of message/discussion
-	  *		[attachments]	- array, The files that need to be attached, tokens will be added
-	  *
-	  * @param int $project_id, int $message_id, array $data
-	  * @return object message data or false
+	  * @param int $project_id The project ID
+	  * @param int $message_id The message ID
+	  * @param array $data Accepted data: <samp>subject</samp>, <samp>content</samp>, <samp>subscribers</samp>, <samp>attachments</samp>
+	  * @return object Current JSON representation of the message
 	  */  
 	public function updateMessage($project_id=null, $message_id=null, $data=array())
 	{
@@ -1461,9 +1572,11 @@ class BasecampAPI {
 	
 	/**
 	  * Deletes the specified message/discussion from a project
-	  * DELETE /projects/$PROJECT_ID/messages/$MESSAGE_ID.json		-> Deletes the message
+	  * 
+	  * <pre>DELETE /projects/1/messages/1.json</pre>
 	  *
-	  * @param int $project_id, int $message_id
+	  * @param int $project_id The project ID
+	  * @param int $message_id The message ID
 	  * @return boolean success/fail
 	  */  
 	public function deleteMessage($project_id=null, $message_id=null)
@@ -1495,9 +1608,10 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves all the people on the account
-	  * GET /people.json		-> Retrives people
+	  * 
+	  * <pre>GET /people.json</pre>
 	  *
-	  * @return array list of people
+	  * @return array Current JSON representation of all users
 	  */  
 	public function getPeople()
 	{
@@ -1511,10 +1625,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves a single person
-	  * GET /people/$PERSON_ID.json		-> Returns specified person
+	  * 
+	  * <pre>GET /people/1.json</pre>
 	  *
-	  * @param int $person_id
-	  * @return object person data
+	  * @param int $person_id The person ID
+	  * @return object Current JSON representation of the user
 	  */  
 	public function getPerson($person_id=null)
 	{
@@ -1535,9 +1650,10 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves the person logged in (you)
-	  * GET /people/me.json
+	  * 
+	  * <pre>GET /people/me.json</pre>
 	  *
-	  * @return object your data
+	  * @return object Current JSON representation of your user data
 	  */  
 	public function getMe()
 	{
@@ -1551,9 +1667,10 @@ class BasecampAPI {
 	
 	/**
 	  * Deletes a specified person
-	  * DELETE /people/$PERSON_ID.json
+	  * 
+	  * <pre>DELETE /people/1.json</pre>
 	  *
-	  * @param int $person_id
+	  * @param int $person_id The user ID
 	  * @return boolean success/fail
 	  */  
 	public function deletePerson($person_id=null)
@@ -1579,9 +1696,10 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves all active projects
-	  * GET /projects.json
+	  * 
+	  * <pre>GET /projects.json</pre>
 	  *
-	  * @return array list of active project data
+	  * @return array Current JSON representation of active projects
 	  */  
 	public function getProjects()
 	{
@@ -1595,9 +1713,10 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves all archived projects
-	  * GET /projects/archived.json
+	  * 
+	  * <pre>GET /projects/archived.json</pre>
 	  *
-	  * @return array list of archived project data
+	  * @return array Current JSON representation of archived projects
 	  */  
 	public function getArchivedProjects()
 	{
@@ -1611,10 +1730,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves single project
-	  * GET /projects/$PROJECT_ID.json	-> Returns specified project
+	  * 
+	  * <pre>GET /projects/1.json</pre>
 	  *
-	  * @param int $project_id
-	  * @return object project data
+	  * @param int $project_id The project ID
+	  * @return object Current JSON representaion of the project
 	  */  
 	public function getSingleProject($project_id=null)
 	{
@@ -1635,14 +1755,11 @@ class BasecampAPI {
 	
 	/**
 	  * Creates a new project
-	  * POST /projects.json
+	  * 
+	  * <pre>POST /projects.json</pre>
 	  *
-	  * $DATA:
-	  *		[name]			- string, The name of the project
-	  *		[description]	- string, A description of the project
-	  *
-	  * @param array $data
-	  * @return object project data or false
+	  * @param array $data Accepted data: <samp>name</samp>, <samp>description</samp>
+	  * @return object Current JSON representation of the project
 	  */  
 	public function createProject($data=null)
 	{
@@ -1663,14 +1780,12 @@ class BasecampAPI {
 	
 	/**
 	  * Updates a single project
-	  * PUT /projects/$PROJECT_ID.json	-> Updates the project
+	  * 
+	  * <pre>PUT /projects/1.json</pre>
 	  *
-	  * $DATA:
-	  *		[name]			- string, The name of the project
-	  *		[description]	- string, A description of the project
-	  *
-	  * @param int $project_id, array $data
-	  * @return object project data
+	  * @param int $project_id The project ID
+	  * @param array $data Accepted data: <samp>name</samp>, <samp>description</samp>
+	  * @return object Current JSON representation of the project
 	  */  
 	public function updateProject($project_id=null, $data=array())
 	{
@@ -1698,10 +1813,11 @@ class BasecampAPI {
 	
 	/**
 	  * Activates an archived project
-	  * PUT /projects/$PROJECT_ID.json
+	  * 
+	  * <pre>PUT /projects/1.json</pre>
 	  *
-	  * @param int $project_id
-	  * @return object project data
+	  * @param int $project_id The project ID
+	  * @return object Current JSON representation of the project
 	  */  
 	public function activateProject($project_id=null)
 	{
@@ -1722,10 +1838,11 @@ class BasecampAPI {
 	
 	/**
 	  * Archives an active project
-	  *	PUT /projects/$PROJECT_ID.json
+	  *	
+	  * <pre>PUT /projects/1.json</pre>
 	  *
-	  * @param int $project_id
-	  * @return object project data
+	  * @param int $project_id The project ID
+	  * @return object Current JSON representation of the project
 	  */  
 	public function archiveProject($project_id=null)
 	{
@@ -1746,9 +1863,10 @@ class BasecampAPI {
 	
 	/**
 	  * Deletes a specified project
-	  * DELETE /project/$PROJECT_ID.json
+	  * 
+	  * <pre>DELETE /project/1.json</pre>
 	  *
-	  * @param int $project_id
+	  * @param int $project_id The project ID
 	  * @return boolean success/fail
 	  */  
 	public function deleteProject($project_id=null)
@@ -1769,15 +1887,16 @@ class BasecampAPI {
 	}
 	
 	// --------------------------------------------------------------------
-	//		TODO LISTS
+	//		;TODOLISTS
 	// --------------------------------------------------------------------
 	
 	/**
 	  * Retrieves the todo lists of a specified project
-	  * GET /projects/$PROJECT_ID/todolists.json	-> Returns all todolists with remaining todos sorted by position
+	  * 
+	  * <pre>GET /projects/1/todolists.json</pre>
 	  *
-	  * @param int $project_id
-	  * @return array list of todolist data
+	  * @param int $project_id The project ID
+	  * @return array Current JSON representation of project todolists
 	  */  
 	public function getProjectToDoLists($project_id=null)
 	{
@@ -1798,10 +1917,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves completed todolists
-	  * GET /projects/$PROJECT_ID/todolists/completed.json	-> Returns all completed todolists
+	  * 
+	  * <pre>GET /projects/1/todolists/completed.json</pre>
 	  *
 	  * @param int $project_id
-	  * @return array completed todolist data
+	  * @return array Current JSON representaion of completed project todolists
 	  */  
 	public function getProjectsCompletedToDoLists($project_id=null)
 	{
@@ -1822,10 +1942,11 @@ class BasecampAPI {
 	
 	/**
 	  * Shorthand method to retrieve completed todolists
-	  * See method getProjectsCompletedToDoLists()
+	  * 
+	  * <strong>See method <samp>getProjectsCompletedToDoLists()</samp></strong>
 	  *
-	  * @param int $project_id
-	  * @return array completed todolist data
+	  * @param int $project_id The project ID
+	  * @return array Current JSON representation of completed project todolists
 	  */  
 	public function getCompletedTDL($project_id=null)
 	{
@@ -1834,10 +1955,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves assigned todolists of the specified person
-	  * GET /people/$PERSON_ID/assigned_todos.json
+	  * 
+	  * <pre>GET /people/1/assigned_todos.json</pre>
 	  *
-	  * @param int $person_id
-	  * @return array assigned todolist data
+	  * @param int $person_id The person ID
+	  * @return array Current JSON representaion of user's assigned todolists
 	  */  
 	public function getPersonsAssignedToDoLists($person_id=null)
 	{
@@ -1858,7 +1980,8 @@ class BasecampAPI {
 	
 	/**
 	  * Shorthand method to retrieve person's assigned todo lists
-	  * See method getPersonsAssignedToDoList()
+	  * 
+	  * <strong>See method <samp>getPersonsAssignedToDoList()</samp></strong>
 	  *
 	  * @param int $person_id
 	  * @return array assigned todolist data
@@ -1870,10 +1993,12 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves a single ToDo List in specified project
-	  * GET /projects/$PROJECT_ID/todolists/$TODOLIST_ID.json
+	  * 
+	  * <pre>GET /projects/1/todolists/1.json</pre>
 	  *
-	  * @param int $project_id, int $todolist_id
-	  * @return object todolist data
+	  * @param int $project_id The project ID
+	  * @param int $todolist_id The todo list ID
+	  * @return object Current JSON representation of the todolist
 	  */  
 	public function getSingleToDoList($project_id=null, $todolist_id=null)
 	{
@@ -1899,14 +2024,12 @@ class BasecampAPI {
 	
 	/**
 	  * Creates a new ToDo List in a specified project
-	  * POST /projects/$PROJECT_ID/todolists.json
+	  * 
+	  * <pre>POST /projects/1/todolists.json</pre>
 	  *
-	  * $DATA:
-	  *		[name]			- string, The name of the todolist
-	  *		[description]	- string, A description of the todolist
-	  *
-	  * @param int $project_id, array $data
-	  * @return object todolist data
+	  * @param int $project_id The project ID
+	  * @param array $data Accepted data: <samp>name</samp>, <samp>description</samp>
+	  * @return object Current JSON representation of the project todo list.
 	  */  
 	public function createProjectToDoList($project_id=null, $data=array())
 	{
@@ -1934,10 +2057,11 @@ class BasecampAPI {
 	
 	/**
 	  * Shorthand method to create a project todo list
-	  * See method createProjectToDoList
+	  * 
+	  * <strong>See method <samp>createProjectToDoList()</samp></strong>
 	  *
 	  * @param int $project_id, array $data
-	  * @return object todolist data
+	  * @return object Current JSON representation of the project todo list
 	  */  
 	public function createToDoList($project_id=null, $data=array())
 	{
@@ -1946,15 +2070,12 @@ class BasecampAPI {
 	
 	/**
 	  * Update a ToDoList in a specified project
-	  * PUT /projects/$PROJECT_ID/todolists/$TODOLIST_ID.json
+	  * PUT /projects/1/todolists/1.json
 	  *
-	  * $DATA:
-	  *		[name]			- string, The name of the todolist
-	  *		[description]	- string, A description of the todolist
-	  *		[position]		- int, Reorder the position of the todolist
-	  *
-	  * @param int $project_id, int $todolist_id, array $data
-	  * @return object todolist data
+	  * @param int $project_id The project ID
+	  * @param int $todolist_id The todolist ID
+	  * @param array $data Accepted data: <samp>name</samp>, <samp>description</samp>, <samp>position</samp>
+	  * @return object Current JSON representation of the project todo list.
 	  */  
 	public function updateProjectToDoList($project_id=null, $todolist_id=null, $data=array())
 	{
@@ -1987,10 +2108,13 @@ class BasecampAPI {
 	
 	/**
 	  * Shorthand method to update a project todo list
-	  * See method updateProjectToDoList()
+	  * 
+	  * <strong>See method <samp>updateProjectToDoList()</samp></strong>
 	  *
-	  * @param int $project_id, int $todolist_id, array $data
-	  * @return object todolist data
+	  * @param int $project_id The project ID
+	  * @param int $todolist_id The todolist ID
+	  * @param array $data Accepted data: <samp>name</samp>, <samp>description</samp>, <samp>position</samp>
+	  * @return object Current JSON representation of the project todo list.
 	  */  
 	public function updateToDoList($project_id=null, $todolist_id=null, $data=array())
 	{
@@ -1999,9 +2123,11 @@ class BasecampAPI {
 	
 	/**
 	  * Deletes a specified project ToDo List
-	  * DELETE /projects/$PROJECT_ID/todolists/$TODOLIST_ID.json
+	  * 
+	  * <pre>DELETE /projects/1/todolists/1.json</pre>
 	  *
-	  * @param int $project_id, int $todolist_id
+	  * @param int $project_id The project ID
+	  * @param int $todolist_id The todolist ID
 	  * @return boolean success/fail
 	  */  
 	public function deleteToDoList($project_id=null, $todolist_id=null)
@@ -2027,15 +2153,17 @@ class BasecampAPI {
 	}
 	
 	// --------------------------------------------------------------------
-	//		TODOS
+	//		;TODOS
 	// --------------------------------------------------------------------
 	
 	/**
 	  * Retrieves a single todo from a project 
-	  * GET /projects/$PROJECT_ID/todos/$TODO_ID.json
+	  * 
+	  * <pre>GET /projects/1/todos/1.json</pre>
 	  *
-	  * @param int $project_id, int $todo_id
-	  * @return object todo data
+	  * @param int $project_id The project ID
+	  * @param int $todo_id The task/todo ID
+	  * @return object Current JSON representation of the task/todo
 	  */  
 	public function getToDo($project_id=null, $todo_id=null)
 	{
@@ -2061,16 +2189,16 @@ class BasecampAPI {
 	
 	/**
 	  * Creates a todo item for a project
-	  * POST /projects/$PROJECT_ID/todolists/$TODOLIST_ID/todos.json
 	  *
-	  * $DATA:
-	  *		[content]	- string, The content of the todo
-	  *		[due_at]	- string, The due date of the todo (ISO 8601 format)
-	  *		[assignee]	- array, The assignee if necessary
-	  *			[id]		- int, The id of the assignee Person or Group
-	  *			[type]		- string, The type of the assignee Person or Group
+	  * <samp>POST /projects/1/todolists/1/todos.json</samp>
 	  *
-	  * @param int $project_id, int $todolist_id, array $data
+	  * The <samp>due_at</samp> parameter should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+	  * The assignee parameters need a <samp>type</samp> field with either <samp>Person</samp> or <samp>Group</samp>,
+	  * the <samp>id</samp> is the ID of the person or group.
+	  *
+	  * @param int $project_id The project ID
+	  * @param int $todolist_id The todolist ID
+	  * @param array $data Accepted data: [content], [due_at], [assignee[id],[type]]
 	  * @return object todo data
 	  */  
 	public function createToDo($project_id=null, $todolist_id=null, $data=array())
@@ -2104,18 +2232,17 @@ class BasecampAPI {
 	
 	/**
 	  * Update a single todo in a project
-	  * PUT /projects/$PROJECT_ID/todos/$TODO_ID.json
 	  *
-	  * $DATA:
-	  *		[content]	- string, The content of the todo
-	  *		[due_at]	- string, The due date of the todo (ISO 8601 format)
-	  *		[assignee]	- array, The assignee if necessary
-	  *			[id]		- int, The id of the assignee Person or Group
-	  *			[type]		- string, The type of the assignee Person or Group
-	  *		[position]	- int, Reorder the position of the todo
+	  * <sample>PUT /projects/1/todos/1.json</sample>
 	  *
-	  * @param int $project_id, int $todo_id, array $data
-	  * @return object todo data or false
+	  * The <samp>due_at</samp> parameter should be in ISO 8601 format (like "2012-08-16T16:00:00-05:00")
+	  * The assignee parameters need a <samp>type</samp> field with either <samp>Person</samp> or <samp>Group</samp>,
+	  * the <samp>id</samp> is the ID of the person or group.
+	  *
+	  * @param int $project_id The project ID
+	  * @param int $todo_id The task/todo ID
+	  * @param array $data Accepted data: <samp>content</samp>, <samp>due_at</samp>, <samp>assignee</samp>, <samp>position</samp>
+	  * @return object Current JSON representation of the todo if the creation was a success
 	  */  
 	public function updateToDo($project_id=null, $todo_id=null, $data=array())
 	{
@@ -2148,9 +2275,11 @@ class BasecampAPI {
 	
 	/**
 	  * Delete the todo item from a ToDoList in a project
-	  * DELETE /projects/$PROJECT_ID/todos/$TODO_ID.json
 	  *
-	  * @param int $project_id, int $todo_id
+	  * <samp>DELETE /projects/1/todos/1.json</samp>
+	  *
+	  * @param int $project_id The project ID
+	  * @param int $todo_id The task/todo ID
 	  * @return boolean success/fail
 	  */  
 	public function deleteToDo($project_id=null, $todo_id=null)
@@ -2181,10 +2310,11 @@ class BasecampAPI {
 	
 	/**
 	  * Retrieves all topics from a project
-	  * GET /projects/$PROJECT_ID/topics.json
 	  *
-	  * @param int $project_id
-	  * @return array list of topic data
+	  * <sample>GET /projects/1/topics.json</sample>
+	  *
+	  * @param int $project_id The project ID
+	  * @return array List of topic data
 	  */  
 	public function getTopics($project_id=null)
 	{
@@ -2210,7 +2340,8 @@ class BasecampAPI {
 	/**
 	  * Retrieve any user-end errors for display.
 	  *
-	  * @param string $prefix, string $suffix
+	  * @param string $prefix The leading html for each error
+	  * @param string $suffix The following html for each error
 	  * @return string HTML error list
 	  */  
 	public function errors($prefix='<p>', $suffix='</p>')
@@ -2339,11 +2470,10 @@ class BasecampAPI {
 	/**
 	  * Validate function arguments and makes sure we've got basic necessities set
 	  *
-	  * @param string $method, array $args
 	  * @access private
 	  * @return boolean, success/fail
 	  */  
-	private function function_check($method='', $args=array())
+	private function function_check()
 	{
 		if(empty($this->basecamp_url))
 		{
@@ -2398,7 +2528,8 @@ class BasecampAPI {
 	/**
 	  * Validates and removes unwanted data.
 	  *
-	  * @param array $keys, array $data
+	  * @param array $keys
+	  * @param array $data
 	  * @access private
 	  * @return boolean, success/fail
 	  */  
@@ -2466,7 +2597,8 @@ class BasecampAPI {
 	/**
 	  * Logs message if debug is enables
 	  *
-	  * @param string $message, string $level
+	  * @param string $message
+	  * @param string $level
 	  * @access private
 	  * @return void
 	  */  
@@ -2502,7 +2634,8 @@ class BasecampAPI {
 	/**
 	  * Process the RESTful Request
 	  *
-	  * @param string $url, string $type
+	  * @param string $url
+	  * @param string $type
 	  * @access private
 	  * @return 
 	  */  
@@ -2562,7 +2695,8 @@ class BasecampAPI {
 	/**
 	  * Build's the URL to be sent to the request
 	  *
-	  * @param string $url, array $params
+	  * @param string $url
+	  * @param array $params
 	  * @access private
 	  * @return void
 	  */  
@@ -2579,7 +2713,7 @@ class BasecampAPI {
 	// --------------------------------------------------------------------
 	
 	/**
-	  * Set the request body
+	  * Set the REST request body
 	  *
 	  * @param array $data
 	  * @access protected
@@ -2591,9 +2725,9 @@ class BasecampAPI {
 	}
 	
 	/**
-	  * Get the response headers
+	  * Retrieves the REST response headers
 	  *
-	  * @return 
+	  * @return string the reponse headers
 	  */  
 	public function getResponseHeaders()
 	{
@@ -2601,10 +2735,9 @@ class BasecampAPI {
 	}
 	
 	/**
-	  * 
+	  * Retrieves the REST response body
 	  *
-	  * @param 
-	  * @return 
+	  * @return string The REST response body
 	  */  
 	public function getReponseBody()
 	{
@@ -2612,10 +2745,9 @@ class BasecampAPI {
 	}
 	
 	/**
-	  * 
+	  * Retrieves the REST response status
 	  *
-	  * @param 
-	  * @return 
+	  * @return string The REST response status
 	  */  
 	public function getResponseStatus()
 	{
@@ -2630,10 +2762,9 @@ class BasecampAPI {
 	}
 	
 	/**
-	  * 
+	  * Retrieves the REST response location
 	  *
-	  * @param 
-	  * @return 
+	  * @return string The REST response location
 	  */  
 	public function getResponseLocation()
 	{
@@ -2652,7 +2783,7 @@ class BasecampAPI {
 	  *
 	  * @param string $verb
 	  * @access protected
-	  * @return false if error
+	  * @return boolean success/fail
 	  */  
 	protected function execute($verb="")
 	{
