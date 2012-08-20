@@ -37,26 +37,72 @@ Revoke access to calendars
 Attachments/Files
 -----------------
 
-* `getAttachments($project_id)` - Retrieve all attachments
-* `createAttachment($file_path)` - Retrieves token for attachment upload
-* `uploadFile($project_id, $data)` - Creates new entry in the files section
-* `getUpload($project_id, $upload_id)` - Get content, comments and attachments of a specific upload
+Retrieve all attachments
+
+	getAttachments($project_id)
+
+Retrieves token for attachment upload
+
+	createAttachment($file_path)
+
+Creates new entry in the files section, data: `content`, `subscribers`, `attachments`
+
+	uploadFile($project_id, $data)
+
+Get content, comments and attachments of a specific upload
+
+	getUpload($project_id, $upload_id)
 
 Calendar Events
 ---------------
 
-* `getProjectCalendarEvents($project_id)` - Retrieve all calendar events for a project
-* `getCalendarEvents($calendar_id)` - Retrieve all calendar events for a calendar
-* `getPastProjectCalendarEvents($project_id)` - Retrieve all past calendar events for a project
-* `getPastCalendarEvents($calendar_id)` - Retrieve all past calendar events for a calendar
-* `getSingleProjectCalendarEvent($project_id, $event_id)` - Retrieve single calendar event in a project
-* `getSingleCalendarEvent($calendar_id, $event_id)` - Retrieve single calendar event in a calendar
-* `createProjectCalendarEvent($project_id, $data)` - Create a calendar event in a project
-* `createCalendarEvent($calendar_id, $data)` - Create a calendar event
-* `updateProjectCalendarEvent($project_id, $event_id, $data)` - Updates a single calendar event in a project
-* `updateCalendarEvent($calendar_id, $event_id, $data)` - Updates a single calendar event in a specified calendar
-* `deleteProjectCalendarEvent($project_id, $event_id)` - Deletes a single calendar event
-* `deleteCalendarEvent($calendar_id, $event_id)` - Deletes a single calendar event
+Retrieve all calendar events for a project
+
+	getProjectCalendarEvents($project_id)
+
+Retrieve all calendar events for a calendar
+
+	getCalendarEvents($calendar_id)
+
+Retrieve all past calendar events for a project
+
+	getPastProjectCalendarEvents($project_id)
+
+Retrieve all past calendar events for a calendar
+
+	getPastCalendarEvents($calendar_id)
+
+Retrieve single calendar event in a project
+
+	getSingleProjectCalendarEvent($project_id, $event_id)
+
+Retrieve single calendar event in a calendar
+
+	getSingleCalendarEvent($calendar_id, $event_id)
+
+Create a calendar event in a project, accepted data: `summary`, `description`, `all_day`, `starts_at`, `ends_at`
+
+	createProjectCalendarEvent($project_id, $data)
+
+Create a calendar event, accepted data: `summary`, `description`, `all_day`, `starts_at`, `ends_at`
+
+	createCalendarEvent($calendar_id, $data)
+
+Updates a single calendar event in a project, accepted data: `summary`, `description`, `all_day`, `starts_at`, `ends_at`
+
+	updateProjectCalendarEvent($project_id, $event_id, $data)
+
+Updates a single calendar event in a specified calendar, accepted data: `summary`, `description`, `all_day`, `starts_at`, `ends_at`
+
+	updateCalendarEvent($calendar_id, $event_id, $data)
+
+Deletes a single calendar event
+
+	deleteProjectCalendarEvent($project_id, $event_id)
+
+Deletes a single calendar event
+
+	deleteCalendarEvent($calendar_id, $event_id)
 
 Calendars
 ---------
